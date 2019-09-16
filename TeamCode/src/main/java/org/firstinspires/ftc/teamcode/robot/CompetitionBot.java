@@ -21,7 +21,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class CompetitionBot {
     public BNO055IMU gyro;
-    //public AnalogInput wallDistanceFront;
+    public AnalogInput sonarDistance;
     public DcMotor RFmotor, RBmotor, LFmotor, LBmotor;
     //, winchLift, mineralLift, SweeperArm, Lights;
     //public Servo SweeperBoxPivot, SweeperSlide;
@@ -65,7 +65,7 @@ public class CompetitionBot {
         // sensors
 //        RcolorSensor = hwMap.colorSensor.get("RcolorSensor");
 //        LcolorSensor = hwMap.colorSensor.get("LcolorSensor");
-//        wallDistanceFront = hwMap.analogInput.get("wallDistanceFront");
+        sonarDistance = hwMap.analogInput.get("sonarDistance");
 
         // motor encoders init
         resetEncoders();

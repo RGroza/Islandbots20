@@ -14,7 +14,7 @@ public class SonarTest extends LinearOpMode {
 
         waitForStart();
         while(opModeIsActive()) {
-//            telemetry.addData("Voltage: ", robot.wallDistanceFront.getVoltage());
+            telemetry.addData("Voltage: ", robot.sonarDistance.getVoltage());
             telemetry.update();
         }
     }
