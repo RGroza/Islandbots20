@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.islandbots19.mode;
+package org.firstinspires.ftc.teamcode.mode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.islandbots19.robot.CompetitionBot;
+import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="MineralBlueAutonomous", group="Competition")

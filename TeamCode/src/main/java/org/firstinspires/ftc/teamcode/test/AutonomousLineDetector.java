@@ -1,13 +1,13 @@
-package org.firstinspires.ftc.islandbots19.test;
+package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.LightSensor;
 
-import org.firstinspires.ftc.islandbots19.mode.AutonomousNew;
-import org.firstinspires.ftc.islandbots19.robot.CompetitionBot;
-import org.firstinspires.ftc.islandbots19.robot.TestBotInit;
+import org.firstinspires.ftc.teamcode.mode.AutonomousNew;
+import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
+import org.firstinspires.ftc.teamcode.robot.TestBotInit;
 
 /**
  * Created by KaDon on 9/23/2018.

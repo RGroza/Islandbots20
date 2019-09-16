@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.islandbots19.mode;
+package org.firstinspires.ftc.teamcode.mode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.islandbots19.robot.CompetitionBot;
-import org.firstinspires.ftc.islandbots19.robot.GamepadButton;
+import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
+import org.firstinspires.ftc.teamcode.robot.GamepadButton;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;

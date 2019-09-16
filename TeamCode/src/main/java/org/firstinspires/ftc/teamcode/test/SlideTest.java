@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.islandbots19.test;
+package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.islandbots19.robot.CompetitionBot;
+import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 
 @TeleOp(name="SlideTest", group="Test")
 public class SlideTest extends LinearOpMode {

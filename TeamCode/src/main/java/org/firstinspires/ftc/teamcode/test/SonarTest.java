@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.islandbots19.test;
+package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 
-import org.firstinspires.ftc.islandbots19.robot.CompetitionBot;
+import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 
 @Autonomous(name="SonarTest", group="Test")
 public class SonarTest extends LinearOpMode {
