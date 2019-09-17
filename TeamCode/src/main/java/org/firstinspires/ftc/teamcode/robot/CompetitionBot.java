@@ -23,6 +23,7 @@ public class CompetitionBot {
     public BNO055IMU gyro;
     public AnalogInput sonarDistance;
     public DcMotor RFmotor, RBmotor, LFmotor, LBmotor;
+    public I2cDeviceSynch opticalDistance;
     //, winchLift, mineralLift, SweeperArm, Lights;
     //public Servo SweeperBoxPivot, SweeperSlide;
     //public CRServo SweeperMotor;
@@ -34,8 +35,10 @@ public class CompetitionBot {
     public final static double SWEEPER_UP_POS = .75;
     public final static double SWEEPER_DOWN_POS = .25;
     public final static double SWEEPER_HALF_POS = .5;
-    public ColorSensor RcolorSensor;
-    public ColorSensor LcolorSensor;
+    // public ColorSensor RcolorSensor;
+    // public ColorSensor LcolorSensor;
+
+    public ColorSensor testColor, LcolorSensor, RcolorSensor;
 
     public CompetitionBot(HardwareMap hwMap, Telemetry telemetry) {
         // gyro initialization
@@ -49,10 +52,10 @@ public class CompetitionBot {
         RBmotor = hwMap.dcMotor.get("RBmotor");
         LFmotor = hwMap.dcMotor.get("LFmotor");
         LBmotor = hwMap.dcMotor.get("LBmotor");
-        //SweeperArm = hwMap.dcMotor.get("SweeperArm");
-        //winchLift = hwMap.dcMotor.get("WinchLift");
-        //mineralLift = hwMap.dcMotor.get("MineralLift");
-        //Lights = hwMap.dcMotor.get("Lights");
+//        SweeperArm = hwMap.dcMotor.get("SweeperArm");
+//        winchLift = hwMap.dcMotor.get("WinchLift");
+//        mineralLift = hwMap.dcMotor.get("MineralLift");
+//        Lights = hwMap.dcMotor.get("Lights");
 
         // servos
         gyro = hwMap.get(BNO055IMU.class, "gyro");
@@ -62,9 +65,11 @@ public class CompetitionBot {
         // CRServos
 //        SweeperMotor = hwMap.crservo.get("SweeperMotor");
 
-        // sensors
-//        RcolorSensor = hwMap.colorSensor.get("RcolorSensor");
-//        LcolorSensor = hwMap.colorSensor.get("LcolorSensor");
+        // Color sensors
+        testColor = hwMap.colorSensor.get("testColor");
+        LcolorSensor = hwMap.colorSensor.get("LcolorSensor");
+        RcolorSensor = hwMap.colorSensor.get("RcolorSensor");
+
         sonarDistance = hwMap.analogInput.get("sonarDistance");
 
         // motor encoders init
