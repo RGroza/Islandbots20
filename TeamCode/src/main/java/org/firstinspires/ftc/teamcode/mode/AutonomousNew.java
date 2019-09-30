@@ -163,7 +163,7 @@ public abstract class AutonomousNew extends LinearOpMode {
                 setMotors(LSpeed, LSpeed, RSpeed, RSpeed);
             }
         } else {
-            while(underThreshold(YEllOW_THRESHOLD)) {
+            while(overThreshold(YEllOW_THRESHOLD)) {
                 setMotors(LSpeed, LSpeed, RSpeed, RSpeed);
             }
         }
