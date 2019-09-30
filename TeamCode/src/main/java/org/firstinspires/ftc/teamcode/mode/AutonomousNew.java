@@ -131,9 +131,9 @@ public abstract class AutonomousNew extends LinearOpMode {
         if(robot.testColor.red() < threshold[0]
             & robot.testColor.green() < threshold[1]
             & robot.testColor.blue() < threshold[2]) {
-            return True;
+            return true;
         } else {
-            return False;
+            return false;
         }
     }
 
@@ -141,9 +141,9 @@ public abstract class AutonomousNew extends LinearOpMode {
         if(robot.testColor.red() > threshold[0]
             & robot.testColor.green() > threshold[1]
             & robot.testColor.blue() > threshold[2]) {
-            return True;
+            return true;
         } else {
-            return False;
+            return false;
         }
     }
 
