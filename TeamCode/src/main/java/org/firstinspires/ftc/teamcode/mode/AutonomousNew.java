@@ -100,8 +100,6 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
 
 
-
-
         int initialPosition = (int) ((robot.LFmotor.getCurrentPosition() + robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 4.0);
         int currentPosition = initialPosition;
         while(abs(currentPosition - initialPosition) < maxDist && (LSpeed != 0 || RSpeed != 0) && opModeIsActive()) {
@@ -127,6 +125,56 @@ public abstract class AutonomousNew extends LinearOpMode {
             setMotors(direction * LSpeed, direction * LSpeed, direction * RSpeed, direction * RSpeed);
         }
         setMotors(0,0,0,0);
+    }
+
+    public boolean underThreshold(int[] threshold) {
+        if(robot.testColor.red() < threshold[0]
+            & robot.testColor.green() < threshold[1]
+            & robot.testColor.blue() < threshold[2]) {
+            return True;
+        } else {
+            return False;
+        }
+    }
+
+    public boolean overThreshold(int[] threshold) {
+        if(robot.testColor.red() > threshold[0]
+            & robot.testColor.green() > threshold[1]
+            & robot.testColor.blue() > threshold[2]) {
+            return True;
+        } else {
+            return False;
+        }
+    }
+
+    public void detectBlockAndColor(boolean useSonar, Telemetry telemetry) throws InterruptedException {
+        telemetry.addData("R: ", robot.testColor.red());
+        telemetry.addData("G: ", robot.testColor.red());
+        telemetry.addData("B: ", robot.testColor.red());
+        telemetry.addData("Alpha: ", robot.testColor.alpha());
+        telemetry.addData("Sonar V: ", robot.sonarDistance.getVoltage());
+        final int[] YEllOW_THRESHOLD = {200, 200, 200};
+        final int[] BLACK_THRESHOLD = {20, 20, 20};
+        double LSpeed = .7;
+        double RSpeed = .7;
+
+        if(useSonar) {
+            while(robot.sonarDistance.getVoltage() > 0.1) {
+                setMotors(LSpeed, LSpeed, RSpeed, RSpeed);
+            }
+        } else {
+            while(underThreshold(YEllOW_THRESHOLD)) {
+                setMotors(LSpeed, LSpeed, RSpeed, RSpeed);
+            }
+        }
+
+        LSpeed = .3;
+        RSpeed = .3;
+        while(underThreshold(BLACK_THRESHOLD)) {
+            setMotors(LSpeed, LSpeed, RSpeed, RSpeed);
+        }
+        setMotors(0, 0, 0, 0);
+
     }
 
     // COPY SPEEDS OVER TO MINERALAUTO
