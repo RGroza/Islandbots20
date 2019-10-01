@@ -35,10 +35,11 @@ public class CompetitionBot {
     public final static double SWEEPER_UP_POS = .75;
     public final static double SWEEPER_DOWN_POS = .25;
     public final static double SWEEPER_HALF_POS = .5;
-    // public ColorSensor RcolorSensor;
-    // public ColorSensor LcolorSensor;
 
-    public ColorSensor testColor, LcolorSensor, RcolorSensor;
+    public ColorSensor RcolorSensor;
+    public ColorSensor LcolorSensor;
+
+    public ColorSensor testColor;
 
     public CompetitionBot(HardwareMap hwMap, Telemetry telemetry) {
         // gyro initialization
