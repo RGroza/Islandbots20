@@ -164,4 +164,32 @@ public class TensorFlowTest20 extends LinearOpMode {
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
+
+    private int getBlockPattern(List<Recognition> updatedRecogList, boolean isBlue) {
+        Recognition leftmostBlock = updatedRecogList.get(0);
+        Recognition nextRecog;
+
+        float upper_A_thresh = 100;
+        float upper_B_thresh = 100;
+        float upper_C_thresh = 100;
+
+        for (int r = 1; r < updatedRecogList.size(); r++) {
+            nextRecog = updatedRecogList.get(r);
+            if (nextRecog.getLeft() < leftmostBlock.getLeft()) {
+                leftmostBlock = nextRecog;
+            }
+        }
+        int returnVal = -1;
+        if (leftmostBlock.getLeft() <= upper_A_thresh) {
+            returnVal = (isBlue) ? 0 : 2;
+            return returnVal;
+        } else if (leftmostBlock.getLeft() <= upper_B_thresh) {
+            returnVal = 1;
+            return returnVal;
+        } else if (leftmostBlock.getLeft() <= upper_C_thresh) {
+            returnVal = (isBlue) ? 2 : 0;
+            return returnVal;
+        }
+        return returnVal;
+    }
 }
