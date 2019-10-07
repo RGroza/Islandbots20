@@ -124,6 +124,7 @@ public class TensorFlowTest20 extends LinearOpMode {
                             telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                                     recognition.getRight(), recognition.getBottom());
                         }
+                        telemetry.addData("block pattern: ", getBlockPattern(updatedRecognitions, true));
                         telemetry.update();
                     }
                 }
