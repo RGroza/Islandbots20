@@ -165,13 +165,13 @@ public class TensorFlowTest20 extends LinearOpMode {
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
 
-    private int getBlockPattern(List<Recognition> updatedRecogList, boolean isBlue) {
+    public int getBlockPattern(List<Recognition> updatedRecogList, boolean isBlue) {
         Recognition leftmostBlock = updatedRecogList.get(0);
         Recognition nextRecog;
 
         float upper_A_thresh = 100;
-        float upper_B_thresh = 100;
-        float upper_C_thresh = 100;
+        float upper_B_thresh = 200;
+        float upper_C_thresh = 300;
 
         for (int r = 1; r < updatedRecogList.size(); r++) {
             nextRecog = updatedRecogList.get(r);
@@ -179,6 +179,7 @@ public class TensorFlowTest20 extends LinearOpMode {
                 leftmostBlock = nextRecog;
             }
         }
+
         int returnVal = -1;
         if (leftmostBlock.getLeft() <= upper_A_thresh) {
             returnVal = (isBlue) ? 0 : 2;
