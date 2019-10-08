@@ -167,17 +167,23 @@ public class TensorFlowTest20 extends LinearOpMode {
     }
 
     public int getBlockPattern(List<Recognition> updatedRecogList, boolean isBlue) {
+        if (updatedRecogList.size() < 1) {
+            return -1;
+        }
+
         Recognition leftmostBlock = updatedRecogList.get(0);
         Recognition nextRecog;
 
         float upper_A_thresh = 100;
-        float upper_B_thresh = 200;
-        float upper_C_thresh = 300;
+        float upper_B_thresh = 700;
+        float upper_C_thresh = 1200;
 
-        for (int r = 1; r < updatedRecogList.size(); r++) {
-            nextRecog = updatedRecogList.get(r);
-            if (nextRecog.getLeft() < leftmostBlock.getLeft()) {
-                leftmostBlock = nextRecog;
+        if (updatedRecogList.size() > 1) {
+            for (int r = 1; r < updatedRecogList.size(); r++) {
+                nextRecog = updatedRecogList.get(r);
+                if (nextRecog.getLeft() < leftmostBlock.getLeft()) {
+                    leftmostBlock = nextRecog;
+                }
             }
         }
 
