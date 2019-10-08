@@ -153,24 +153,24 @@ public abstract class AutonomousNew extends LinearOpMode {
         telemetry.addData("B: ", robot.testColor.red());
         telemetry.addData("Alpha: ", robot.testColor.alpha());
         telemetry.addData("Sonar V: ", robot.sonarDistance.getVoltage());
-        final int[] YEllOW_THRESHOLD = {200, 200, 200};
-        final int[] BLACK_THRESHOLD = {20, 20, 20};
+        final int[] YEllOW_THRESHOLD = {50, 30, 10};
+        final int[] BLACK_THRESHOLD = {30, 30, 30};
         double LSpeed = .7;
         double RSpeed = .7;
 
         if(useSonar) {
-            while(robot.sonarDistance.getVoltage() > 0.1) {
+            while(robot.sonarDistance.getVoltage() > 0.05) {
                 setMotors(LSpeed, LSpeed, RSpeed, RSpeed);
             }
         } else {
-            while(overThreshold(YEllOW_THRESHOLD)) {
+            while(underThreshold(YEllOW_THRESHOLD)) {
                 setMotors(LSpeed, LSpeed, RSpeed, RSpeed);
             }
         }
 
         LSpeed = .3;
         RSpeed = .3;
-        while(underThreshold(BLACK_THRESHOLD)) {
+        while(overThreshold(BLACK_THRESHOLD)) {
             setMotors(LSpeed, LSpeed, RSpeed, RSpeed);
         }
         setMotors(0, 0, 0, 0);

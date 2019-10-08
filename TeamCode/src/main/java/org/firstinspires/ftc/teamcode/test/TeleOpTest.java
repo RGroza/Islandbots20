@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.test;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -9,7 +8,6 @@ import org.firstinspires.ftc.teamcode.robot.GamepadButton;
 import org.firstinspires.ftc.teamcode.robot.TestBotInit;
 
 @TeleOp(name="TeleOpTest", group="Test")
-@Disabled
 public class TeleOpTest extends LinearOpMode{
     @Override
     public void runOpMode() throws InterruptedException {
