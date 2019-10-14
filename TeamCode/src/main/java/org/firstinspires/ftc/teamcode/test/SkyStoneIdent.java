@@ -321,10 +321,13 @@ public class SkyStoneIdent extends LinearOpMode {
 
             // check all the trackable targets to see which one (if any) is visible.
             targetVisible = false;
+            List<VuforiaTrackable> trackableList = new ArrayList<>();
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
                     targetVisible = true;
+
+                    trackableList.add(trackable);
 
                     // getUpdatedRobotLocation() will return null if no new information is available since
                     // the last time that call was made, or if the trackable is not currently visible.
@@ -332,28 +335,63 @@ public class SkyStoneIdent extends LinearOpMode {
                     if (robotLocationTransform != null) {
                         lastLocation = robotLocationTransform;
                     }
-                    break;
+                    // break;
                 }
             }
 
             // Provide feedback as to where the robot is located (if we know).
-            if (targetVisible) {
-                // express position (translation) of robot in inches.
-                VectorF translation = lastLocation.getTranslation();
-                telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                        translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+            // List<Float> positionsList = new ArrayList<Float>();
+            for (int i = 0; i < trackableList.size(); i++) {
+                if (targetVisible) {
+                    // express position (translation) of robot in inches.
+                    VectorF translation = lastLocation.getTranslation();
 
-                // express the rotation of the robot in degrees.
-                Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
-                telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+                    telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                            translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+
+                    // express the rotation of the robot in degrees.
+                    Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+                    telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+                } else {
+                    telemetry.addData("Visible Target", "none");
+                }
+                telemetry.update();
             }
-            else {
-                telemetry.addData("Visible Target", "none");
-            }
-            telemetry.update();
         }
 
         // Disable Tracking when we are done;
         targetsSkyStone.deactivate();
+    }
+
+    public int getBlockPattern(List<Float> positionsList, boolean isBlue) {
+        if (positionsList.size() < 2) {
+            return -1;
+        }
+
+        float leftmostPos = positionsList.get(0);
+
+        float upper_A_thresh = 250;
+        float upper_B_thresh = 500;
+        float upper_C_thresh = 750;
+
+
+        for (int i = 1; i < positionsList.size(); i++) {
+            if (positionsList.get(i) < leftmostPos) {
+                leftmostPos = positionsList.get(i);
+            }
+        }
+
+        int returnVal = -1;
+        if (leftmostPos <= upper_A_thresh) {
+            returnVal = (isBlue) ? 0 : 2;
+            return returnVal;
+        } else if (leftmostPos <= upper_B_thresh) {
+            returnVal = 1;
+            return returnVal;
+        } else if (leftmostPos <= upper_C_thresh) {
+            returnVal = (isBlue) ? 2 : 0;
+            return returnVal;
+        }
+        return returnVal;
     }
 }
