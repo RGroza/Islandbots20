@@ -15,67 +15,20 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
-
 import static java.lang.Math.abs;
 
-/**
- * Created by KaDon on 9/23/2018.
- *
- */
-// took org/firstinspires/ftc/robotcontroller/external/samples/PushbotAutoDriveToLine_Linear.java as a prototype
+
 public abstract class AutonomousNew extends LinearOpMode {
     protected CompetitionBot robot;
-    static private final double APPROACH_SPEED  = .1;
+
     private ElapsedTime timer = new ElapsedTime();
-    static private final double  NEXT_SPEED  = .5;
+
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
-    private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
-    private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
-    private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
+    private static final String TFOD_MODEL_ASSET = "SkyStone.tflite";
+    private static final String LABEL_GOLD_MINERAL = "Stone";
+    private static final String LABEL_SILVER_MINERAL = "Skystone";
 
-
-    class KeepUp extends Thread {
-        private int sweeperArmBrakePosition = 0;
-        volatile boolean isRunning = true;
-        KeepUp(int sweeperArmBrakePosition) {
-            this.sweeperArmBrakePosition = sweeperArmBrakePosition;
-        }
-
-        public void run() {
-            if(isRunning && opModeIsActive()) {
-//                robot.SweeperArm.setPower((sweeperArmBrakePosition - robot.SweeperArm.getCurrentPosition()) * .01);
-            } else {
-                return;
-            }
-        }
-    }
-
-
-//    public void land() throws InterruptedException {
-//        robot.winchLift.setPower(1);
-//        rest(2);
-//        robot.winchLift.setPower(0);
-//        robot.mineralLift.setPower(1);
-//        rest(1);
-//        robot.mineralLift.setPower(0);
-//        right(.5, 1000);
-//        while(robot.SweeperArm.getCurrentPosition() < 1600) {
-//            robot.SweeperArm.setPower(.6);
-//        }
-//        robot.SweeperArm.setPower(0);
-//    }
-
-//    private void depositMarker() throws InterruptedException {
-//        robot.SweeperSlide.setPosition(.7);
-//        while(robot.SweeperArm.getCurrentPosition() < 1000) {
-//            robot.SweeperArm.setPower(.6);
-//        }
-//        robot.SweeperArm.setPower(0);
-//        robot.SweeperMotor.setPower(-1);
-//        rest(1);
-//        robot.SweeperSlide.setPosition(.47);
-//    }
 
     public void runTestLineDetect(Telemetry telemetry) throws InterruptedException {
         detectLineAndStop(false, 1800, telemetry, false);
@@ -99,11 +52,11 @@ public abstract class AutonomousNew extends LinearOpMode {
             direction = -1;
         }
 
-
         int initialPosition = (int) ((robot.LFmotor.getCurrentPosition() + robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 4.0);
         int currentPosition = initialPosition;
         while(abs(currentPosition - initialPosition) < maxDist && (LSpeed != 0 || RSpeed != 0) && opModeIsActive()) {
             currentPosition = (int) ((robot.LFmotor.getCurrentPosition() + robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 4.0);
+
 //            if(abs(currentPosition - initialPosition) > abs(.6 * (double) maxDist)) {
 //                RSpeed = .2;
 //                LSpeed = .2;
@@ -283,7 +236,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void forward(double speed, int deltaDistance) throws InterruptedException {
-        //int linearDistance = // Conversion from enconder counts to linear distance
+//        int linearDistance = // Conversion from enconder counts to linear distance
 
 //        if (deltaDistance < 0) {
 //            return;
@@ -438,21 +391,21 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
     }
 
-    private void followGold() throws InterruptedException {
-        final double SEARCH_SPEED = .2;
-        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-        int goldMineralX = -1;
-        while(opModeIsActive() && updatedRecognitions.size() > 0) {
-            updatedRecognitions = tfod.getUpdatedRecognitions();
-            for(Recognition recognition : updatedRecognitions) {
-                if(recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                    goldMineralX = (int) recognition.getLeft();
-                }
-            }
-            double correction = (goldMineralX - 300) / 100;
-            setMotors(SEARCH_SPEED + correction, SEARCH_SPEED + correction, SEARCH_SPEED - correction, SEARCH_SPEED - correction);
-        }
-    }
+//    private void followGold() throws InterruptedException {
+//        final double SEARCH_SPEED = .2;
+//        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+//        int goldMineralX = -1;
+//        while(opModeIsActive() && updatedRecognitions.size() > 0) {
+//            updatedRecognitions = tfod.getUpdatedRecognitions();
+//            for(Recognition recognition : updatedRecognitions) {
+//                if(recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+//                    goldMineralX = (int) recognition.getLeft();
+//                }
+//            }
+//            double correction = (goldMineralX - 300) / 100;
+//            setMotors(SEARCH_SPEED + correction, SEARCH_SPEED + correction, SEARCH_SPEED - correction, SEARCH_SPEED - correction);
+//        }
+//    }
 
     public boolean runTensorFlow(Telemetry telemetry, boolean isMineral) throws InterruptedException {
         boolean goldFound = false;

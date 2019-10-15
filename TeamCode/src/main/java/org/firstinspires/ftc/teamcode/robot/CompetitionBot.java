@@ -5,8 +5,10 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -15,26 +17,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-/**
- * Created by KaDon on 8/26/2018.
- */
 
 public class CompetitionBot {
     public BNO055IMU gyro;
     public AnalogInput sonarDistance;
     public DcMotor RFmotor, RBmotor, LFmotor, LBmotor;
-    public I2cDeviceSynch opticalDistance;
-    //, winchLift, mineralLift, SweeperArm, Lights;
-    //public Servo SweeperBoxPivot, SweeperSlide;
-    //public CRServo SweeperMotor;
-    //public I2cDeviceSynch pixyCam;
+    public DistanceSensor sensorRange;
 
     boolean slowMove;
-
-    // Servo constants
-    public final static double SWEEPER_UP_POS = .75;
-    public final static double SWEEPER_DOWN_POS = .25;
-    public final static double SWEEPER_HALF_POS = .5;
 
     public ColorSensor RcolorSensor;
     public ColorSensor LcolorSensor;
@@ -53,25 +43,20 @@ public class CompetitionBot {
         RBmotor = hwMap.dcMotor.get("RBmotor");
         LFmotor = hwMap.dcMotor.get("LFmotor");
         LBmotor = hwMap.dcMotor.get("LBmotor");
-//        SweeperArm = hwMap.dcMotor.get("SweeperArm");
-//        winchLift = hwMap.dcMotor.get("WinchLift");
-//        mineralLift = hwMap.dcMotor.get("MineralLift");
-//        Lights = hwMap.dcMotor.get("Lights");
 
-        // servos
+        // gyro hwMap
         gyro = hwMap.get(BNO055IMU.class, "gyro");
-//        SweeperBoxPivot = hwMap.servo.get("SweeperBoxPivot");
-//        SweeperSlide = hwMap.servo.get("SweeperSlide");
 
-        // CRServos
-//        SweeperMotor = hwMap.crservo.get("SweeperMotor");
-
-        // Color sensors
+        // color sensors
         testColor = hwMap.colorSensor.get("testColor");
         LcolorSensor = hwMap.colorSensor.get("LcolorSensor");
         RcolorSensor = hwMap.colorSensor.get("RcolorSensor");
 
+        // analog sensors
         sonarDistance = hwMap.analogInput.get("sonarDistance");
+
+        // distance sensors
+        sensorRange = hwMap.get(DistanceSensor.class, "sensor_range");
 
         // motor encoders init
         resetEncoders();
@@ -83,7 +68,6 @@ public class CompetitionBot {
         gyro.initialize(parameters);
         telemetry.addData("Successfully Initialized", null);
         telemetry.update();
-//        slowMove = false;
     }
 
     // joystickY and joystickX expected to be within [-1,1]
@@ -160,34 +144,21 @@ public class CompetitionBot {
         return gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     }
 
-//    public double[] getColor() {
-//        double[] color = new double[]{colorSensor.red(), colorSensor.green(), colorSensor.blue()};
-//        return color;
-//    }
-
     public void resetEncoders() {
         LFmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RBmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        mineralLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        SweeperArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         LFmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         LBmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RFmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RBmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        mineralLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        SweeperArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        //mineralLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         LBmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LFmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RBmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RFmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        mineralLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        SweeperArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     private double clamp(double d) {
@@ -197,13 +168,6 @@ public class CompetitionBot {
             d = -1;
         }
         return  d;
-    }
-
-    public double keepLevel(int motorPosition) {
-        final int TICKS_PER_REV = 5264;
-        final double SERVO_DEGREE = 180;
-        double servoDelta = SERVO_DEGREE/TICKS_PER_REV;
-        return (motorPosition * servoDelta);
     }
 
 }
