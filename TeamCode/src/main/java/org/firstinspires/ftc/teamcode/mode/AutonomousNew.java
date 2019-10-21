@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.test.SkyStoneVuforia;
 
 import java.util.List;
 import static java.lang.Math.abs;
@@ -81,9 +82,8 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public boolean underThreshold(int[] threshold) {
-        if(robot.testColor.red() < threshold[0]
-            & robot.testColor.green() < threshold[1]
-            & robot.testColor.blue() < threshold[2]) {
+        if(robot.testColor.red() < threshold[0] & robot.testColor.green() < threshold[1]
+                                                & robot.testColor.blue() < threshold[2]) {
             return true;
         } else {
             return false;
@@ -91,9 +91,8 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public boolean overThreshold(int[] threshold) {
-        if(robot.testColor.red() > threshold[0]
-            & robot.testColor.green() > threshold[1]
-            & robot.testColor.blue() > threshold[2]) {
+        if(robot.testColor.red() > threshold[0] & robot.testColor.green() > threshold[1]
+                                                & robot.testColor.blue() > threshold[2]) {
             return true;
         } else {
             return false;
@@ -128,6 +127,11 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
         setMotors(0, 0, 0, 0);
 
+    }
+
+    public void detectSkyStone() {
+        SkyStoneVuforia vuforiaObj = new SkyStoneVuforia();
+        vuforiaObj.runVuforia();
     }
 
     public void turnBy(double speed, double deltaAngle) throws InterruptedException {
