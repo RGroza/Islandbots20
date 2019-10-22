@@ -69,6 +69,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     private float phoneYRotate    = 0;
     private float phoneZRotate    = 0;
 
+    List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
 
     public void runTestLineDetect(Telemetry telemetry) throws InterruptedException {
         detectLineAndStop(false, 1800, telemetry, false);
@@ -266,7 +267,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         return speed; // default
     }
 
-    public void setMotors(double LF, double LB, double RF, double RB) throws InterruptedException{
+    public void setMotors(double LF, double LB, double RF, double RB) {
         robot.LFmotor.setPower(LF);
         robot.LBmotor.setPower(LB);
         robot.RFmotor.setPower(RF);
@@ -599,5 +600,79 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         // Disable Tracking when we are done;
         targetsSkyStone.deactivate();
+    }
+
+    public void initVuforia() {
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+
+        // VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraDirection = CAMERA_CHOICE;
+
+        //  Instantiate the Vuforia engine
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+        // Load the data sets for the trackable objects. These particular data
+        // sets are stored in the 'assets' part of our application.
+        VuforiaTrackables targetsSkyStone = this.vuforia.loadTrackablesFromAsset("Skystone");
+
+        VuforiaTrackable stoneTarget = targetsSkyStone.get(0);
+        stoneTarget.setName("Stone Target");
+
+        // For convenience, gather together all the trackable objects in one easily-iterable collection */
+        allTrackables.addAll(targetsSkyStone);
+
+
+        stoneTarget.setLocation(OpenGLMatrix
+                .translation(0, 0, stoneZ)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
+
+        // We need to rotate the camera around it's long axis to bring the correct camera forward.
+        if (CAMERA_CHOICE == BACK) {
+            phoneYRotate = -90;
+        } else {
+            phoneYRotate = 90;
+        }
+
+        // Rotate the phone vertical about the X axis if it's in portrait mode
+        if (PHONE_IS_PORTRAIT) {
+            phoneXRotate = 90;
+        }
+
+        // Next, translate the camera lens to where it is on the robot.
+        // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
+        final float CAMERA_FORWARD_DISPLACEMENT = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot center
+        final float CAMERA_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
+        final float CAMERA_LEFT_DISPLACEMENT = 0;     // eg: Camera is ON the robot's center line
+
+        OpenGLMatrix robotFromCamera = OpenGLMatrix
+                .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES, phoneYRotate, phoneZRotate, phoneXRotate));
+
+        /**  Let all the trackable listeners know where the phone is.  */
+        for (VuforiaTrackable trackable : allTrackables) {
+            ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
+        }
+
+
+        targetsSkyStone.activate();
+    }
+
+    public boolean detectSkyStone() {
+        while (!isStopRequested()) {
+            setMotors(0.5, 0.5, 0.5, 0.5);
+
+            // check all the trackable targets to see which one (if any) is visible.
+            for (VuforiaTrackable trackable : allTrackables) {
+                if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() && trackable.getName() == "Stone Target") {
+                    telemetry.addLine("SkyStone Found!");
+                    setMotors(0, 0, 0, 0);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
