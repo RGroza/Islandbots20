@@ -11,6 +11,7 @@ public class RunAutonomousTest extends AutonomousNew {
         initVuforia();
 
         waitForStart();
-        detectSkyStone();
+        boolean returnedVal = detectSkyStone();
+        telemetry.addData("Returned Value: ", returnedVal);
     }
 }
