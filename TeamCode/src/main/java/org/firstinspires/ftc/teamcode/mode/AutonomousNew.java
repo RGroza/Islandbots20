@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.mode;
 
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.test.SkyStoneVuforia;
@@ -664,12 +667,14 @@ public abstract class AutonomousNew extends LinearOpMode {
         while (!isStopRequested()) {
             setMotors(0.5, 0.5, 0.5, 0.5);
 
-            // check all the trackable targets to see which one (if any) is visible.
-            for (VuforiaTrackable trackable : allTrackables) {
-                if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() && trackable.getName() == "Stone Target") {
-                    telemetry.addLine("SkyStone Found!");
-                    setMotors(0, 0, 0, 0);
-                    return true;
+            // check all the trackable targets to see which one (if any) is visible, while the measured distance > 5 cm
+            while (robot.sensorRange.getDistance(DistanceUnit.CM) > 5) {
+                for (VuforiaTrackable trackable : allTrackables) {
+                    if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() && trackable.getName() == "Stone Target") {
+                        telemetry.addLine("SkyStone Found!");
+                        setMotors(0, 0, 0, 0);
+                        return true;
+                    }
                 }
             }
         }
