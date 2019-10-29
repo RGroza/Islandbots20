@@ -665,18 +665,25 @@ public abstract class AutonomousNew extends LinearOpMode {
 
     public boolean detectSkyStone() {
         while (!isStopRequested()) {
-            setMotors(0.5, 0.5, 0.5, 0.5);
+            setMotors(0.3, 0.3, 0.3, 0.3);
 
             // check all the trackable targets to see which one (if any) is visible, while the measured distance > 5 cm
+            telemetry.addData("Initial Dist: ", robot.sensorRange.getDistance(DistanceUnit.CM));
+            telemetry.update();
             while (robot.sensorRange.getDistance(DistanceUnit.CM) > 5) {
+                telemetry.addData("Dist: ", robot.sensorRange.getDistance(DistanceUnit.CM));
+                telemetry.update();
                 for (VuforiaTrackable trackable : allTrackables) {
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() && trackable.getName() == "Stone Target") {
-                        telemetry.addLine("SkyStone Found!");
+                        telemetry.addLine("SkyStone found!");
                         setMotors(0, 0, 0, 0);
                         return true;
                     }
                 }
             }
+            telemetry.addLine("Not found!");
+            telemetry.update();
+            return false;
         }
         return false;
     }
