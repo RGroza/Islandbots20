@@ -663,28 +663,50 @@ public abstract class AutonomousNew extends LinearOpMode {
         targetsSkyStone.activate();
     }
 
-    public boolean detectSkyStone() {
+    public String detectSkyStone(boolean isBlue) {
+        String returnVal = "None";
+        int[] patternThresholds = {200, 400, 600};
         while (!isStopRequested()) {
             setMotors(0.3, 0.3, 0.3, 0.3);
 
             // check all the trackable targets to see which one (if any) is visible, while the measured distance > 5 cm
             telemetry.addData("Initial Dist: ", robot.sensorRange.getDistance(DistanceUnit.CM));
-            telemetry.update();
             while (robot.sensorRange.getDistance(DistanceUnit.CM) > 5) {
                 telemetry.addData("Dist: ", robot.sensorRange.getDistance(DistanceUnit.CM));
-                telemetry.update();
                 for (VuforiaTrackable trackable : allTrackables) {
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() && trackable.getName() == "Stone Target") {
                         telemetry.addLine("SkyStone found!");
+
                         setMotors(0, 0, 0, 0);
-                        return true;
+
+                        OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
+                        if (robotLocationTransform != null) {
+                            lastLocation = robotLocationTransform;
+                        }
+
+                        VectorF translation = lastLocation.getTranslation();
+
+                        telemetry.addData("0: ", translation.get(0));
+                        telemetry.addData("1: ", translation.get(1));
+                        telemetry.addData("2: ", translation.get(2));
+                        sleep(500);
+
+                        if (translation.get(0) <= patternThresholds[0]) {
+                            returnVal = isBlue ? "C" : "A";
+                        } else if (translation.get(0) <= patternThresholds[1]) {
+                            returnVal = "B";
+                        } else if (translation.get(0) <= patternThresholds[2]) {
+                            returnVal = isBlue ? "A" : "C";
+                        }
+                        telemetry.addData("Pattern: ", returnVal);
+                        telemetry.update();
+                        // return returnVal;
                     }
                 }
             }
             telemetry.addLine("Not found!");
-            telemetry.update();
-            return false;
+            return returnVal;
         }
-        return false;
+        return returnVal;
     }
 }
