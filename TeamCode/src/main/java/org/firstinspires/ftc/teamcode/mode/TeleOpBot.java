@@ -19,9 +19,13 @@ public class TeleOpBot extends LinearOpMode {
         CompetitionBot robot = new CompetitionBot(hardwareMap, telemetry);
         // Gamepad 1
         GamepadButton slowToggleButton = new GamepadButton(300, false);
+        GamepadButton slideUpButton = new GamepadButton(300, false);
+        GamepadButton slideDownButton = new GamepadButton(300, false);
+        GamepadButton grabberServoButton = new GamepadButton(300, false);
+        GamepadButton armRotateButton = new GamepadButton(300, false);
+        GamepadButton intakeButton = new GamepadButton(300, false);
 
         waitForStart();
-
         while(opModeIsActive()) {
             // CONTROLS
             // Gamepad 1
@@ -30,14 +34,52 @@ public class TeleOpBot extends LinearOpMode {
             double rotation = gamepad1.right_stick_x;
             boolean slowToggleBool = gamepad1.y;
 
+            boolean slideUpBool = gamepad1.y;
+            boolean slideDownBool = gamepad1.a;
+
+            boolean grabberServoBool = gamepad1.right_bumper;
+            boolean armRotateServoBool = gamepad1.left_bumper;
+
+            boolean intakeBool = gamepad1.x;
+
             // BUTTON DEBOUNCE
             slowToggleButton.checkStatus(slowToggleBool);
+            slideUpButton.checkStatus(slideUpBool);
+            slideDownButton.checkStatus(slideDownBool);
+            grabberServoButton.checkStatus(grabberServoBool);
+            armRotateButton.checkStatus(armRotateServoBool);
+            intakeButton.checkStatus(intakeBool);
 
-            if(slowToggleButton.pressed) {
+            if (slowToggleButton.pressed) {
                 x /= 2;
                 y /= 2;
             }
 
+            if (slideUpButton.buttonStatus) {
+                robot.SlideMotor.setPower(1);
+            } else if (slideDownButton.buttonStatus) {
+                robot.SlideMotor.setPower(-1);
+            } else {
+                robot.SlideMotor.setPower(0);
+            }
+
+            if (grabberServoButton.pressed) {
+                robot.grabberServo.setPosition(.75);
+            } else {
+                robot.grabberServo.setPosition(.25);
+            }
+
+            if (armRotateButton.pressed) {
+                robot.armRotateServo.setPosition(.75);
+            } else {
+                robot.armRotateServo.setPosition(.25);
+            }
+
+            if (intakeButton.pressed) {
+                robot.IntakeMotor.setPower(1);
+            } else {
+                robot.IntakeMotor.setPower(0);
+            }
 
             // MOVEMENT
             robot.mecanumMove(x, y, rotation, slowToggleButton.pressed);

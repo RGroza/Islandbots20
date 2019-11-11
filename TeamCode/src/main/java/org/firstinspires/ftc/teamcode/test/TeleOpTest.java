@@ -17,8 +17,6 @@ public class TeleOpTest extends LinearOpMode{
 
         waitForStart();
         while(opModeIsActive()) {
-//            double left = -gamepad1.left_stick_y;
-//            double right = -gamepad1.right_stick_y;
             double x = -gamepad1.left_stick_x;
             double y = -gamepad1.left_stick_y;
             double rotation = gamepad1.right_stick_x;
@@ -26,19 +24,12 @@ public class TeleOpTest extends LinearOpMode{
 
             slowToggleButton.checkStatus(slowToggleBool);
 
-//            robot.RFmotor.setPower(right);
-//            robot.RBmotor.setPower(right);
-//            robot.LFmotor.setPower(left);
-//            robot.LBmotor.setPower(left);
-
             robot.mecanumMove(x, y, rotation, slowToggleButton.pressed);
 
             telemetry.addData("A: RF:  ", robot.RFmotor.getCurrentPosition());
             telemetry.addData("B: RB:  ", robot.RBmotor.getCurrentPosition());
             telemetry.addData("X: LF:  ", robot.LFmotor.getCurrentPosition());
             telemetry.addData("Y: LB:  ", robot.LBmotor.getCurrentPosition());
-//            telemetry.addData("RColor: ", Rcolor[0] + ", " + Rcolor[1] + ", " + Rcolor[2]);
-//            telemetry.addData("Lcolor: ", Lcolor[0] + ", " + Lcolor[1] + ", " + Lcolor[2]);
             telemetry.update();
         }
     }

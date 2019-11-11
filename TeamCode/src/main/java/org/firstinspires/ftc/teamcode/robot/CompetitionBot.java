@@ -21,7 +21,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 public class CompetitionBot {
     public BNO055IMU gyro;
     public AnalogInput sonarDistance;
-    public DcMotor RFmotor, RBmotor, LFmotor, LBmotor;
+    public DcMotor RFmotor, RBmotor, LFmotor, LBmotor, SlideMotor, IntakeMotor;
+    public Servo grabberServo, armRotateServo;
     public DistanceSensor sensorRange;
 
     boolean slowMove;
@@ -43,6 +44,8 @@ public class CompetitionBot {
         RBmotor = hwMap.dcMotor.get("RBmotor");
         LFmotor = hwMap.dcMotor.get("LFmotor");
         LBmotor = hwMap.dcMotor.get("LBmotor");
+        SlideMotor = hwMap.dcMotor.get("SlideMotor");
+        IntakeMotor = hwMap.dcMotor.get("IntakeMotor");
 
         // gyro hwMap
         gyro = hwMap.get(BNO055IMU.class, "gyro");
@@ -64,6 +67,10 @@ public class CompetitionBot {
         // motor directions
         RFmotor.setDirection(DcMotor.Direction.REVERSE);
         RBmotor.setDirection(DcMotor.Direction.REVERSE);
+
+        // servos
+        grabberServo = hwMap.servo.get("grabberServo");
+        armRotateServo = hwMap.servo.get("armRotateServo");
 
         gyro.initialize(parameters);
         telemetry.addData("Successfully Initialized", null);
@@ -149,16 +156,19 @@ public class CompetitionBot {
         LBmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RBmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        SlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         LFmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         LBmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RFmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RBmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         LBmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LFmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RBmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RFmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        SlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     private double clamp(double d) {
