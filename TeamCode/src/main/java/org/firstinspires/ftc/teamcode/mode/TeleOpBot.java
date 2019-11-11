@@ -56,9 +56,9 @@ public class TeleOpBot extends LinearOpMode {
             }
 
             if (slideUpButton.buttonStatus) {
-                robot.SlideMotor.setPower(1);
+                robot.SlideMotor.setPower(.75);
             } else if (slideDownButton.buttonStatus) {
-                robot.SlideMotor.setPower(-1);
+                robot.SlideMotor.setPower(-.75);
             } else {
                 robot.SlideMotor.setPower(0);
             }
@@ -76,7 +76,7 @@ public class TeleOpBot extends LinearOpMode {
             }
 
             if (intakeButton.pressed) {
-                robot.IntakeMotor.setPower(1);
+                robot.IntakeMotor.setPower(.75);
             } else {
                 robot.IntakeMotor.setPower(0);
             }
