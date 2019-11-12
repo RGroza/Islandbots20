@@ -124,6 +124,50 @@ public abstract class AutonomousNew extends LinearOpMode {
         setMotors(0,0,0,0);
     }
 
+    private void detectLineAndContinue(boolean isForward, Telemetry telemetry, boolean useDistanceSensor) throws InterruptedException {
+        telemetry.addData("Initial reading: ", 0);
+        telemetry.addData("Left  Level: ",  robot.LcolorSensor.blue());
+        telemetry.addData("Right  Level: ",  robot.RcolorSensor.blue());
+        telemetry.addData("Left Alpha  Level: ",  robot.LcolorSensor.alpha());
+        telemetry.addData("Right Alpha  Level: ",  robot.RcolorSensor.alpha());
+        telemetry.update();
+        final int R_COLOR_THRESHOLD = 200;
+        final int L_COLOR_THRESHOLD = 160;
+        double RSpeed = .7;
+        double LSpeed = .7;
+        int direction = 1;
+
+        if(!isForward) {
+            direction = -1;
+        }
+
+        int initialPosition = (int) ((robot.LFmotor.getCurrentPosition() + robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 4.0);
+        int currentPosition = initialPosition;
+        while(LSpeed != 0 || RSpeed != 0 && opModeIsActive()) {
+            currentPosition = (int) ((robot.LFmotor.getCurrentPosition() + robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 4.0);
+
+//            if(abs(currentPosition - initialPosition) > abs(.6 * (double) maxDist)) {
+//                RSpeed = .2;
+//                LSpeed = .2;
+//            }
+
+//            if(useDistanceSensor && robot.wallDistanceFront.getVoltage() < .12) { // .098 = 30 in
+//                RSpeed = .2;
+//                LSpeed = .2;
+//            }
+
+            if(robot.RcolorSensor.blue() > R_COLOR_THRESHOLD) {
+                RSpeed = 0;
+            }
+            if(robot.LcolorSensor.blue() > L_COLOR_THRESHOLD) {
+                LSpeed = 0;
+            }
+//            setMotors(direction * ramp(currentPosition, maxDist, LSpeed), direction * ramp(currentPosition, maxDist, LSpeed),
+//                    direction * ramp(currentPosition, maxDist, RSpeed), direction * ramp(currentPosition, maxDist, RSpeed));
+            setMotors(direction * LSpeed, direction * LSpeed, direction * RSpeed, direction * RSpeed);
+        }
+    }
+
     public boolean underThreshold(int[] threshold) {
         if(robot.testColor.red() < threshold[0] & robot.testColor.green() < threshold[1]
                                                 & robot.testColor.blue() < threshold[2]) {
@@ -665,7 +709,6 @@ public abstract class AutonomousNew extends LinearOpMode {
 
     public String detectSkyStone(boolean isBlue) {
         String returnVal = "None";
-        int[] patternThresholds = {200, 400, 600};
         while (!isStopRequested()) {
             setMotors(0.3, 0.3, 0.3, 0.3);
 
@@ -686,17 +729,20 @@ public abstract class AutonomousNew extends LinearOpMode {
 
                         VectorF translation = lastLocation.getTranslation();
 
-                        telemetry.addData("0: ", translation.get(0));
-                        telemetry.addData("1: ", translation.get(1));
-                        telemetry.addData("2: ", translation.get(2));
-                        sleep(500);
+                        telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                                translation.get(1) / mmPerInch, translation.get(2) / mmPerInch, translation.get(0) / mmPerInch);
 
-                        if (translation.get(0) <= patternThresholds[0]) {
+                        Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+                        telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+
+                        // sleep(500);
+
+                        if (translation.get(1) / mmPerInch <= -3.0) {
                             returnVal = isBlue ? "C" : "A";
-                        } else if (translation.get(0) <= patternThresholds[1]) {
-                            returnVal = "B";
-                        } else if (translation.get(0) <= patternThresholds[2]) {
+                        } else if (translation.get(1) / mmPerInch >= 3.0) {
                             returnVal = isBlue ? "A" : "C";
+                        } else {
+                            returnVal = "B";
                         }
                         telemetry.addData("Pattern: ", returnVal);
                         telemetry.update();
