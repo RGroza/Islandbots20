@@ -142,6 +142,13 @@ public class CompetitionBot {
 
     }
 
+    public void setMotors(double LF, double LB, double RF, double RB) {
+        LFmotor.setPower(LF);
+        LBmotor.setPower(LB);
+        RFmotor.setPower(RF);
+        RBmotor.setPower(RB);
+    }
+
     public double getPitch() {
         Orientation angOrientation = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         return angOrientation.firstAngle;

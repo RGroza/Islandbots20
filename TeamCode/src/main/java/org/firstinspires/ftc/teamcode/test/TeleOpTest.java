@@ -24,7 +24,13 @@ public class TeleOpTest extends LinearOpMode{
 
             slowToggleButton.checkStatus(slowToggleBool);
 
-            robot.mecanumMove(x, y, rotation, slowToggleButton.pressed);
+            if (y != 0) {
+                robot.setMotors(y, y, y, y);
+            } else {
+                robot.setMotors(rotation, rotation, -rotation, -rotation);
+            }
+
+            // robot.mecanumMove(x, y, rotation, slowToggleButton.pressed);
 
             telemetry.addData("A: RF:  ", robot.RFmotor.getCurrentPosition());
             telemetry.addData("B: RB:  ", robot.RBmotor.getCurrentPosition());

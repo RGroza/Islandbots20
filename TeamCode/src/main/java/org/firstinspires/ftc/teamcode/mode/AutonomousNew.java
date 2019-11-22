@@ -72,7 +72,14 @@ public abstract class AutonomousNew extends LinearOpMode {
     private float phoneYRotate    = 0;
     private float phoneZRotate    = 0;
 
+    private DistanceSensor sensorRange;
+
     List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
+
+    public void runAutonomousTest(Telemetry telemetry) throws InterruptedException {
+        detectSkyStone(true);
+
+    }
 
     public void runTestLineDetect(Telemetry telemetry) throws InterruptedException {
         detectLineAndStop(false, 1800, telemetry, false);
@@ -117,11 +124,11 @@ public abstract class AutonomousNew extends LinearOpMode {
             if(robot.LcolorSensor.blue() > L_COLOR_THRESHOLD) {
                 LSpeed = 0;
             }
-//            setMotors(direction * ramp(currentPosition, maxDist, LSpeed), direction * ramp(currentPosition, maxDist, LSpeed),
+//            robot.setMotors(direction * ramp(currentPosition, maxDist, LSpeed), direction * ramp(currentPosition, maxDist, LSpeed),
 //                    direction * ramp(currentPosition, maxDist, RSpeed), direction * ramp(currentPosition, maxDist, RSpeed));
-            setMotors(direction * LSpeed, direction * LSpeed, direction * RSpeed, direction * RSpeed);
+            robot.setMotors(direction * LSpeed, direction * LSpeed, direction * RSpeed, direction * RSpeed);
         }
-        setMotors(0,0,0,0);
+        robot.setMotors(0,0,0,0);
     }
 
     private void detectLineAndContinue(boolean isForward, Telemetry telemetry, boolean useDistanceSensor) throws InterruptedException {
@@ -162,9 +169,9 @@ public abstract class AutonomousNew extends LinearOpMode {
             if(robot.LcolorSensor.blue() > L_COLOR_THRESHOLD) {
                 LSpeed = 0;
             }
-//            setMotors(direction * ramp(currentPosition, maxDist, LSpeed), direction * ramp(currentPosition, maxDist, LSpeed),
+//            robot.setMotors(direction * ramp(currentPosition, maxDist, LSpeed), direction * ramp(currentPosition, maxDist, LSpeed),
 //                    direction * ramp(currentPosition, maxDist, RSpeed), direction * ramp(currentPosition, maxDist, RSpeed));
-            setMotors(direction * LSpeed, direction * LSpeed, direction * RSpeed, direction * RSpeed);
+            robot.setMotors(direction * LSpeed, direction * LSpeed, direction * RSpeed, direction * RSpeed);
         }
     }
 
@@ -199,20 +206,20 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         if(useSonar) {
             while(robot.sonarDistance.getVoltage() > 0.05) {
-                setMotors(LSpeed, LSpeed, RSpeed, RSpeed);
+                robot.setMotors(LSpeed, LSpeed, RSpeed, RSpeed);
             }
         } else {
             while(underThreshold(YEllOW_THRESHOLD)) {
-                setMotors(LSpeed, LSpeed, RSpeed, RSpeed);
+                robot.setMotors(LSpeed, LSpeed, RSpeed, RSpeed);
             }
         }
 
         LSpeed = .3;
         RSpeed = .3;
         while(overThreshold(BLACK_THRESHOLD)) {
-            setMotors(LSpeed, LSpeed, RSpeed, RSpeed);
+            robot.setMotors(LSpeed, LSpeed, RSpeed, RSpeed);
         }
-        setMotors(0, 0, 0, 0);
+        robot.setMotors(0, 0, 0, 0);
 
     }
 
@@ -239,7 +246,7 @@ public abstract class AutonomousNew extends LinearOpMode {
             telemetry.update();
 
         }
-        setMotors(0,0,0,0);
+        robot.setMotors(0,0,0,0);
     }
 
     public void turnUntil(double speed, double absAngle) throws InterruptedException {
@@ -314,12 +321,12 @@ public abstract class AutonomousNew extends LinearOpMode {
         return speed; // default
     }
 
-    public void setMotors(double LF, double LB, double RF, double RB) {
-        robot.LFmotor.setPower(LF);
-        robot.LBmotor.setPower(LB);
-        robot.RFmotor.setPower(RF);
-        robot.RBmotor.setPower(RB);
-    }
+//    public void setMotors(double LF, double LB, double RF, double RB) {
+//        robot.LFmotor.setPower(LF);
+//        robot.LBmotor.setPower(LB);
+//        robot.RFmotor.setPower(RF);
+//        robot.RBmotor.setPower(RB);
+//    }
 
     public void forward(double speed, int deltaDistance) throws InterruptedException {
 //        int linearDistance = // Conversion from enconder counts to linear distance
@@ -341,13 +348,13 @@ public abstract class AutonomousNew extends LinearOpMode {
             gyroCorrection = gyroCorrect(targetPitch, robot.getPitch());
 //            double rampedSpeed = distanceTarget == 0 ? ramp(avgPos, deltaDistance, targetPos, speed) : ramp(currentDistance, distanceTarget, speed);
             double rampedSpeed = ramp(avgPos, deltaDistance, targetPos, speed);
-            setMotors(clamp(rampedSpeed - gyroCorrection),
+            robot.setMotors(clamp(rampedSpeed - gyroCorrection),
                     clamp(rampedSpeed - gyroCorrection),
                     clamp(rampedSpeed + gyroCorrection),
                     clamp(rampedSpeed + gyroCorrection));
 
         }
-        setMotors(0,0,0,0);
+        robot.setMotors(0,0,0,0);
     }
 
     public void backward(double speed, int deltaDistance) throws InterruptedException {
@@ -369,14 +376,14 @@ public abstract class AutonomousNew extends LinearOpMode {
             gyroCorrection = gyroCorrect(targetPitch, robot.getPitch());
 //            double rampedSpeed = distanceTarget == 0 ? ramp(avgPos, -deltaDistance, targetPos, speed) : ramp(currentDistance, distanceTarget, speed);
             double rampedSpeed = ramp(avgPos, -deltaDistance, targetPos, speed);
-            setMotors(clamp(-rampedSpeed - gyroCorrection),
+            robot.setMotors(clamp(-rampedSpeed - gyroCorrection),
                     clamp(-rampedSpeed - gyroCorrection),
                     clamp(-rampedSpeed + gyroCorrection),
                     clamp(-rampedSpeed + gyroCorrection));
             telemetry.update();
 
         }
-        setMotors(0,0,0,0);
+        robot.setMotors(0,0,0,0);
     }
 
     public void right(double speed, int deltaDistance) throws InterruptedException {
@@ -395,11 +402,11 @@ public abstract class AutonomousNew extends LinearOpMode {
             gyroCorrection = gyroCorrect(targetPitch, robot.getPitch());
 //            distanceCorrection = distanceReading != 0 ? (distanceReading - robot.wallDistanceFront.getVoltage()) * 10 : 0;
             double rampedSpeed = ramp(avgPos, deltaDistance, targetPos, speed);
-//            setMotors(clamp(rampedSpeed - gyroCorrection + distanceCorrection),
+//            robot.setMotors(clamp(rampedSpeed - gyroCorrection + distanceCorrection),
 //                    clamp(-rampedSpeed - gyroCorrection + distanceCorrection),
 //                    clamp(-rampedSpeed + gyroCorrection + distanceCorrection),
 //                    clamp(rampedSpeed + gyroCorrection) + distanceCorrection);
-            setMotors(clamp(rampedSpeed - gyroCorrection),
+            robot.setMotors(clamp(rampedSpeed - gyroCorrection),
                     clamp(-rampedSpeed - gyroCorrection),
                     clamp(-rampedSpeed + gyroCorrection),
                     clamp(rampedSpeed + gyroCorrection));
@@ -407,7 +414,7 @@ public abstract class AutonomousNew extends LinearOpMode {
             telemetry.update();
 
         }
-        setMotors(0,0,0,0);
+        robot.setMotors(0,0,0,0);
     }
 
     public void left(double speed, int deltaDistance) throws InterruptedException {
@@ -426,11 +433,11 @@ public abstract class AutonomousNew extends LinearOpMode {
             gyroCorrection = gyroCorrect(targetPitch, robot.getPitch());
 //            distanceCorrection = distanceReading != 0 ? (distanceReading - robot.wallDistanceFront.getVoltage()) * 10 : 0;
             double rampedSpeed = ramp(avgPos, deltaDistance, targetPos, speed);
-//            setMotors(clamp(-rampedSpeed - gyroCorrection + distanceCorrection),
+//            robot.setMotors(clamp(-rampedSpeed - gyroCorrection + distanceCorrection),
 //                    clamp(rampedSpeed - gyroCorrection + distanceCorrection),
 //                    clamp(rampedSpeed + gyroCorrection + distanceCorrection),
 //                    clamp(-rampedSpeed + gyroCorrection) + distanceCorrection);
-            setMotors(clamp(-rampedSpeed - gyroCorrection),
+            robot.setMotors(clamp(-rampedSpeed - gyroCorrection),
                     clamp(rampedSpeed - gyroCorrection),
                     clamp(rampedSpeed + gyroCorrection),
                     clamp(-rampedSpeed + gyroCorrection));
@@ -438,7 +445,7 @@ public abstract class AutonomousNew extends LinearOpMode {
             telemetry.update();
 
         }
-        setMotors(0,0,0,0);
+        robot.setMotors(0,0,0,0);
     }
 
     // overloading allows us to define the following
@@ -710,7 +717,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     public String detectSkyStone(boolean isBlue) {
         String returnVal = "None";
         while (!isStopRequested()) {
-            setMotors(0.3, 0.3, 0.3, 0.3);
+            robot.setMotors(0.3, 0.3, 0.3, 0.3);
 
             // check all the trackable targets to see which one (if any) is visible, while the measured distance > 5 cm
             telemetry.addData("Initial Dist: ", robot.sensorRange.getDistance(DistanceUnit.CM));
@@ -720,7 +727,7 @@ public abstract class AutonomousNew extends LinearOpMode {
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() && trackable.getName() == "Stone Target") {
                         telemetry.addLine("SkyStone found!");
 
-                        setMotors(0, 0, 0, 0);
+                        robot.setMotors(0, 0, 0, 0);
 
                         OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
                         if (robotLocationTransform != null) {
@@ -754,5 +761,16 @@ public abstract class AutonomousNew extends LinearOpMode {
             return returnVal;
         }
         return returnVal;
+    }
+
+    public void moveUntilDist(double distance) {
+        // Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor)sensorRange;
+
+        while (!isStopRequested()) {
+            robot.setMotors(0.3, 0.3, 0.3, 0.3);
+
+            // while (sensorRange.getDistance())
+            // TODO Use laser distance sensor to check when distance is below threshold, otherwise timeout
+        }
     }
 }
