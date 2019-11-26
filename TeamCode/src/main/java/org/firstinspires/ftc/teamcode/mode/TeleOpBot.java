@@ -82,12 +82,16 @@ public class TeleOpBot extends LinearOpMode {
             }
 
             // MOVEMENT
-            robot.mecanumMove(x, y, rotation, slowToggleButton.pressed);
+            double[] powerList = robot.mecanumMove(x, y, rotation, slowToggleButton.pressed, telemetry);
 
-            telemetry.addData("LF", robot.LFmotor.getCurrentPosition());
-            telemetry.addData("LB", robot.LBmotor.getCurrentPosition());
-            telemetry.addData("RF", robot.RFmotor.getCurrentPosition());
-            telemetry.addData("RB", robot.RBmotor.getCurrentPosition());
+            telemetry.addData("LF Pos: ", robot.LFmotor.getCurrentPosition());
+            telemetry.addData("LF Pow: ", Math.round(powerList[0] * 100.0) / 100.0);
+            telemetry.addData("LB Pos: ", robot.LBmotor.getCurrentPosition());
+            telemetry.addData("LB Pow: ", Math.round(powerList[1] * 100.0) / 100.0);
+            telemetry.addData("RF Pos: ", robot.RFmotor.getCurrentPosition());
+            telemetry.addData("RF Pow: ", Math.round(powerList[2] * 100.0) / 100.0);
+            telemetry.addData("RB Pos: ", robot.RBmotor.getCurrentPosition());
+            telemetry.addData("RB Pow: ", Math.round(powerList[3] * 100.0) / 100.0);
             telemetry.addData("joyX: ", gamepad1.left_stick_x);
             telemetry.addData("joyY: ", gamepad1.left_stick_y);
             telemetry.addData("X: ", slowToggleButton.pressed);

@@ -103,7 +103,7 @@ public class CompetitionBot {
         return Magnitude;
     }
 
-    public void mecanumMove(double joystickX, double joystickY, double rotation, boolean slowToggle) {
+    public double[] mecanumMove(double joystickX, double joystickY, double rotation, boolean slowToggle, Telemetry telemetry) {
         double SPEED_REDUCTION;
 
         if(slowToggle){
@@ -135,11 +135,10 @@ public class CompetitionBot {
         RF = clamp(RF);
         RB = clamp(RB);
 
-        RFmotor.setPower(RF);
-        RBmotor.setPower(RB);
-        LFmotor.setPower(LF); 
-        LBmotor.setPower(LB);
+        setMotors(LF, LB, RF, RB);
 
+        double[] returnedValues = {LF, LB, RF, RB};
+        return returnedValues;
     }
 
     public void setMotors(double LF, double LB, double RF, double RB) {

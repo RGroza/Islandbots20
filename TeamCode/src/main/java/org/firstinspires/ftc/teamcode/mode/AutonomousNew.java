@@ -31,6 +31,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
+import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
 
 
 public abstract class AutonomousNew extends LinearOpMode {
@@ -38,7 +39,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
     private ElapsedTime timer = new ElapsedTime();
 
-    private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
+    private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
     private static final boolean PHONE_IS_PORTRAIT = false;
 
 
@@ -717,7 +718,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     public String detectSkyStone(boolean isBlue) {
         String returnVal = "None";
         while (!isStopRequested()) {
-            robot.setMotors(0.3, 0.3, 0.3, 0.3);
+            robot.setMotors(.1, -.1, -.1, .1);
 
             // check all the trackable targets to see which one (if any) is visible, while the measured distance > 5 cm
             telemetry.addData("Initial Dist: ", robot.sensorRange.getDistance(DistanceUnit.CM));
