@@ -9,11 +9,12 @@ public class RunAutonomousTest extends AutonomousNew {
         robot = new CompetitionBot(hardwareMap, telemetry);
 
         initVuforia();
+        telemetry.addLine("Vuforia Initialized!");
+        telemetry.update();
 
         waitForStart();
-        String returnedVal = detectSkyStone(true);
-        telemetry.addData("Returned Value: ", returnedVal);
+        runAutonomous(telemetry);
+
         telemetry.update();
-        sleep(2000);
     }
 }
