@@ -24,6 +24,7 @@ public class TeleOpBot extends LinearOpMode {
         GamepadButton grabberServoButton = new GamepadButton(300, false);
         GamepadButton armRotateButton = new GamepadButton(300, false);
         GamepadButton intakeButton = new GamepadButton(300, false);
+        GamepadButton platformServoButton = new GamepadButton(300, false);
 
         waitForStart();
         while(opModeIsActive()) {
@@ -32,15 +33,19 @@ public class TeleOpBot extends LinearOpMode {
             double x = -gamepad1.left_stick_x;
             double y = -gamepad1.left_stick_y;
             double rotation = gamepad1.right_stick_x;
+
             boolean slowToggleBool = gamepad1.b;
 
-            boolean slideUpBool = gamepad1.y;
-            boolean slideDownBool = gamepad1.a;
+            // Gamepad 2
+            boolean slideUpBool = gamepad2.y;
+            boolean slideDownBool = gamepad2.a;
 
-            boolean grabberServoBool = gamepad1.right_bumper;
-            boolean armRotateServoBool = gamepad1.left_bumper;
+            boolean grabberServoBool = gamepad2.right_bumper;
+            boolean armRotateServoBool = gamepad2.left_bumper;
 
-            boolean intakeBool = gamepad1.x;
+            boolean intakeBool = gamepad2.x;
+
+            boolean platformServoBool = gamepad2.b;
 
             // BUTTON DEBOUNCE
             slowToggleButton.checkStatus(slowToggleBool);
@@ -49,6 +54,7 @@ public class TeleOpBot extends LinearOpMode {
             grabberServoButton.checkStatus(grabberServoBool);
             armRotateButton.checkStatus(armRotateServoBool);
             intakeButton.checkStatus(intakeBool);
+            platformServoButton.checkStatus(platformServoBool);
 
             if (slowToggleButton.pressed) {
                 x /= 2;
@@ -80,6 +86,12 @@ public class TeleOpBot extends LinearOpMode {
             } else {
                 robot.IntakeMotor.setPower(0);
             }
+
+//            if (platformServoButton.pressed) {
+//                robot.platformServo.setPosition(.75);
+//            } else {
+//                robot.platformServo.setPosition(.25);
+//            }
 
             // MOVEMENT
             double[] powerList = robot.mecanumMove(x, y, rotation, slowToggleButton.pressed, telemetry);
