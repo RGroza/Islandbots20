@@ -8,13 +8,16 @@ public class RunAutonomousTest extends AutonomousNew {
     public void runOpMode() throws InterruptedException {
         robot = new CompetitionBot(hardwareMap, telemetry);
 
-        initVuforia();
-        telemetry.addLine("Vuforia Initialized!");
-        telemetry.update();
+//        initVuforia();
+//        telemetry.addLine("Vuforia Initialized!");
+//        telemetry.update();
+//
+//        waitForStart();
+//        runAutonomous(telemetry);
 
         waitForStart();
-        runAutonomous(telemetry);
 
+        rightUntil(0.5, 10.0);
         telemetry.update();
     }
 }

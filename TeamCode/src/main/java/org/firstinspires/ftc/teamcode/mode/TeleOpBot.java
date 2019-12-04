@@ -34,18 +34,19 @@ public class TeleOpBot extends LinearOpMode {
             double y = -gamepad1.left_stick_y;
             double rotation = gamepad1.right_stick_x;
 
-            boolean slowToggleBool = gamepad1.b;
+            boolean slowToggleBool = gamepad1.;
 
             // Gamepad 2
-            boolean slideUpBool = gamepad2.y;
-            boolean slideDownBool = gamepad2.a;
+            boolean slideUpBool = gamepad1.y;
+            boolean slideDownBool = gamepad1.a;
 
-            boolean grabberServoBool = gamepad2.right_bumper;
-            boolean armRotateServoBool = gamepad2.left_bumper;
+            boolean grabberServoBool = gamepad1.right_bumper;
+            boolean armRotateServoBool = gamepad1.left_bumper;
 
-            boolean intakeBool = gamepad2.x;
+            boolean intakeBool = gamepad1.x;
+            boolean reverseIntakeBool = gamepad1.b;
 
-            boolean platformServoBool = gamepad2.b;
+            boolean platformServoBool = gamepad1.b;
 
             // BUTTON DEBOUNCE
             slowToggleButton.checkStatus(slowToggleBool);

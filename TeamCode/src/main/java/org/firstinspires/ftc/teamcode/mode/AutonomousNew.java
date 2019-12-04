@@ -476,19 +476,26 @@ public abstract class AutonomousNew extends LinearOpMode {
         robot.setMotors(0,0,0,0);
     }
 
-    public void forwardUntil(double speed, double distance) throws InterruptedException {
+    public void forwardUntil(double speed, int distance) throws InterruptedException {
+        int avgPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 4.0);
+        int targetPos = avgPos + distance;
         double targetPitch = robot.getPitch();
         double currentDistance = robot.sensorRange.getDistance(DistanceUnit.CM);
 
         double gyroCorrection;
         while(currentDistance >= distance && opModeIsActive()) {
+            avgPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 4.0);
             currentDistance = robot.sensorRange.getDistance(DistanceUnit.CM);
+            int remainingDist = (int)(currentDistance - distance);
             gyroCorrection = gyroCorrect(targetPitch, robot.getPitch());
+            double rampedSpeed = ramp(avgPos, remainingDist, targetPos, speed);
             robot.setMotors(clamp(speed - gyroCorrection),
                     clamp(speed - gyroCorrection),
                     clamp(speed + gyroCorrection),
                     clamp(speed + gyroCorrection));
 
+            telemetry.addData("dist: ", currentDistance);
+            telemetry.update();
         }
         robot.setMotors(0,0,0,0);
     }
@@ -513,7 +520,8 @@ public abstract class AutonomousNew extends LinearOpMode {
         robot.setMotors(0,0,0,0);
     }
 
-    public void backwardUntil(double speed, double distance) throws InterruptedException {
+    // TODO: add "remainingDist" for rampedSpeed
+    public void backwardUntil(double speed, int distance) throws InterruptedException {
         double targetPitch = robot.getPitch();
         double currentDistance = robot.sensorRange.getDistance(DistanceUnit.CM);
 
@@ -526,6 +534,8 @@ public abstract class AutonomousNew extends LinearOpMode {
                     clamp(-speed + gyroCorrection),
                     clamp(-speed + gyroCorrection));
 
+            telemetry.addData("dist: ", currentDistance);
+            telemetry.update();
         }
         robot.setMotors(0,0,0,0);
     }
@@ -552,6 +562,26 @@ public abstract class AutonomousNew extends LinearOpMode {
         robot.setMotors(0,0,0,0);
     }
 
+    // TODO: add "remainingDist" for rampedSpeed
+    public void rightUntil(double speed, int distance) throws InterruptedException {
+        double targetPitch = robot.getPitch();
+        double currentDistance = robot.sensorRange.getDistance(DistanceUnit.CM);
+
+        double gyroCorrection;
+        while(currentDistance >= distance && opModeIsActive()) {
+            gyroCorrection = gyroCorrect(targetPitch, robot.getPitch());
+            currentDistance = robot.sensorRange.getDistance(DistanceUnit.CM);
+            robot.setMotors(clamp(speed - gyroCorrection),
+                    clamp(-speed - gyroCorrection),
+                    clamp(-speed + gyroCorrection),
+                    clamp(speed + gyroCorrection));
+
+        telemetry.addData("dist: ", currentDistance);
+        telemetry.update();
+        }
+        robot.setMotors(0,0,0,0);
+    }
+
     public void left(double speed, int deltaDistance) throws InterruptedException {
         int avgPos = (int) ((robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition()) / 2.0);
 
@@ -570,6 +600,26 @@ public abstract class AutonomousNew extends LinearOpMode {
             telemetry.addData("PosR: ", avgPos);
             telemetry.update();
 
+        }
+        robot.setMotors(0,0,0,0);
+    }
+
+    // TODO: add "remainingDist" for rampedSpeed
+    public void leftUntil(double speed, int distance) throws InterruptedException {
+        double targetPitch = robot.getPitch();
+        double currentDistance = robot.sensorRange.getDistance(DistanceUnit.CM);
+
+        double gyroCorrection;
+        while(currentDistance >= distance && opModeIsActive()) {
+            gyroCorrection = gyroCorrect(targetPitch, robot.getPitch());
+            currentDistance = robot.sensorRange.getDistance(DistanceUnit.CM);
+            robot.setMotors(clamp(-speed - gyroCorrection),
+                    clamp(speed - gyroCorrection),
+                    clamp(speed + gyroCorrection),
+                    clamp(-speed + gyroCorrection));
+
+            telemetry.addData("dist: ", currentDistance);
+            telemetry.update();
         }
         robot.setMotors(0,0,0,0);
     }
