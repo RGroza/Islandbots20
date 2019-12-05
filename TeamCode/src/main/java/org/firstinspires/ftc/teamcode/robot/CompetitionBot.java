@@ -22,7 +22,7 @@ public class CompetitionBot {
     public BNO055IMU gyro;
     public AnalogInput sonarDistance;
     public DcMotor RFmotor, RBmotor, LFmotor, LBmotor, SlideMotor, IntakeMotor;
-    public Servo grabberServo, armRotateServo;
+    public Servo grabberServo, armRotateServo, Lfoundation, Rfoundation;
     public DistanceSensor sensorRange;
 
     boolean slowMove;
@@ -51,7 +51,6 @@ public class CompetitionBot {
         gyro = hwMap.get(BNO055IMU.class, "gyro");
 
         // color sensors
-        testColor = hwMap.colorSensor.get("testColor");
         LcolorSensor = hwMap.colorSensor.get("LcolorSensor");
         RcolorSensor = hwMap.colorSensor.get("RcolorSensor");
 
@@ -59,7 +58,7 @@ public class CompetitionBot {
         sonarDistance = hwMap.analogInput.get("sonarDistance");
 
         // distance sensors
-        sensorRange = hwMap.get(DistanceSensor.class, "sensor_range");
+        sensorRange = hwMap.get(DistanceSensor.class, "sensorRange");
 
         // motor encoders init
         resetEncoders();
@@ -71,6 +70,8 @@ public class CompetitionBot {
         // servos
         grabberServo = hwMap.servo.get("grabberServo");
         armRotateServo = hwMap.servo.get("armRotateServo");
+        Lfoundation = hwMap.servo.get("Lfoundation");
+        Rfoundation = hwMap.servo.get("Rfoundation");
 
         gyro.initialize(parameters);
         telemetry.addData("Successfully Initialized", null);
