@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.mode;
 
+import android.sax.TextElementListener;
+
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -93,6 +95,37 @@ public abstract class AutonomousNew extends LinearOpMode {
         turnUntil(0.5, 180);
 
         backward(0.5, 1000);
+
+    }
+
+    public void runBlueAutonomous(Telemetry telemetry) throws InterruptedException {
+        // BLUE SIDE
+        String pattern = detectSkyStone(true, telemetry);
+        int patternDist = 1500;
+        if (pattern.equals("A")) {
+            patternDist = 500;
+        } else if (pattern.equals("B")) {
+            patternDist = 1000;
+        } else { // Pattern C and default condition
+            right(0.5, 500);
+
+            forward(0.5, patternDist);
+            turnUntil(0.5, -135);
+
+            robot.IntakeMotor.setPower(0.75);
+            forward(0.5, 1250);
+            sleep(500);
+            backward(0.5, 1250);
+            robot.IntakeMotor.setPower(0);
+        }
+
+        turnUntil(0.5, 180);
+
+        backward(0.5, 1000);
+
+    }
+
+    public void runRedAutonomous(Telemetry telemetry) throws InterruptedException {
 
     }
 
