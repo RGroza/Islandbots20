@@ -26,10 +26,10 @@ public class TeleOpBot extends LinearOpMode {
         GamepadButton grabberServoButton = new GamepadButton(300, false);
         GamepadButton armRotateButton = new GamepadButton(300, false);
         GamepadButton intakeButton = new GamepadButton(300, false);
-        GamepadButton foundationServoButton = new GamepadButton(300, false);
+        GamepadButton reverseIntakeButton = new GamepadButton(300, false);
+        GamepadButton foundationServosButton = new GamepadButton(300, false);
 
         int slideMotorSteps = 0;
-        int slideLevel = 0;
 
         waitForStart();
         while(opModeIsActive()) {
@@ -40,6 +40,8 @@ public class TeleOpBot extends LinearOpMode {
             double rotation = gamepad1.right_stick_x;
 
             boolean slowToggleBool = gamepad1.right_stick_button;
+
+            boolean foundationServosBool = gamepad1.a;
 
             // Gamepad 2
             double slide_y = -gamepad2.left_stick_y;
@@ -55,8 +57,6 @@ public class TeleOpBot extends LinearOpMode {
             boolean intakeBool = gamepad2.x;
             boolean reverseIntakeBool = gamepad2.b;
 
-            boolean foundationServoBool = gamepad2.dpad_left;
-
             // BUTTON DEBOUNCE
             slowToggleButton.checkStatus(slowToggleBool);
             slideUpButton.checkStatus(slideUpBool);
@@ -66,7 +66,8 @@ public class TeleOpBot extends LinearOpMode {
             grabberServoButton.checkStatus(grabberServoBool);
             armRotateButton.checkStatus(armRotateServoBool);
             intakeButton.checkStatus(intakeBool);
-            foundationServoButton.checkStatus(foundationServoBool);
+            reverseIntakeButton.checkStatus(reverseIntakeBool);
+            foundationServosButton.checkStatus(foundationServosBool);
 
             if (slowToggleButton.pressed) {
                 x /= 2;
@@ -84,13 +85,11 @@ public class TeleOpBot extends LinearOpMode {
             // Manual control of the linear slide
             robot.SlideMotor.setPower(slide_y*slide_y);
 
-            // TODO: to be tested
-            if (slideUpLevelButton.justPressed && slideLevel <= 4) {
+            // TODO: to be tested and add slideLevel if necessary
+            if (slideUpLevelButton.justPressed) {
                 slideMotorSteps = 500;
-                slideLevel++;
-            } else if (slideDownLevelButton.justPressed && slideLevel > 0) {
+            } else if (slideDownLevelButton.justPressed) {
                 slideMotorSteps = -500;
-                slideLevel--;
             }
             if (slideMotorSteps != 0) {
                 double initialPos = robot.SlideMotor.getCurrentPosition();
@@ -112,13 +111,17 @@ public class TeleOpBot extends LinearOpMode {
                 robot.armRotateServo.setPosition(.25);
             }
 
-            if (intakeButton.pressed) {
-                robot.IntakeMotor.setPower(.75);
+            if (reverseIntakeButton.buttonStatus) {
+                robot.IntakeMotor.setPower(-.75);
             } else {
-                robot.IntakeMotor.setPower(0);
+                if (intakeButton.pressed) {
+                    robot.IntakeMotor.setPower(.75);
+                } else {
+                    robot.IntakeMotor.setPower(0);
+                }
             }
 
-            if (foundationServoButton.pressed) {
+            if (foundationServosButton.pressed) {
                 robot.Lfoundation.setPosition(.75);
                 robot.Rfoundation.setPosition(.75);
             } else {
