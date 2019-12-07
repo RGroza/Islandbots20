@@ -17,7 +17,7 @@ public class RunAutonomousTest extends AutonomousNew {
 
         waitForStart();
 
-        rightUntil(0.5, 10.0);
+        rightUntil(0.5, 10);
         telemetry.update();
     }
 }

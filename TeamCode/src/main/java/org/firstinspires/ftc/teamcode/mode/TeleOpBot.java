@@ -28,6 +28,7 @@ public class TeleOpBot extends LinearOpMode {
         GamepadButton intakeButton = new GamepadButton(300, false);
         GamepadButton reverseIntakeButton = new GamepadButton(300, false);
         GamepadButton foundationServosButton = new GamepadButton(300, false);
+        GamepadButton reverseToggleButton = new GamepadButton(300, false);
 
         int slideMotorSteps = 0;
 
@@ -43,8 +44,10 @@ public class TeleOpBot extends LinearOpMode {
 
             boolean foundationServosBool = gamepad1.a;
 
+            boolean reverseToggleBool = gamepad1.left_stick_button;
+
             // Gamepad 2
-            double slide_y = -gamepad2.left_stick_y;
+            double slide_y = gamepad2.left_stick_y;
 
             boolean slideUpBool = gamepad2.y;
             boolean slideDownBool = gamepad2.a;
@@ -68,47 +71,59 @@ public class TeleOpBot extends LinearOpMode {
             intakeButton.checkStatus(intakeBool);
             reverseIntakeButton.checkStatus(reverseIntakeBool);
             foundationServosButton.checkStatus(foundationServosBool);
+            reverseToggleButton.checkStatus(reverseToggleBool);
 
+
+            if(reverseToggleButton.pressed) {
+                x = gamepad1.left_stick_x;
+                y = gamepad1.left_stick_y;
+            }
             if (slowToggleButton.pressed) {
-                x /= 2;
-                y /= 2;
+                x *= .75;
+                y *= .75;
             }
 
             if (slideUpButton.buttonStatus) {
-                robot.SlideMotor.setPower(.75);
-            } else if (slideDownButton.buttonStatus) {
                 robot.SlideMotor.setPower(-.75);
+            } else if (slideDownButton.buttonStatus) {
+                robot.SlideMotor.setPower(.75);
             } else {
                 robot.SlideMotor.setPower(0);
             }
 
             // Manual control of the linear slide
-            robot.SlideMotor.setPower(slide_y*slide_y);
+            if (slide_y > 0) {
+                robot.SlideMotor.setPower(slide_y * slide_y);
+            } else if (slide_y < 0) {
+                robot.SlideMotor.setPower(-slide_y * slide_y);
+            }
 
+            double initialPos = robot.SlideMotor.getCurrentPosition();
             // TODO: to be tested and add slideLevel if necessary
             if (slideUpLevelButton.justPressed) {
-                slideMotorSteps = 500;
+                slideMotorSteps = 250;
+                initialPos = robot.SlideMotor.getCurrentPosition();
             } else if (slideDownLevelButton.justPressed) {
-                slideMotorSteps = -500;
+                slideMotorSteps = -250;
+                initialPos = robot.SlideMotor.getCurrentPosition();
             }
             if (slideMotorSteps != 0) {
-                double initialPos = robot.SlideMotor.getCurrentPosition();
-                while (robot.SlideMotor.getCurrentPosition() - initialPos < 1) {
+                while (Math.abs(robot.SlideMotor.getCurrentPosition() - initialPos) < 1) {
                     double power = slideMotorSteps > 0 ? .75 : -.75;
                     robot.SlideMotor.setPower(power);
                 }
             }
 
             if (grabberServoButton.pressed) {
-                robot.grabberServo.setPosition(.75);
+                robot.grabberServo.setPosition(.63);
             } else {
-                robot.grabberServo.setPosition(.25);
+                robot.grabberServo.setPosition(.45);
             }
 
             if (armRotateButton.pressed) {
-                robot.armRotateServo.setPosition(.75);
+                robot.armRotateServo.setPosition(.45);
             } else {
-                robot.armRotateServo.setPosition(.25);
+                robot.armRotateServo.setPosition(.08);
             }
 
             if (reverseIntakeButton.buttonStatus) {
@@ -122,11 +137,11 @@ public class TeleOpBot extends LinearOpMode {
             }
 
             if (foundationServosButton.pressed) {
-                robot.Lfoundation.setPosition(.75);
-                robot.Rfoundation.setPosition(.75);
+                robot.Lfoundation.setPosition(.84);
+                robot.Rfoundation.setPosition(.5);
             } else {
-                robot.Lfoundation.setPosition(.25);
-                robot.Rfoundation.setPosition(.25);
+                robot.Lfoundation.setPosition(.57);
+                robot.Rfoundation.setPosition(.8);
             }
 
             // MOVEMENT
