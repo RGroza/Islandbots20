@@ -115,9 +115,9 @@ public class TeleOpBot extends LinearOpMode {
             }
 
             if (grabberServoButton.pressed) {
-                robot.grabberServo.setPosition(.63);
+                robot.grabberServo.setPosition(.65);
             } else {
-                robot.grabberServo.setPosition(.45);
+                robot.grabberServo.setPosition(.35);
             }
 
             if (armRotateButton.pressed) {

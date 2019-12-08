@@ -28,7 +28,7 @@ public class CompetitionBot {
     boolean slowMove;
 
     public ColorSensor RcolorSensor;
-    public ColorSensor LcolorSensor;
+    //public ColorSensor LcolorSensor;
 
     public ColorSensor testColor;
 
@@ -51,7 +51,7 @@ public class CompetitionBot {
         gyro = hwMap.get(BNO055IMU.class, "gyro");
 
         // color sensors
-        LcolorSensor = hwMap.colorSensor.get("LcolorSensor");
+        //LcolorSensor = hwMap.colorSensor.get("LcolorSensor");
         RcolorSensor = hwMap.colorSensor.get("RcolorSensor");
 
         // analog sensors

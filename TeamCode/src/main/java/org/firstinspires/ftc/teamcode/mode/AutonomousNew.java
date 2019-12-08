@@ -41,7 +41,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
     private ElapsedTime timer = new ElapsedTime();
 
-    private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
+    private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
     private static final boolean PHONE_IS_PORTRAIT = false;
 
 
@@ -130,7 +130,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void runTestLineDetect(Telemetry telemetry) throws InterruptedException {
-        detectLineAndStop(false, 1800, telemetry, false);
+        //detectLineAndStop(false, 1800, telemetry, false);
 
     }
 
@@ -249,6 +249,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         return returnVal;
     }
 
+/*
     private void detectLineAndStop(boolean isForward, int maxDist, Telemetry telemetry, boolean useDistanceSensor) throws InterruptedException {
         telemetry.addData("Initial reading: ", 0);
         telemetry.addData("Left  Level: ",  robot.LcolorSensor.blue());
@@ -293,7 +294,9 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
         robot.setMotors(0,0,0,0);
     }
+*/
 
+/*
     private void detectLineAndContinue(boolean isForward, Telemetry telemetry, boolean useDistanceSensor) throws InterruptedException {
         telemetry.addData("Initial reading: ", 0);
         telemetry.addData("Left  Level: ",  robot.LcolorSensor.blue());
@@ -337,6 +340,7 @@ public abstract class AutonomousNew extends LinearOpMode {
             robot.setMotors(direction * LSpeed, direction * LSpeed, direction * RSpeed, direction * RSpeed);
         }
     }
+*/
 
     public boolean underThreshold(int[] threshold) {
         if(robot.testColor.red() < threshold[0] & robot.testColor.green() < threshold[1]
