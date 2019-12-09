@@ -4,6 +4,7 @@ import android.sax.TextElementListener;
 
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -297,6 +298,24 @@ public abstract class AutonomousNew extends LinearOpMode {
         telemetry.addLine("Not found!");
         telemetry.update();
         return returnVal;
+    }
+
+    public void detectLineAndGyro(boolean isForward, int maxDist, ColorSensor colorSensor, Telemetry telemetry) throws InterruptedException {
+        final int BLUE_THRESHOLD = 200;
+        final int RED_THRESHOLD = 200;
+
+        int initialPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 4.0);
+        int currentPos = initialPos;
+
+        int headingCorrection = robot.getPitch() > Math.abs(robot.getPitch() - 180) ? 0 : 180;
+
+        while ((colorSensor.blue() < BLUE_THRESHOLD || colorSensor.red() < RED_THRESHOLD)
+                && Math.abs(currentPos - initialPos) > maxDist && opModeIsActive()) {
+            double power = isForward ? .75 : -.75;
+            robot.setMotors(power, power, power, power);
+        }
+
+        turnUntil(.75, headingCorrection);
     }
 
 /*
