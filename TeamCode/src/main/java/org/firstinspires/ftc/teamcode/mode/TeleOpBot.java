@@ -115,9 +115,9 @@ public class TeleOpBot extends LinearOpMode {
             }
 
             if (grabberServoButton.pressed) {
-                robot.grabberServo.setPosition(.65);
-            } else {
                 robot.grabberServo.setPosition(.35);
+            } else {
+                robot.grabberServo.setPosition(.65);
             }
 
             if (armRotateButton.pressed) {
@@ -127,10 +127,10 @@ public class TeleOpBot extends LinearOpMode {
             }
 
             if (reverseIntakeButton.buttonStatus) {
-                robot.IntakeMotor.setPower(-.75);
+                robot.IntakeMotor.setPower(-1);
             } else {
                 if (intakeButton.pressed) {
-                    robot.IntakeMotor.setPower(.75);
+                    robot.IntakeMotor.setPower(1);
                 } else {
                     robot.IntakeMotor.setPower(0);
                 }

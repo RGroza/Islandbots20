@@ -101,31 +101,81 @@ public abstract class AutonomousNew extends LinearOpMode {
     public void runBlueAutonomous(Telemetry telemetry) throws InterruptedException {
         // BLUE SIDE
         String pattern = detectSkyStone(true, telemetry);
+        rightUntil(.75, 10);
+
         int patternDist = 1500;
-        if (pattern.equals("A")) {
-            patternDist = 500;
-        } else if (pattern.equals("B")) {
-            patternDist = 1000;
-        } else { // Pattern C and default condition
-            right(0.5, 500);
+        if (!pattern.equals("C") && !pattern.equals("None")) {
+            if (pattern.equals("A")) {
+                patternDist = 500;
+            } else if (pattern.equals("B")) {
+                patternDist = 1000;
+            }
+            forward(.75, patternDist);
+            turnUntil(.75, 180);
 
-            forward(0.5, patternDist);
-            turnUntil(0.5, -135);
+            left(.75, 500);
 
-            robot.IntakeMotor.setPower(0.75);
-            forward(0.5, 1250);
+            robot.IntakeMotor.setPower(1);
+            forward(.75, 500);
             sleep(500);
-            backward(0.5, 1250);
+            backward(.75, 500);
             robot.IntakeMotor.setPower(0);
+
+            right(.75, 500);
+        } else { // Pattern C and default condition
+            forward(.75, patternDist);
+            turnUntil(.75, -135);
+
+            robot.IntakeMotor.setPower(1);
+            forward(.75, 1250);
+            sleep(500);
+            robot.IntakeMotor.setPower(0);
+            backward(.75, 1250);
         }
 
-        turnUntil(0.5, 180);
+        turnUntil(.75, 180);
 
-        backward(0.5, 1000);
+        backward(.75, 2500 - patternDist);
 
     }
 
     public void runRedAutonomous(Telemetry telemetry) throws InterruptedException {
+        // RED SIDE
+        String pattern = detectSkyStone(true, telemetry);
+        rightUntil(.75, 10);
+
+        int patternDist = 1500;
+        if (!pattern.equals("C") && !pattern.equals("None")) {
+            if (pattern.equals("A")) {
+                patternDist = 500;
+            } else if (pattern.equals("B")) {
+                patternDist = 1000;
+            }
+            backward(.75, patternDist);
+
+            right(.75, 500);
+
+            robot.IntakeMotor.setPower(1);
+            forward(.75, 500);
+            sleep(500);
+            backward(.75, 500);
+            robot.IntakeMotor.setPower(0);
+
+            left(.75, 500);
+        } else { // Pattern C and default condition
+            backward(.75, patternDist);
+            turnUntil(.75, 45);
+
+            robot.IntakeMotor.setPower(1);
+            forward(.75, 1250);
+            sleep(500);
+            robot.IntakeMotor.setPower(0);
+            backward(.75, 1250);
+        }
+
+        turnUntil(.75, 180);
+
+        backward(.75, 2500 - patternDist);
 
     }
 

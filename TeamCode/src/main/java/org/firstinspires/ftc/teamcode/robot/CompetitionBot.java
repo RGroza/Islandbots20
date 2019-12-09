@@ -72,6 +72,7 @@ public class CompetitionBot {
         armRotateServo = hwMap.servo.get("armRotateServo");
         Lfoundation = hwMap.servo.get("Lfoundation");
         Rfoundation = hwMap.servo.get("Rfoundation");
+        // TODO: move servos to initial positions
 
         gyro.initialize(parameters);
         telemetry.addData("Successfully Initialized", null);
