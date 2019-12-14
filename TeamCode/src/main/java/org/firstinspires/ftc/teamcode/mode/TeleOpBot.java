@@ -115,15 +115,15 @@ public class TeleOpBot extends LinearOpMode {
             }
 
             if (grabberServoButton.pressed) {
-                robot.grabberServo.setPosition(.35);
+                robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
             } else {
-                robot.grabberServo.setPosition(.65);
+                robot.grabberServo.setPosition(CompetitionBot.GRABBER_OPEN);
             }
 
             if (armRotateButton.pressed) {
-                robot.armRotateServo.setPosition(.45);
+                robot.armRotateServo.setPosition(CompetitionBot.ARM_OUT);
             } else {
-                robot.armRotateServo.setPosition(.08);
+                robot.armRotateServo.setPosition(CompetitionBot.ARM_IN);
             }
 
             if (reverseIntakeButton.buttonStatus) {
@@ -137,11 +137,11 @@ public class TeleOpBot extends LinearOpMode {
             }
 
             if (foundationServosButton.pressed) {
-                robot.Lfoundation.setPosition(.84);
-                robot.Rfoundation.setPosition(.5);
+                robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
+                robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
             } else {
-                robot.Lfoundation.setPosition(.57);
-                robot.Rfoundation.setPosition(.8);
+                robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
+                robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
             }
 
             // MOVEMENT

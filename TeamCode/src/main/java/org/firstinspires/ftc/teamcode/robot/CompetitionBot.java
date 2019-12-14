@@ -32,6 +32,18 @@ public class CompetitionBot {
 
     public ColorSensor testColor;
 
+    // Servo constants
+    public static final double GRABBER_OPEN = .65;
+    public static final double GRABBER_CLOSED = .35;
+
+    public static final double ARM_IN = .08;
+    public static final double ARM_OUT = .45;
+
+    public static final double L_FOUND_UP = .57;
+    public static final double R_FOUND_UP = .8;
+    public static final double L_FOUND_DOWN = .84;
+    public static final double R_FOUND_DOWN = .5;
+
     public CompetitionBot(HardwareMap hwMap, Telemetry telemetry) {
         // gyro initialization
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
