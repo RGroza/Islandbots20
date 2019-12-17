@@ -98,21 +98,21 @@ public class TeleOpBot extends LinearOpMode {
                 robot.SlideMotor.setPower(-slide_y * slide_y);
             }
 
-            double initialPos = robot.SlideMotor.getCurrentPosition();
-            // TODO: to be tested and add slideLevel if necessary
-            if (slideUpLevelButton.justPressed) {
-                slideMotorSteps = 250;
-                initialPos = robot.SlideMotor.getCurrentPosition();
-            } else if (slideDownLevelButton.justPressed) {
-                slideMotorSteps = -250;
-                initialPos = robot.SlideMotor.getCurrentPosition();
-            }
-            if (slideMotorSteps != 0) {
-                while (Math.abs(robot.SlideMotor.getCurrentPosition() - initialPos) < 1) {
-                    double power = slideMotorSteps > 0 ? .75 : -.75;
-                    robot.SlideMotor.setPower(power);
-                }
-            }
+//            double initialPos = robot.SlideMotor.getCurrentPosition();
+//            // TODO: to be tested and add slideLevel if necessary
+//            if (slideUpLevelButton.justPressed) {
+//                slideMotorSteps = 250;
+//                initialPos = robot.SlideMotor.getCurrentPosition();
+//            } else if (slideDownLevelButton.justPressed) {
+//                slideMotorSteps = -250;
+//                initialPos = robot.SlideMotor.getCurrentPosition();
+//            }
+//            if (slideMotorSteps != 0) {
+//                while (Math.abs(robot.SlideMotor.getCurrentPosition() - initialPos) < 1) {
+//                    double power = slideMotorSteps > 0 ? .75 : -.75;
+//                    robot.SlideMotor.setPower(power);
+//                }
+//            }
 
             if (grabberServoButton.pressed) {
                 robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
