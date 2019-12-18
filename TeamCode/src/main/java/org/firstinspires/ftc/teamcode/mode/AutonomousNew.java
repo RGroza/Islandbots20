@@ -164,7 +164,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void runBlueFoundationAuto(Telemetry telemetry) throws InterruptedException {
-        while (robot.sonarDistance.getVoltage() < .14) { robot.setMotors(-.75, -.75, -.75, -.75); }
+        while (robot.sonarDistance.getVoltage() < .14) { robot.setMotors(-1, -1, -1, -1); }
         turnUntil(.75, 0);
 
         backward(.5, 200);
@@ -175,15 +175,16 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         sleep(500);
 
-        while (robot.sonarDistance.getVoltage() > .07) { robot.setMotors(.5, .5, .5, .5); }
+        while (robot.sonarDistance.getVoltage() > .07) { robot.setMotors(.75, .75, .75, .75); }
         turnUntil(.5, 90);
+        right(.5, 500);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
 
         sleep(500);
 
-        forward(.75, 2000);
+        forward(1, 2000);
 
     }
 
