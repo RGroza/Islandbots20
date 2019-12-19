@@ -11,10 +11,17 @@ public class IntakeTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         CompetitionBot robot = new CompetitionBot(hardwareMap, telemetry);
 
+        int initPos = robot.SlideMotor.getCurrentPosition();
+
         waitForStart();
         while (opModeIsActive()) {
-            robot.LBmotor.setPower(0.75);
-            robot.LFmotor.setPower(-0.75);
+            while (Math.abs(robot.SlideMotor.getCurrentPosition() - initPos) < 100) {
+                robot.SlideMotor.setPower(.05);
+                telemetry.addData("initial pos: ", initPos);
+                telemetry.addData("pos: ", robot.SlideMotor.getCurrentPosition());
+                telemetry.update();
+            }
+            robot.SlideMotor.setPower(0);
         }
 
     }

@@ -81,7 +81,8 @@ public abstract class AutonomousNew extends LinearOpMode {
     private int[] patternDistances = {200, 600, 1000};
 
     public void runBlueBlocksAuto(Telemetry telemetry) throws InterruptedException {
-        // BLUE SIDE
+        double currentAngle = robot.getPitch();
+
         String pattern = detectSkyStone(true, telemetry);
         rightUntil(.5, 10, 500);
 
@@ -93,7 +94,7 @@ public abstract class AutonomousNew extends LinearOpMode {
                 patternDist = patternDistances[1];
             }
             forward(.75, patternDist);
-            turnUntil(.75, 180);
+            turnBy(.75, 180);
 
             left(.75, 500);
 
@@ -105,7 +106,7 @@ public abstract class AutonomousNew extends LinearOpMode {
             right(.75, 500);
         } else { // Pattern C and default condition
             forward(.75, patternDist);
-            turnUntil(.75, -135);
+            turnBy(.75, -135);
 
             robot.IntakeMotor.setPower(1);
             forward(.75, 1250);
@@ -114,16 +115,17 @@ public abstract class AutonomousNew extends LinearOpMode {
             backward(.75, 1250);
         }
 
-        turnUntil(.75, 180);
+        turnUntil(.75, currentAngle + 180);
 
-        backward(.75, 2500 - patternDist);
+        backward(.75, 3000 - patternDist);
 
         // depositBlock(telemetry);
 
     }
 
     public void runRedBlocksAuto(Telemetry telemetry) throws InterruptedException {
-        // RED SIDE
+        double currentAngle = robot.getPitch();
+
         String pattern = detectSkyStone(false, telemetry);
         rightUntil(.5, 10, 500);
 
@@ -146,7 +148,7 @@ public abstract class AutonomousNew extends LinearOpMode {
             left(.75, 500);
         } else { // Pattern C and default condition
             backward(.75, patternDist);
-            turnUntil(.75, 45);
+            turnBy(.75, 45);
 
             robot.IntakeMotor.setPower(1);
             forward(.75, 1250);
@@ -155,19 +157,19 @@ public abstract class AutonomousNew extends LinearOpMode {
             backward(.75, 1250);
         }
 
-        turnUntil(.75, 180);
+        turnUntil(.75, currentAngle);
 
-        backward(.75, 2500 - patternDist);
+        backward(.75, 3000 - patternDist);
 
         // depositBlock(telemetry);
 
     }
 
     public void runBlueFoundationAuto(Telemetry telemetry) throws InterruptedException {
-        while (robot.sonarDistance.getVoltage() < .14) { robot.setMotors(-1, -1, -1, -1); }
+        while (robot.sonarDistance.getVoltage() < .125) { robot.setMotors(-1, -1, -1, -1); }
         turnUntil(.75, 0);
 
-        backward(.5, 200);
+        backward(.5, 500);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
@@ -184,15 +186,25 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         sleep(500);
 
-        forward(1, 2000);
+        left(.75, 200);
+        turnUntil(.5, 90);
+
+        while (robot.sonarDistance.getVoltage() > .135) { robot.setMotors(.5, .5, .5, .5); }
+        robot.setMotors(0, 0, 0, 0);
+        turnUntil(.5, -90);
+
+        sleep(500);
+
+        runBlueBlocksAuto(telemetry);
 
     }
 
     public void depositBlock(Telemetry telemetry) throws InterruptedException {
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
 
-        double initialPos = robot.SlideMotor.getCurrentPosition();
-        while (Math.abs(robot.SlideMotor.getCurrentPosition() - initialPos) < 500) { robot.SlideMotor.setPower(-.75); }
+        double initPos = robot.SlideMotor.getCurrentPosition();
+        while (Math.abs(robot.SlideMotor.getCurrentPosition() - initPos) < 500) { robot.SlideMotor.setPower(-.75); }
+        robot.SlideMotor.setPower(0);
 
         robot.armRotateServo.setPosition(CompetitionBot.ARM_OUT);
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_OPEN);
