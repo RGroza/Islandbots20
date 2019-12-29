@@ -84,7 +84,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         double currentAngle = robot.getPitch();
 
         String pattern = detectSkyStone(true, telemetry);
-        rightUntil(.5, 10, 500);
+        rightUntil(.5, 10, 1000);
 
         int patternDist = patternDistances[2];
         if (!pattern.equals("C") && !pattern.equals("None")) {
@@ -117,9 +117,10 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         turnUntil(.75, currentAngle + 180);
 
-        backward(.75, 3000 - patternDist);
+        backward(.75, 2900 - patternDist);
+        left(0.75, 200);
 
-        // depositBlock(telemetry);
+//        depositBlock(telemetry);
 
     }
 
@@ -203,11 +204,33 @@ public abstract class AutonomousNew extends LinearOpMode {
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
 
         double initPos = robot.SlideMotor.getCurrentPosition();
-        while (Math.abs(robot.SlideMotor.getCurrentPosition() - initPos) < 500) { robot.SlideMotor.setPower(-.75); }
+        //while (Math.abs(robot.SlideMotor.getCurrentPosition() - initPos) < 200) { robot.SlideMotor.setPower(-.5); }
+        //robot.SlideMotor.setPower(0);
+
+        robot.SlideMotor.setPower(-.75);
+        sleep(500);
         robot.SlideMotor.setPower(0);
 
+        sleep(1000);
         robot.armRotateServo.setPosition(CompetitionBot.ARM_OUT);
+
+        robot.SlideMotor.setPower(.75);
+        sleep(500);
+        robot.SlideMotor.setPower(0);
+
+        sleep(1000);
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_OPEN);
+
+        robot.SlideMotor.setPower(-.75);
+        sleep(500);
+        robot.SlideMotor.setPower(0);
+
+        sleep(1000);
+        robot.armRotateServo.setPosition(CompetitionBot.ARM_IN);
+
+        robot.SlideMotor.setPower(.75);
+        sleep(500);
+        robot.SlideMotor.setPower(0);
     }
 
     public void runTestLineDetect(Telemetry telemetry) throws InterruptedException {
