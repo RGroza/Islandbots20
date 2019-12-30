@@ -22,10 +22,8 @@ public class CompetitionBot {
     public BNO055IMU gyro;
     public AnalogInput sonarDistance;
     public DcMotor RFmotor, RBmotor, LFmotor, LBmotor, SlideMotor, IntakeMotor;
-    public Servo grabberServo, armRotateServo, Lfoundation, Rfoundation;
+    public Servo grabberServo, armRotateServo, capStoneServo, Lfoundation, Rfoundation;
     public DistanceSensor sensorRange;
-
-    boolean slowMove;
 
     public ColorSensor RcolorSensor;
     //public ColorSensor LcolorSensor;
@@ -43,6 +41,11 @@ public class CompetitionBot {
     public static final double R_FOUND_UP = .8;
     public static final double L_FOUND_DOWN = .84;
     public static final double R_FOUND_DOWN = .5;
+
+    public static final double CAPSTONE_OPEN = .75;
+    public static final double CAPSTONE_CLOSED = .25;
+
+    public static final double MAX_SPEED = .5;
 
     public CompetitionBot(HardwareMap hwMap, Telemetry telemetry) {
         // gyro initialization
@@ -82,6 +85,7 @@ public class CompetitionBot {
         // servos
         grabberServo = hwMap.servo.get("grabberServo");
         armRotateServo = hwMap.servo.get("armRotateServo");
+        capStoneServo = hwMap.servo.get("capStoneServo");
         Lfoundation = hwMap.servo.get("Lfoundation");
         Rfoundation = hwMap.servo.get("Rfoundation");
         // TODO: move servos to initial positions
@@ -121,9 +125,9 @@ public class CompetitionBot {
         double SPEED_REDUCTION;
 
         if(slowToggle){
-            SPEED_REDUCTION = .3;
+            SPEED_REDUCTION = .3*MAX_SPEED;
         } else {
-            SPEED_REDUCTION = 1;
+            SPEED_REDUCTION = MAX_SPEED;
         }
 
         double vMagnitude = getVMagnitude(joystickX, joystickY);

@@ -17,8 +17,14 @@ public class TeleOpBot extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         CompetitionBot robot = new CompetitionBot(hardwareMap, telemetry);
+
+        // BUTTON DECLARE
         // Gamepad 1
         GamepadButton slowToggleButton = new GamepadButton(300, false);
+        GamepadButton reverseToggleButton = new GamepadButton(300, false);
+        GamepadButton foundationServosButton = new GamepadButton(300, false);
+
+        // Gamepad 2
         GamepadButton slideUpButton = new GamepadButton(300, false);
         GamepadButton slideDownButton = new GamepadButton(300, false);
         GamepadButton slideUpLevelButton = new GamepadButton(300, false);
@@ -27,51 +33,54 @@ public class TeleOpBot extends LinearOpMode {
         GamepadButton armRotateButton = new GamepadButton(300, false);
         GamepadButton intakeButton = new GamepadButton(300, false);
         GamepadButton reverseIntakeButton = new GamepadButton(300, false);
-        GamepadButton foundationServosButton = new GamepadButton(300, false);
-        GamepadButton reverseToggleButton = new GamepadButton(300, false);
+        GamepadButton capStoneButton = new GamepadButton(300, false);
+
+        // CONTROLS
+        // Gamepad 1
+        double x = -gamepad1.left_stick_x;
+        double y = -gamepad1.left_stick_y;
+        double rotation = gamepad1.right_stick_x;
+
+        boolean slowToggleBool = gamepad1.right_stick_button;
+        boolean reverseToggleBool = gamepad1.left_stick_button;
+
+        boolean foundationServosBool = gamepad1.a;
+
+        // Gamepad 2
+        double slide_y = gamepad2.left_stick_y;
+
+        boolean slideUpBool = gamepad2.y;
+        boolean slideDownBool = gamepad2.a;
+        boolean slideUpLevelBool = gamepad2.dpad_up;
+        boolean slideDownLevelBool = gamepad2.dpad_down;
+
+        boolean grabberServoBool = gamepad2.right_bumper;
+        boolean armRotateServoBool = gamepad2.left_bumper;
+        boolean capStoneServoBool = gamepad2.right_stick_button;
+
+        boolean intakeBool = gamepad2.x;
+        boolean reverseIntakeBool = gamepad2.b;
 
         int slideMotorSteps = 0;
 
         waitForStart();
         while(opModeIsActive()) {
-            // CONTROLS
+            // BUTTON DEBOUNCE
             // Gamepad 1
-            double x = -gamepad1.left_stick_x;
-            double y = -gamepad1.left_stick_y;
-            double rotation = gamepad1.right_stick_x;
-
-            boolean slowToggleBool = gamepad1.right_stick_button;
-
-            boolean foundationServosBool = gamepad1.a;
-
-            boolean reverseToggleBool = gamepad1.left_stick_button;
+            slowToggleButton.checkStatus(slowToggleBool);
+            reverseToggleButton.checkStatus(reverseToggleBool);
+            foundationServosButton.checkStatus(foundationServosBool);
 
             // Gamepad 2
-            double slide_y = gamepad2.left_stick_y;
-
-            boolean slideUpBool = gamepad2.y;
-            boolean slideDownBool = gamepad2.a;
-            boolean slideUpLevelBool = gamepad2.dpad_up;
-            boolean slideDownLevelBool = gamepad2.dpad_down;
-
-            boolean grabberServoBool = gamepad2.right_bumper;
-            boolean armRotateServoBool = gamepad2.left_bumper;
-
-            boolean intakeBool = gamepad2.x;
-            boolean reverseIntakeBool = gamepad2.b;
-
-            // BUTTON DEBOUNCE
-            slowToggleButton.checkStatus(slowToggleBool);
             slideUpButton.checkStatus(slideUpBool);
             slideDownButton.checkStatus(slideDownBool);
             slideUpLevelButton.checkStatus(slideUpLevelBool);
             slideDownLevelButton.checkStatus(slideDownLevelBool);
             grabberServoButton.checkStatus(grabberServoBool);
             armRotateButton.checkStatus(armRotateServoBool);
+            capStoneButton.checkStatus(capStoneServoBool);
             intakeButton.checkStatus(intakeBool);
             reverseIntakeButton.checkStatus(reverseIntakeBool);
-            foundationServosButton.checkStatus(foundationServosBool);
-            reverseToggleButton.checkStatus(reverseToggleBool);
 
 
             if(reverseToggleButton.pressed) {
@@ -124,6 +133,12 @@ public class TeleOpBot extends LinearOpMode {
                 robot.armRotateServo.setPosition(CompetitionBot.ARM_OUT);
             } else {
                 robot.armRotateServo.setPosition(CompetitionBot.ARM_IN);
+            }
+
+            if (capStoneButton.pressed) {
+                robot.capStoneServo.setPosition(CompetitionBot.CAPSTONE_OPEN);
+            } else {
+                robot.capStoneServo.setPosition(CompetitionBot.CAPSTONE_CLOSED);
             }
 
             if (reverseIntakeButton.buttonStatus) {
