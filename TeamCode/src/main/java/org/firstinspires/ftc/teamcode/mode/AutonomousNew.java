@@ -119,50 +119,32 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         turnUntil(.75, currentAngle + 180);
 
-        backward(.75, 4850 - patternDist);
+        backward(.75, 4500 - patternDist);
 
         turnUntil(.75,currentAngle + 90);
 
-        backward(.5, 200);
-        sleep(300);
-        backward(.2,100);
+//        backward(.5, 200);
+//        sleep(300);
+//        backward(.2, 100);
+//
+//        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
+//        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
+//        turnUntil(.5, currentAngle + 90);
+//
+//        sleep(500);
+//
+//        while (robot.sonarDistance.getVoltage() > .07) { robot.setMotors(.75, .75, .75, .75); }
+//        turnUntil(.5, currentAngle + 180);
+//        right(.5, 500);
+//
+//        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
+//        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
 
-        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
-        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
-        turnUntil(.5, currentAngle + 90);
-
-        sleep(500);
-
-        while (robot.sonarDistance.getVoltage() > .07) { robot.setMotors(.75, .75, .75, .75); }
-        turnUntil(.5, currentAngle + 180);
-        right(.5, 500);
-
-        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
-        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
+        grabBlueFoundation(telemetry);
         depositBlock(telemetry);
-//        grabBlueFoundation();
-//        rubBlueFoundationAuto()
-/*        left(.75, 1750);
-        backward(.5, 100);
 
-        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
-        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
-
-        sleep(5000);
-
-        forward(.75,100);
-        right(.75,3000);
-        backward(.75,100);
-
-        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
-        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP); */
-
-        if (!pattern.equals("A") && !pattern.equals("B")); {patternDist = patternDistances[2];}
+        if (!pattern.equals("A") && !pattern.equals("B")) {patternDist = patternDistances[2];}
         forward(.75,3050 - patternDist);
-
-//        turnUntil(.75, currentAngle);
-
-//        depositBlock(telemetry);
 
     }
 
@@ -202,35 +184,20 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         turnUntil(.75, currentAngle);
 
-        backward(.75, 3000 - patternDist);
+        backward(.75, 4500 - patternDist);
 
-        // depositBlock(telemetry);
+        turnUntil(.75, currentAngle - 90);
+
+        grabRedFoundation(telemetry);
+        depositBlock(telemetry);
+
+        if (!pattern.equals("A") && !pattern.equals("B")) {patternDist = patternDistances[2];}
+        forward(.75,3050 - patternDist);
 
     }
 
     public void runBlueFoundationAuto(Telemetry telemetry) throws InterruptedException {
-        while (robot.sonarDistance.getVoltage() < .125) { robot.setMotors(-1, -1, -1, -1); }
-        turnUntil(.75, 0);
-
-        backward(.5, 500);
-
-        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
-        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
-        turnUntil(.5, 0);
-
-        sleep(500);
-
-        while (robot.sonarDistance.getVoltage() > .07) { robot.setMotors(.75, .75, .75, .75); }
-        turnUntil(.5, 90);
-        right(.5, 500);
-
-        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
-        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
-
-        sleep(500);
-
-        left(.75, 200);
-        turnUntil(.5, 90);
+        grabBlueFoundation(telemetry);
 
         while (robot.sonarDistance.getVoltage() > .135) { robot.setMotors(.5, .5, .5, .5); }
         robot.setMotors(0, 0, 0, 0);
@@ -242,26 +209,74 @@ public abstract class AutonomousNew extends LinearOpMode {
 
     }
 
-    public void depositBlock(Telemetry telemetry) throws InterruptedException {
-        /*robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
+    public void runRedFoundationAuto(Telemetry telemetry) throws InterruptedException {
+        grabRedFoundation(telemetry);
 
-        double initPos = robot.SlideMotor.getCurrentPosition();
+        while (robot.sonarDistance.getVoltage() > .135) { robot.setMotors(.5, .5, .5, .5); }
+        robot.setMotors(0, 0, 0, 0);
+        turnUntil(.5, 90);
 
-        telemetry.addData("Init Pos: ", initPos);
-
-        while (Math.abs(robot.SlideMotor.getCurrentPosition() - initPos) < 100) { robot.SlideMotor.setPower(-.5); }
-        robot.SlideMotor.setPower(0);
-
-        telemetry.addData("Final Pos: ", initPos);
-
-        sleep(3000);
-        robot.grabberServo.setPosition(CompetitionBot.GRABBER_OPEN);
         sleep(500);
-        while (Math.abs(robot.SlideMotor.getCurrentPosition() - initPos) > 5) { robot.SlideMotor.setPower(-.5); }
-        robot.SlideMotor.setPower(0);
 
-        telemetry.update();*/
+        runRedBlocksAuto(telemetry);
 
+    }
+
+    public void grabBlueFoundation(Telemetry telemetry) throws InterruptedException {
+        double currentAngle = robot.getPitch();
+
+        while (robot.sonarDistance.getVoltage() < .125) { robot.setMotors(-1, -1, -1, -1); }
+        turnUntil(.75, currentAngle);
+
+        backward(.5, 500);
+
+        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
+        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
+        turnUntil(.5, currentAngle);
+
+        sleep(500);
+
+        while (robot.sonarDistance.getVoltage() > .07) { robot.setMotors(.75, .75, .75, .75); }
+        turnUntil(.5, currentAngle + 90);
+        right(.5, 750);
+
+        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
+        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
+
+        sleep(500);
+
+        left(.75, 200);
+        turnUntil(.5, currentAngle + 90);
+    }
+
+    public void grabRedFoundation(Telemetry telemetry) throws InterruptedException {
+        double currentAngle = robot.getPitch();
+
+        while (robot.sonarDistance.getVoltage() < .125) { robot.setMotors(-1, -1, -1, -1); }
+        turnUntil(.75, currentAngle);
+
+        backward(.5, 500);
+
+        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
+        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
+        turnUntil(.5, currentAngle);
+
+        sleep(500);
+
+        while (robot.sonarDistance.getVoltage() > .07) { robot.setMotors(.75, .75, .75, .75); }
+        turnUntil(.5, currentAngle - 90);
+        left(.5, 750);
+
+        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
+        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
+
+        sleep(500);
+
+        right(.75, 200);
+        turnUntil(.5, currentAngle - 90);
+    }
+
+    public void depositBlock(Telemetry telemetry) throws InterruptedException {
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
 
         robot.SlideMotor.setPower(-.75);
@@ -270,16 +285,8 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         robot.armRotateServo.setPosition(CompetitionBot.ARM_OUT);
 
-        /*robot.SlideMotor.setPower(.75);
-        sleep(500);
-        robot.SlideMotor.setPower(0);*/
-
         sleep(250);
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_OPEN);
-
-        /*robot.SlideMotor.setPower(-.75);
-        sleep(500);
-        robot.SlideMotor.setPower(0);*/
 
         sleep(500);
         robot.armRotateServo.setPosition(CompetitionBot.ARM_IN);
@@ -291,7 +298,6 @@ public abstract class AutonomousNew extends LinearOpMode {
 
     public void runTestLineDetect(Telemetry telemetry) throws InterruptedException {
         //detectLineAndStop(false, 1800, telemetry, false);
-
     }
 
     public void initVuforia() {
@@ -359,9 +365,7 @@ public abstract class AutonomousNew extends LinearOpMode {
             robot.setMotors(.1, -.1, -.1, .1);
 
             // check all the trackable targets to see which one (if any) is visible, while the measured distance > 5 cm
-            // telemetry.addData("Initial Dist: ", robot.sensorRange.getDistance(DistanceUnit.CM));
             while (!isStopRequested() && robot.sensorRange.getDistance(DistanceUnit.CM) > 5) {
-                // telemetry.addData("Dist: ", robot.sensorRange.getDistance(DistanceUnit.CM));
                 for (VuforiaTrackable trackable : allTrackables) {
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() && trackable.getName() == "Stone Target") {
                         telemetry.addLine("SkyStone found!");
@@ -568,22 +572,22 @@ public abstract class AutonomousNew extends LinearOpMode {
 
     }
 
-/*    public void grabBlueFoundation(Telemetry telemetry) throws InterruptedException {
-        backward(.5, 500);
-
-        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
-        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
-        turnUntil(.5, 0);
-
-        sleep(500);
-
-        while (robot.sonarDistance.getVoltage() > .07) { robot.setMotors(.75, .75, .75, .75); }
-        turnUntil(.5, 90);
-        right(.5, 500);
-
-        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
-        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
-    } */
+//    public void grabBlueFoundation(Telemetry telemetry) throws InterruptedException {
+//        backward(.5, 500);
+//
+//        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
+//        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
+//        turnUntil(.5, 0);
+//
+//        sleep(500);
+//
+//        while (robot.sonarDistance.getVoltage() > .07) { robot.setMotors(.75, .75, .75, .75); }
+//        turnUntil(.5, 90);
+//        right(.5, 500);
+//
+//        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
+//        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
+//    }
 
     public void turnBy(double speed, double deltaAngle) throws InterruptedException {
         //
