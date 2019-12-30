@@ -23,7 +23,7 @@ public class CompetitionBot {
     public AnalogInput sonarDistance;
     public DcMotor RFmotor, RBmotor, LFmotor, LBmotor, SlideMotor, IntakeMotor;
     public Servo grabberServo, armRotateServo, capStoneServo, Lfoundation, Rfoundation;
-    public DistanceSensor sensorRange;
+    public DistanceSensor sideDistance, backDistance;
 
     public ColorSensor RcolorSensor;
     //public ColorSensor LcolorSensor;
@@ -73,7 +73,8 @@ public class CompetitionBot {
         sonarDistance = hwMap.analogInput.get("sonarDistance");
 
         // distance sensors
-        sensorRange = hwMap.get(DistanceSensor.class, "sensorRange");
+        sideDistance = hwMap.get(DistanceSensor.class, "sideDistance");
+//        backDistance = hwMap.get(DistanceSensor.class, "backDistance");
 
         // motor encoders init
         resetEncoders();

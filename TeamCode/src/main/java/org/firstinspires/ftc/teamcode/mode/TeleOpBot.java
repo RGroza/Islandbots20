@@ -61,7 +61,7 @@ public class TeleOpBot extends LinearOpMode {
         boolean intakeBool = gamepad2.x;
         boolean reverseIntakeBool = gamepad2.b;
 
-        int slideMotorSteps = 0;
+//        int slideMotorSteps = 0;
 
         waitForStart();
         while(opModeIsActive()) {
