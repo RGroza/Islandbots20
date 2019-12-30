@@ -84,7 +84,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         double currentAngle = robot.getPitch();
 
         String pattern = detectSkyStone(true, telemetry);
-        rightUntil(.5, 10, 1000);
+        rightUntil(.5, 10, 1200);
 
         int patternDist = patternDistances[2];
         if (!pattern.equals("C") && !pattern.equals("None")) {
@@ -96,29 +96,71 @@ public abstract class AutonomousNew extends LinearOpMode {
             forward(.75, patternDist);
             turnBy(.75, 180);
 
-            left(.75, 500);
+            left(.75, 550);
 
             robot.IntakeMotor.setPower(1);
             forward(.75, 500);
             sleep(500);
             robot.IntakeMotor.setPower(0);
 
-            right(.75, 500);
+            right(.75, 550);
         } else { // Pattern C and default condition
             forward(.75, patternDist);
             turnBy(.75, -135);
 
             robot.IntakeMotor.setPower(1);
-            forward(.75, 1250);
+            forward(.5, 1250);
             sleep(500);
             robot.IntakeMotor.setPower(0);
             backward(.75, 1250);
+
+            patternDist += 250;
         }
 
         turnUntil(.75, currentAngle + 180);
 
-        backward(.75, 2900 - patternDist);
-        left(0.75, 200);
+        backward(.75, 4850 - patternDist);
+
+        turnUntil(.75,currentAngle + 90);
+
+        backward(.5, 200);
+        sleep(300);
+        backward(.2,100);
+
+        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
+        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
+        turnUntil(.5, currentAngle + 90);
+
+        sleep(500);
+
+        while (robot.sonarDistance.getVoltage() > .07) { robot.setMotors(.75, .75, .75, .75); }
+        turnUntil(.5, currentAngle + 180);
+        right(.5, 500);
+
+        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
+        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
+        depositBlock(telemetry);
+//        grabBlueFoundation();
+//        rubBlueFoundationAuto()
+/*        left(.75, 1750);
+        backward(.5, 100);
+
+        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
+        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
+
+        sleep(5000);
+
+        forward(.75,100);
+        right(.75,3000);
+        backward(.75,100);
+
+        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
+        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP); */
+
+        if (!pattern.equals("A") && !pattern.equals("B")); {patternDist = patternDistances[2];}
+        forward(.75,3050 - patternDist);
+
+//        turnUntil(.75, currentAngle);
 
 //        depositBlock(telemetry);
 
@@ -201,35 +243,49 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void depositBlock(Telemetry telemetry) throws InterruptedException {
-        robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
+        /*robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
 
         double initPos = robot.SlideMotor.getCurrentPosition();
-        //while (Math.abs(robot.SlideMotor.getCurrentPosition() - initPos) < 200) { robot.SlideMotor.setPower(-.5); }
-        //robot.SlideMotor.setPower(0);
 
-        robot.SlideMotor.setPower(-.75);
-        sleep(500);
+        telemetry.addData("Init Pos: ", initPos);
+
+        while (Math.abs(robot.SlideMotor.getCurrentPosition() - initPos) < 100) { robot.SlideMotor.setPower(-.5); }
         robot.SlideMotor.setPower(0);
 
-        sleep(1000);
+        telemetry.addData("Final Pos: ", initPos);
+
+        sleep(3000);
+        robot.grabberServo.setPosition(CompetitionBot.GRABBER_OPEN);
+        sleep(500);
+        while (Math.abs(robot.SlideMotor.getCurrentPosition() - initPos) > 5) { robot.SlideMotor.setPower(-.5); }
+        robot.SlideMotor.setPower(0);
+
+        telemetry.update();*/
+
+        robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
+
+        robot.SlideMotor.setPower(-.75);
+        sleep(750);
+        robot.SlideMotor.setPower(0);
+
         robot.armRotateServo.setPosition(CompetitionBot.ARM_OUT);
 
-        robot.SlideMotor.setPower(.75);
+        /*robot.SlideMotor.setPower(.75);
         sleep(500);
-        robot.SlideMotor.setPower(0);
+        robot.SlideMotor.setPower(0);*/
 
-        sleep(1000);
+        sleep(250);
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_OPEN);
 
-        robot.SlideMotor.setPower(-.75);
+        /*robot.SlideMotor.setPower(-.75);
         sleep(500);
-        robot.SlideMotor.setPower(0);
+        robot.SlideMotor.setPower(0);*/
 
-        sleep(1000);
+        sleep(500);
         robot.armRotateServo.setPosition(CompetitionBot.ARM_IN);
 
         robot.SlideMotor.setPower(.75);
-        sleep(500);
+        sleep(600);
         robot.SlideMotor.setPower(0);
     }
 
@@ -511,6 +567,23 @@ public abstract class AutonomousNew extends LinearOpMode {
         robot.setMotors(0, 0, 0, 0);
 
     }
+
+/*    public void grabBlueFoundation(Telemetry telemetry) throws InterruptedException {
+        backward(.5, 500);
+
+        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
+        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
+        turnUntil(.5, 0);
+
+        sleep(500);
+
+        while (robot.sonarDistance.getVoltage() > .07) { robot.setMotors(.75, .75, .75, .75); }
+        turnUntil(.5, 90);
+        right(.5, 500);
+
+        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
+        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
+    } */
 
     public void turnBy(double speed, double deltaAngle) throws InterruptedException {
         //
