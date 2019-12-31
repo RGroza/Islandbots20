@@ -35,36 +35,36 @@ public class TeleOpBot extends LinearOpMode {
         GamepadButton reverseIntakeButton = new GamepadButton(300, false);
         GamepadButton capStoneButton = new GamepadButton(300, false);
 
-        // CONTROLS
-        // Gamepad 1
-        double x = -gamepad1.left_stick_x;
-        double y = -gamepad1.left_stick_y;
-        double rotation = gamepad1.right_stick_x;
-
-        boolean slowToggleBool = gamepad1.right_stick_button;
-        boolean reverseToggleBool = gamepad1.left_stick_button;
-
-        boolean foundationServosBool = gamepad1.a;
-
-        // Gamepad 2
-        double slide_y = gamepad2.left_stick_y;
-
-        boolean slideUpBool = gamepad2.y;
-        boolean slideDownBool = gamepad2.a;
-        boolean slideUpLevelBool = gamepad2.dpad_up;
-        boolean slideDownLevelBool = gamepad2.dpad_down;
-
-        boolean grabberServoBool = gamepad2.right_bumper;
-        boolean armRotateServoBool = gamepad2.left_bumper;
-        boolean capStoneServoBool = gamepad2.right_stick_button;
-
-        boolean intakeBool = gamepad2.x;
-        boolean reverseIntakeBool = gamepad2.b;
-
 //        int slideMotorSteps = 0;
 
         waitForStart();
         while(opModeIsActive()) {
+            // CONTROLS
+            // Gamepad 1
+            double x = -gamepad1.left_stick_x;
+            double y = -gamepad1.left_stick_y;
+            double rotation = gamepad1.right_stick_x;
+
+            boolean slowToggleBool = gamepad1.right_stick_button;
+            boolean reverseToggleBool = gamepad1.left_stick_button;
+
+            boolean foundationServosBool = gamepad1.a;
+
+            // Gamepad 2
+            double slide_y = gamepad2.left_stick_y;
+
+            boolean slideUpBool = gamepad2.y;
+            boolean slideDownBool = gamepad2.a;
+            boolean slideUpLevelBool = gamepad2.dpad_up;
+            boolean slideDownLevelBool = gamepad2.dpad_down;
+
+            boolean grabberServoBool = gamepad2.right_bumper;
+            boolean armRotateServoBool = gamepad2.left_bumper;
+            boolean capStoneServoBool = gamepad2.right_stick_button;
+
+            boolean intakeBool = gamepad2.x;
+            boolean reverseIntakeBool = gamepad2.b;
+
             // BUTTON DEBOUNCE
             // Gamepad 1
             slowToggleButton.checkStatus(slowToggleBool);

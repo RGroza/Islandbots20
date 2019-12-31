@@ -25,8 +25,7 @@ public class CompetitionBot {
     public Servo grabberServo, armRotateServo, capStoneServo, Lfoundation, Rfoundation;
     public DistanceSensor sideDistance, backDistance;
 
-    public ColorSensor RcolorSensor;
-    //public ColorSensor LcolorSensor;
+    public ColorSensor LcolorSensor, RcolorSensor;
 
     public ColorSensor testColor;
 
@@ -66,7 +65,7 @@ public class CompetitionBot {
         gyro = hwMap.get(BNO055IMU.class, "gyro");
 
         // color sensors
-        //LcolorSensor = hwMap.colorSensor.get("LcolorSensor");
+        LcolorSensor = hwMap.colorSensor.get("LcolorSensor");
         RcolorSensor = hwMap.colorSensor.get("RcolorSensor");
 
         // analog sensors
@@ -86,7 +85,7 @@ public class CompetitionBot {
         // servos
         grabberServo = hwMap.servo.get("grabberServo");
         armRotateServo = hwMap.servo.get("armRotateServo");
-//        capStoneServo = hwMap.servo.get("capStoneServo");
+        capStoneServo = hwMap.servo.get("capStoneServo");
         Lfoundation = hwMap.servo.get("Lfoundation");
         Rfoundation = hwMap.servo.get("Rfoundation");
         // TODO: move servos to initial positions
