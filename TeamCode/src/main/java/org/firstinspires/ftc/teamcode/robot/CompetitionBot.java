@@ -124,7 +124,7 @@ public class CompetitionBot {
     public double[] mecanumMove(double joystickX, double joystickY, double rotation, boolean slowToggle, Telemetry telemetry) {
         double SPEED_REDUCTION;
 
-        if(slowToggle){
+        if (slowToggle){
             SPEED_REDUCTION = .3*MAX_SPEED;
         } else {
             SPEED_REDUCTION = MAX_SPEED;
@@ -132,6 +132,8 @@ public class CompetitionBot {
 
         double vMagnitude = getVMagnitude(joystickX, joystickY);
         double vAngle = getVAngle(joystickX, joystickY);
+
+        vMagnitude *= vMagnitude; // Non-linear magnitude input
 
         double LB = vMagnitude * Math.cos(vAngle) + (.7 * rotation);
         double RB = vMagnitude * Math.sin(vAngle) - (.7 * rotation);
@@ -143,20 +145,16 @@ public class CompetitionBot {
         RF *= SPEED_REDUCTION;
         RB *= SPEED_REDUCTION;
 
-        LF *= Math.abs(LF);
-        LB *= Math.abs(LB);
-        RF *= Math.abs(RF);
-        RB *= Math.abs(RB);
+        double[] powerVals = {LF, LB, RF, RB};
 
-        LF = clamp(LF);
-        LB = clamp(LB);
-        RF = clamp(RF);
-        RB = clamp(RB);
+        LF *= clamp(powerVals);
+        LB *= clamp(powerVals);
+        RF *= clamp(powerVals);
+        RB *= clamp(powerVals);
 
         setMotors(LF, LB, RF, RB);
 
-        double[] returnedValues = {LF, LB, RF, RB};
-        return returnedValues;
+        return powerVals;
     }
 
     public void setMotors(double LF, double LB, double RF, double RB) {
@@ -195,13 +193,22 @@ public class CompetitionBot {
         SlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    private double clamp(double d) {
+    private double singleClamp(double d) {
         if(d > 1) {
             d = 1;
         } else if (d < -1) {
             d = -1;
         }
         return  d;
+    }
+
+    private double clamp(double[] powerVals) {
+        double max = Math.max(Math.max(powerVals[0], powerVals[1]), Math.max(powerVals[2], powerVals[3]));
+        if (max > 1) {
+            return 1 / max;
+        } else {
+            return 1;
+        }
     }
 
 }
