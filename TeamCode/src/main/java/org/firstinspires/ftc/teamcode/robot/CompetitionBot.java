@@ -47,6 +47,9 @@ public class CompetitionBot {
 
     public static final double MAX_SPEED = .5;
 
+    public static final double DRIVETAIN_RPM = 1150;
+    public static final double DRIVETAIN_PPR = 146;
+
     public CompetitionBot(HardwareMap hwMap, Telemetry telemetry) {
         // gyro initialization
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -163,6 +166,13 @@ public class CompetitionBot {
         LBmotor.setPower(LB);
         RFmotor.setPower(RF);
         RBmotor.setPower(RB);
+    }
+
+    public void setMotorRPM(int LF, int LB, int RF, int RB) {
+        LFmotor.setPower(LF/DRIVETAIN_RPM);
+        LBmotor.setPower(LB/DRIVETAIN_RPM);
+        RFmotor.setPower(RF/DRIVETAIN_RPM);
+        RBmotor.setPower(RB/DRIVETAIN_RPM);
     }
 
     public double getPitch() {
