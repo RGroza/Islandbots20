@@ -87,10 +87,6 @@ public class TeleOpBot extends LinearOpMode {
                 x = gamepad1.left_stick_x;
                 y = gamepad1.left_stick_y;
             }
-            if (slowToggleButton.pressed) {
-                x *= .75;
-                y *= .75;
-            }
 
             if (slideUpButton.buttonStatus) {
                 robot.SlideMotor.setPower(-.75);
