@@ -78,13 +78,15 @@ public abstract class AutonomousNew extends LinearOpMode {
 
     List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
 
-    private double[] patternDistances = {1.35, 4.1, 6.85};
+    private double[] patternDistances = {1, 2, 3};
+
+    private double gyroCorrectConst = .02;
 
     public void runBlueBlocksAuto(Telemetry telemetry) throws InterruptedException {
         double currentAngle = robot.getPitch();
 
         String pattern = detectSkyStone(true, telemetry);
-        rightUntil(.25, 10, 8.25);
+        rightUntil(.2, 10, 5);
 
         double patternDist = patternDistances[2];
         if (!pattern.equals("C") && !pattern.equals("None")) {
@@ -93,35 +95,35 @@ public abstract class AutonomousNew extends LinearOpMode {
             } else if (pattern.equals("B")) {
                 patternDist = patternDistances[1];
             }
-            forward(.3, patternDist);
-            turnBy(.3, 180);
+            forward(.2, patternDist);
+            turnUntil(.4, currentAngle + 180);
 
-            left(.3, 3.75);
+            left(.2, 2.5);
 
             robot.IntakeMotor.setPower(1);
-            forward(.3, 3.45);
+            forward(.2, 3.5);
             sleep(500);
             robot.IntakeMotor.setPower(0);
 
-            right(.3, 3.75);
+            right(.2, 2.5);
         } else { // Pattern C and default condition
-            forward(.3, patternDist);
-            turnBy(.3, -135);
+            forward(.2, patternDist);
+            turnBy(.4, -135);
 
             robot.IntakeMotor.setPower(1);
-            forward(.25, 8.55);
+            forward(.2, 8.55);
             sleep(500);
             robot.IntakeMotor.setPower(0);
-            backward(.3, 8.55);
+            backward(.2, 8.55);
 
-            patternDist += 1.7;
+            patternDist += 1.5;
         }
 
-        turnUntil(.3, currentAngle + 180);
+        turnUntil(.4, currentAngle + 180);
 
-        backward(.3, 30.8 - patternDist);
+        backward(.2, 15 - patternDist);
 
-        turnUntil(.3, currentAngle + 90);
+        turnUntil(.4, currentAngle + 90);
 
 //        backward(.5, 200);
 //        sleep(300);
@@ -129,12 +131,12 @@ public abstract class AutonomousNew extends LinearOpMode {
 //
 //        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
 //        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
-//        turnUntil(.5, currentAngle + 90);
+//        turnUntil(.5, 90);
 //
 //        sleep(500);
 //
 //        while (robot.sonarDistance.getVoltage() > .07) { robot.setMotors(.75, .75, .75, .75); }
-//        turnUntil(.5, currentAngle + 180);
+//        turnUntil(.5, 180);
 //        right(.5, 500);
 //
 //        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
@@ -144,7 +146,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         depositBlock(telemetry);
 
         if (!pattern.equals("A") && !pattern.equals("B")) {patternDist = patternDistances[2];}
-        forward(.3, 20.9 - patternDist);
+        forward(.2, 10 - patternDist);
 
     }
 
@@ -152,7 +154,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         double currentAngle = robot.getPitch();
 
         String pattern = detectSkyStone(false, telemetry);
-        rightUntil(.25, 10, 8.25);
+        rightUntil(.15, 10, 8.25);
 
         double patternDist = patternDistances[2];
         if (!pattern.equals("C") && !pattern.equals("None")) {
@@ -161,38 +163,38 @@ public abstract class AutonomousNew extends LinearOpMode {
             } else if (pattern.equals("B")) {
                 patternDist = patternDistances[1];
             }
-            backward(.3, patternDist);
+            backward(.2, patternDist);
 
-            right(.3, 3.45);
+            right(.2, 3.45);
 
             robot.IntakeMotor.setPower(1);
-            forward(.3, 3.45);
+            forward(.2, 3.45);
             sleep(500);
             robot.IntakeMotor.setPower(0);
 
-            left(.3, 3.45);
+            left(.2, 3.45);
         } else { // Pattern C and default condition
-            backward(.3, patternDist);
-            turnBy(.3, 45);
+            backward(.2, patternDist);
+            turnBy(.2, 45);
 
             robot.IntakeMotor.setPower(1);
-            forward(.3, 8.55);
+            forward(.2, 8.55);
             sleep(500);
             robot.IntakeMotor.setPower(0);
-            backward(.3, 8.55);
+            backward(.2, 8.55);
         }
 
-        turnUntil(.3, currentAngle);
+        turnUntil(.2, currentAngle);
 
-        backward(.3, 30.8 - patternDist);
+        backward(.2, 30.8 - patternDist);
 
-        turnUntil(.3, currentAngle - 90);
+        turnUntil(.2, currentAngle - 90);
 
         grabRedFoundation(telemetry);
         depositBlock(telemetry);
 
         if (!pattern.equals("A") && !pattern.equals("B")) {patternDist = patternDistances[2];}
-        forward(.3, 20.9 - patternDist);
+        forward(.2, 20.9 - patternDist);
 
     }
 
@@ -225,20 +227,24 @@ public abstract class AutonomousNew extends LinearOpMode {
     public void grabBlueFoundation(Telemetry telemetry) throws InterruptedException {
         double currentAngle = robot.getPitch();
 
-        while (robot.sonarDistance.getVoltage() < .125) { robot.setMotors(-.5, -.5, -.5, -.5); }
-        turnUntil(.3, currentAngle);
+        backwardUntil(.3, 5, 10);
+        turnUntil(.4, currentAngle);
 
-        backward(.25, 3.45);
+        backward(.3, 2);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
-        turnUntil(.25, currentAngle);
+        turnUntil(.4, currentAngle);
 
         sleep(500);
 
-        while (robot.sonarDistance.getVoltage() > .07) { robot.setMotors(.3, .3, .3, .3); }
-        turnUntil(.25, currentAngle + 90);
-        right(.25, 5);
+        while (robot.sonarDistance.getVoltage() > .07) {
+            robot.setMotors(.2, .2, .2, .2);
+            telemetry.addData("V: ", robot.sonarDistance.getVoltage());
+            telemetry.update();
+        }
+        turnUntil(.2, currentAngle + 90);
+        right(.3, 5);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
@@ -246,7 +252,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         sleep(500);
 
         left(.3, 1.35);
-        turnUntil(.25, currentAngle + 90);
+        turnUntil(.4, currentAngle + 90);
     }
 
     public void grabRedFoundation(Telemetry telemetry) throws InterruptedException {
@@ -361,11 +367,18 @@ public abstract class AutonomousNew extends LinearOpMode {
     public String detectSkyStone(boolean isBlue, Telemetry telemetry) {
         String returnVal = "None";
         boolean patternFound = false;
-        while (opModeIsActive()) {
-            robot.setMotors(.2, -.2, -.2, .2);
 
+        double gyroCorrection;
+        double targetPitch = robot.getPitch();
+        while (opModeIsActive()) {
             // check all the trackable targets to see which one (if any) is visible, while the measured distance > 5 cm
             while (!isStopRequested() && robot.sideDistance.getDistance(DistanceUnit.CM) > 5) {
+                gyroCorrection = gyroCorrect(targetPitch, robot.getPitch());
+                robot.setMotors(clamp(.2 - gyroCorrection),
+                        clamp(-.2 - gyroCorrection),
+                        clamp(-.2 + gyroCorrection),
+                        clamp(.2 + gyroCorrection));
+
                 for (VuforiaTrackable trackable : allTrackables) {
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() && trackable.getName() == "Stone Target") {
                         telemetry.addLine("SkyStone found!");
@@ -429,6 +442,25 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
 
         turnUntil(.3, headingCorrection);
+    }
+
+    public void strafingTest(Telemetry telemetry) throws InterruptedException {
+        right(.2, 3);
+        sleep(1000);
+        right(.3, 3);
+        sleep(1000);
+        right(.4, 3);
+        sleep(1000);
+        right(.5, 3);
+        sleep(1000);
+
+        left(.2, 3);
+        sleep(1000);
+        left(.3, 3);
+        sleep(1000);
+        left(.4, 3);
+        sleep(1000);
+        left(.5, 3);
     }
 
 /*
@@ -660,7 +692,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
     private double ramp(int position, int deltaDistance, int finalPosition, double speed) {
         // dynamically adjust speed based on encoder values
-        double MIN_SPEED = 0.2;
+        double MIN_SPEED = 0.1;
         double RAMP_DIST = 300; // Distance over which to do ramping
         // make sure speed is positive
         speed = abs(speed);
@@ -737,7 +769,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         int stepCount = (int) (revCount*CompetitionBot.DRIVETAIN_PPR);
         int avgPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 4.0);
 
-        int targetPos = avgPos + stepCount;
+        int targetPos = avgPos - stepCount;
         double targetPitch = robot.getPitch();
 
         double gyroCorrection;
@@ -883,7 +915,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         if(abs(diff) < 1) {
             diff = 0;
         }
-        return (diff * .03);
+        return (diff * gyroCorrectConst);
     }
 
     private double angleDiff(double angle1, double angle2) {

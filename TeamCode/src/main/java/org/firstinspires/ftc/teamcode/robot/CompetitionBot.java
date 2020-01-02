@@ -34,7 +34,7 @@ public class CompetitionBot {
     public static final double GRABBER_CLOSED = .17;
 
     public static final double ARM_OUT = .61;
-    public static final double ARM_IN = .3;
+    public static final double ARM_IN = .27;
 
     public static final double L_FOUND_UP = .75;
     public static final double L_FOUND_DOWN = .45;
@@ -119,7 +119,7 @@ public class CompetitionBot {
     private double getVMagnitude(double joystickX, double joystickY) {
         double Magnitude;
         Magnitude = Math.hypot(joystickX, joystickY);
-        if(Magnitude < .3) {
+        if(Magnitude < .1) {
             Magnitude = 0;
         }
         return Magnitude;
@@ -129,7 +129,7 @@ public class CompetitionBot {
         double SPEED_REDUCTION;
 
         if (slowToggle){
-            SPEED_REDUCTION = .3*MAX_SPEED;
+            SPEED_REDUCTION = .5*MAX_SPEED;
         } else {
             SPEED_REDUCTION = MAX_SPEED;
         }
@@ -204,13 +204,15 @@ public class CompetitionBot {
         SlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    private double singleClamp(double d) {
-        if(d > 1) {
-            d = 1;
-        } else if (d < -1) {
-            d = -1;
+    private double Singleclamp(double power) {
+        // ensures power does not exceed abs(1)
+        if (power > 1) {
+            return 1;
         }
-        return  d;
+        if (power < -1) {
+            return -1;
+        }
+        return power;
     }
 
     private double clamp(double[] powerVals) {
