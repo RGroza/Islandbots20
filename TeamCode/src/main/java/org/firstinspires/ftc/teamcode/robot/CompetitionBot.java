@@ -195,7 +195,8 @@ public class CompetitionBot {
         LBmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RFmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RBmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        SlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         LBmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LFmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
