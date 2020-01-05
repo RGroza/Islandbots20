@@ -34,7 +34,9 @@ public class TeleOpBot extends LinearOpMode {
         GamepadButton reverseIntakeButton = new GamepadButton(300, false);
         GamepadButton capStoneButton = new GamepadButton(300, false);
 
-        int slidePos;
+        int slidePos = robot.SlideMotor.getCurrentPosition();
+
+        boolean slideActive = false;
 
         waitForStart();
         while(opModeIsActive()) {
@@ -85,23 +87,28 @@ public class TeleOpBot extends LinearOpMode {
                 y = gamepad1.left_stick_y;
             }
 
-            if (slideUpButton.buttonStatus) {
-                robot.SlideMotor.setPower(-.75);
-            } else if (slideDownButton.buttonStatus) {
-                robot.SlideMotor.setPower(.75);
-            } else {
-                robot.SlideMotor.setPower(0);
-            }
-
-            // Non-linear control of the slide with joystick
+            // Non-linear joystick or button control of the linear slide
             if (slide_y > .05) {
                 robot.SlideMotor.setPower(slide_y * slide_y);
+                slideActive = true;
             } else if (slide_y < -.05) {
                 robot.SlideMotor.setPower(-(slide_y * slide_y));
+                slideActive = true;
+            } else if (slideUpButton.buttonStatus) {
+                robot.SlideMotor.setPower(-.75);
+                slideActive = true;
+            } else if (slideDownButton.buttonStatus) {
+                robot.SlideMotor.setPower(.75);
+                slideActive = true;
             } else {
-                slidePos = robot.SlideMotor.getCurrentPosition();
-                robot.SlideMotor.setTargetPosition(slidePos);
-                robot.SlideMotor.setPower(.5);
+                //no active control
+                if (slideActive) {
+                    //slide was active in previous loop - so we just released controls
+                    slidePos = robot.SlideMotor.getCurrentPosition();
+                    slideActive = false;
+                    robot.SlideMotor.setTargetPosition(slidePos);
+                    robot.SlideMotor.setPower(.5);
+                }
             }
 
             // Slide and arm homing function
