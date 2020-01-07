@@ -27,7 +27,7 @@ public class PIDController {
     private double[] getCorrection(double currentAngle) {
         double currentError = currentAngle - targetAngle;
 
-        
+
 
         double[] returnedValues = {0, 0};
         return returnedValues;

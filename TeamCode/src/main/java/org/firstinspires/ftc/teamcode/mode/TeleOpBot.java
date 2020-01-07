@@ -87,7 +87,6 @@ public class TeleOpBot extends LinearOpMode {
                 y = gamepad1.left_stick_y;
             }
 
-            // Non-linear joystick or button control of the linear slide
             if (slide_y > .05) {
                 robot.SlideMotor.setPower(slide_y * slide_y);
                 slideActive = true;
@@ -101,17 +100,11 @@ public class TeleOpBot extends LinearOpMode {
                 robot.SlideMotor.setPower(.75);
                 slideActive = true;
             } else {
-                //no active control
-                if (slideActive) {
-                    //slide was active in previous loop - so we just released controls
-                    slidePos = robot.SlideMotor.getCurrentPosition();
-                    slideActive = false;
-                    robot.SlideMotor.setTargetPosition(slidePos);
-                    robot.SlideMotor.setPower(.5);
-                }
+                robot.SlideMotor.setPower(0);
             }
 
             // Slide and arm homing function
+/*
             if (slideHomeButton.buttonStatus) {
                 if (robot.SlideMotor.getCurrentPosition() > 500) {
                     while (robot.SlideMotor.getCurrentPosition() > 500) {
@@ -126,6 +119,7 @@ public class TeleOpBot extends LinearOpMode {
                 }
                 robot.SlideMotor.setPower(0);
             }
+*/
 
             if (grabberServoButton.pressed) {
                 robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
