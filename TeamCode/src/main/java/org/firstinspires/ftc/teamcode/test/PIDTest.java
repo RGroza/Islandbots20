@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 import org.firstinspires.ftc.teamcode.robot.GamepadButton;
-import org.firstinspires.ftc.teamcode.robot.MiniPID;
+import org.firstinspires.ftc.teamcode.robot.PIDController;
 
 @Autonomous(name="PIDTest", group="Test")
 public class PIDTest extends LinearOpMode {
@@ -22,10 +22,10 @@ public class PIDTest extends LinearOpMode {
         GamepadButton speedIncButton = new GamepadButton(500, false);
         GamepadButton speedDecButton = new GamepadButton(500, false);
 
-        MiniPID miniPID;
+        PIDController PIDControl;
 
-        miniPID = new MiniPID(.01, .075, .15);
-        miniPID.setOutputLimits(-.05, .05);
+        PIDControl = new PIDController(.01, .075, .15);
+        PIDControl.setOutputLimits(-.05, .05);
         //miniPID.setMaxIOutput(2);
         //miniPID.setOutputRampRate(3);
         //miniPID.setOutputFilter(.3);
@@ -36,8 +36,8 @@ public class PIDTest extends LinearOpMode {
 
         double output;
 
-        miniPID.setSetpoint(0);
-        miniPID.setSetpoint(target);
+        PIDControl.setSetpoint(0);
+        PIDControl.setSetpoint(target);
 
         double speed = .25;
 
@@ -61,26 +61,26 @@ public class PIDTest extends LinearOpMode {
             speedDecButton.checkStatus(speedDecBool);
 
             actual = robot.getPitch();
-            output = miniPID.getOutput(actual, target);
+            output = PIDControl.getOutput(actual, target);
 
-            if (forwardToggle.pressed) {
+            if (forwardToggle.buttonStatus) {
                 robot.setMotors(clamp(speed - output), clamp(speed - output),
                                 clamp(speed + output), clamp(speed + output));
-            } else if (backwardToggle.pressed){
+            } else if (backwardToggle.buttonStatus){
                 robot.setMotors(clamp(-speed - output), clamp(-speed - output),
                                 clamp(-speed + output), clamp(-speed + output));
-            } else if (leftToggle.pressed){
+            } else if (leftToggle.buttonStatus){
                 robot.setMotors(clamp(-speed - output), clamp(speed - output),
                                 clamp(speed + output), clamp(-speed + output));
-            } else if (rightToggle.pressed){
+            } else if (rightToggle.buttonStatus){
                 robot.setMotors(clamp(speed - output), clamp(-speed - output),
                                 clamp(-speed + output), clamp(speed + output));
             } else {
                 robot.setMotors(0, 0, 0, 0);
             }
 
-            if (speedIncButton.justPressed) { speed += .05; }
-            if (speedDecButton.justPressed) { speed -= .05; }
+            if (speedIncButton.justPressed) speed += .05;
+            if (speedDecButton.justPressed) speed -= .05;
 
             telemetry.addData("actual: ", actual);
             telemetry.addData("output: ", output);
