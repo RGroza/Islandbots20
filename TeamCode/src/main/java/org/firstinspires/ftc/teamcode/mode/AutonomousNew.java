@@ -119,7 +119,7 @@ public abstract class AutonomousNew extends LinearOpMode {
             right(.25, 2.5, true);
         } else { // Pattern C and default condition
             moveUntil(.3, 0, patternV, 5, true);
-            turnBy(.4, -135);
+            turnBy(.4, currentAngle - 135);
 
             robot.IntakeMotor.setPower(1);
             forward(.3, 5, true);
@@ -171,14 +171,14 @@ public abstract class AutonomousNew extends LinearOpMode {
 
             left(.25, 2.5, true);
         } else { // Pattern C and default condition
-            backward(.2, patternV, true);
-            turnBy(.2, 45);
+            moveUntil(.3, 0, patternV, 5, true);
+            turnBy(.4, currentAngle + 45);
 
             robot.IntakeMotor.setPower(1);
-            forward(.2, 5, true);
+            forward(.3, 5, true);
             sleep(500);
             robot.IntakeMotor.setPower(0);
-            backward(.2, 5, true);
+            backward(.3, 5, true);
         }
 
         turnUntil(.4, currentAngle);
