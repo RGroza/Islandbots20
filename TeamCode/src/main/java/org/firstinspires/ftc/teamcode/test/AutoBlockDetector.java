@@ -18,7 +18,7 @@ public class AutoBlockDetector extends AutonomousNew {
 
         waitForStart();
         while(opModeIsActive()) {
-            detectBlockAndColor(true, telemetry);
+//            detectBlockAndColor(true, telemetry);
         }
     }
 }

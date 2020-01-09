@@ -11,14 +11,19 @@ public class ColorTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         CompetitionBot robot = new CompetitionBot(hardwareMap, telemetry);
+        robot.LcolorSensor.enableLed(true);
+        robot.RcolorSensor.enableLed(true);
 
         waitForStart();
         while(opModeIsActive()) {
-            robot.testColor.enableLed(true);
-            telemetry.addData("R: ", robot.testColor.red());
-            telemetry.addData("G: ", robot.testColor.green());
-            telemetry.addData("B: ", robot.testColor.blue());
-            telemetry.addData("Alpha: ", robot.testColor.alpha());
+            telemetry.addData("left R: ", robot.LcolorSensor.red());
+            telemetry.addData("left G: ", robot.LcolorSensor.green());
+            telemetry.addData("left B: ", robot.LcolorSensor.blue());
+            telemetry.addData("left A: ", robot.LcolorSensor.alpha());
+            telemetry.addData("right R: ", robot.RcolorSensor.red());
+            telemetry.addData("right G: ", robot.RcolorSensor.green());
+            telemetry.addData("right B: ", robot.RcolorSensor.blue());
+            telemetry.addData("right A: ", robot.RcolorSensor.alpha());
             telemetry.update();
         }
     }

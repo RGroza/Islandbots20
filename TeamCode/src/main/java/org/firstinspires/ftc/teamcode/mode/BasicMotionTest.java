@@ -10,6 +10,6 @@ public class BasicMotionTest extends AutonomousNew {
 //        forward(0.5, 50);
 //        turnUntil(0.8, 90);
 //        forward(0.5, 50);
-        detectBlockAndColor(true, telemetry);
+//        detectBlockAndColor(true, telemetry);
     }
 }

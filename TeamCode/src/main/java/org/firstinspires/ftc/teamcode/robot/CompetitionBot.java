@@ -27,8 +27,6 @@ public class CompetitionBot {
 
     public ColorSensor LcolorSensor, RcolorSensor;
 
-    public ColorSensor testColor;
-
     // Servo constants
     public static final double GRABBER_OPEN = .7;
     public static final double GRABBER_CLOSED = .17;
@@ -78,7 +76,7 @@ public class CompetitionBot {
 
         // distance sensors
         sideDistance = hwMap.get(DistanceSensor.class, "sideDistance");
-//        backDistance = hwMap.get(DistanceSensor.class, "backDistance");
+        backDistance = hwMap.get(DistanceSensor.class, "backDistance");
 
         // motor encoders init
         resetEncoders();
