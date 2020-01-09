@@ -145,47 +145,53 @@ public abstract class AutonomousNew extends LinearOpMode {
     public void runRedBlocksAuto(Telemetry telemetry) throws InterruptedException {
         double currentAngle = robot.getPitch();
 
-        String pattern = detectSkyStone(false, telemetry);
-        rightUntil(.15, 10, 8.25, true);
+        String pattern = detectSkyStone(true, telemetry);
 
-        double patternDist = patternVoltages[2];
+        telemetry.addData("Pattern: ", pattern);
+        telemetry.update();
+
+        rightUntil(.2, 20, 5, true);
+
+        double patternV = patternVoltages[2];
         if (!pattern.equals("C") && !pattern.equals("None")) {
             if (pattern.equals("A")) {
-                patternDist = patternVoltages[0];
+                patternV = patternVoltages[0];
             } else if (pattern.equals("B")) {
-                patternDist = patternVoltages[1];
+                patternV = patternVoltages[1];
             }
-            backward(.2, patternDist, true);
+            moveUntil(.3, 0, patternV, 5, true);
+            turnUntil(.4, currentAngle);
 
-            right(.2, 3.45, true);
+            right(.25, 2.5, true);
 
             robot.IntakeMotor.setPower(1);
-            forward(.2, 3.45, true);
+            forward(.3, 3.5, true);
             sleep(500);
             robot.IntakeMotor.setPower(0);
 
-            left(.2, 3.45, true);
+            left(.25, 2.5, true);
         } else { // Pattern C and default condition
-            backward(.2, patternDist, true);
+            backward(.2, patternV, true);
             turnBy(.2, 45);
 
             robot.IntakeMotor.setPower(1);
-            forward(.2, 8.55, true);
+            forward(.2, 5, true);
             sleep(500);
             robot.IntakeMotor.setPower(0);
-            backward(.2, 8.55, true);
+            backward(.2, 5, true);
         }
 
-        turnUntil(.2, currentAngle);
+        turnUntil(.4, currentAngle);
 
-        backward(.2, 30.8 - patternDist, true);
+        moveUntil(.3, 0, .3, 5, true);
+        backward(.3, 5, true);
 
-        turnUntil(.2, currentAngle - 90);
+        turnUntil(.4, currentAngle - 90);
 
         grabRedFoundation(telemetry);
         depositBlock(telemetry);
 
-        forward(.2, 20.9 - patternDist, true);
+        forward(.4, 8, true);
 
     }
 
@@ -821,8 +827,6 @@ public abstract class AutonomousNew extends LinearOpMode {
                         clamp(speed + gyroCorrection),
                         clamp(speed + gyroCorrection));
             }
-            telemetry.addData("dist: ", currentDistance);
-            telemetry.update();
         }
         robot.setMotors(0,0,0,0);
     }
@@ -856,8 +860,6 @@ public abstract class AutonomousNew extends LinearOpMode {
                         clamp(-rampedSpeed + gyroCorrection),
                         clamp(-rampedSpeed + gyroCorrection));
             }
-            telemetry.update();
-
         }
         robot.setMotors(0,0,0,0);
     }
@@ -911,8 +913,6 @@ public abstract class AutonomousNew extends LinearOpMode {
                         clamp(-speed + gyroCorrection),
                         clamp(-speed + gyroCorrection));
             }
-            telemetry.addData("dist: ", currentDistance);
-            telemetry.update();
         }
         robot.setMotors(0,0,0,0);
     }
@@ -946,9 +946,6 @@ public abstract class AutonomousNew extends LinearOpMode {
                         clamp(rampedSpeed + gyroCorrection),
                         clamp(-rampedSpeed + gyroCorrection));
             }
-            telemetry.addData("PosL: ", avgPos);
-            telemetry.update();
-
         }
         robot.setMotors(0,0,0,0);
     }
@@ -984,8 +981,6 @@ public abstract class AutonomousNew extends LinearOpMode {
                         clamp(speed + gyroCorrection),
                         clamp(-speed + gyroCorrection));
             }
-            telemetry.addData("dist: ", currentDistance);
-            telemetry.update();
         }
         robot.setMotors(0,0,0,0);
     }
@@ -1019,9 +1014,7 @@ public abstract class AutonomousNew extends LinearOpMode {
                         clamp(-rampedSpeed - gyroCorrection),
                         clamp(-rampedSpeed + gyroCorrection),
                         clamp(rampedSpeed + gyroCorrection));
-            }            telemetry.addData("PosR: ", avgPos);
-            telemetry.update();
-
+            }
         }
         robot.setMotors(0,0,0,0);
     }
@@ -1057,8 +1050,6 @@ public abstract class AutonomousNew extends LinearOpMode {
                         clamp(-speed + gyroCorrection),
                         clamp(speed + gyroCorrection));
             }
-            telemetry.addData("dist: ", currentDistance);
-            telemetry.update();
         }
         robot.setMotors(0,0,0,0);
     }
