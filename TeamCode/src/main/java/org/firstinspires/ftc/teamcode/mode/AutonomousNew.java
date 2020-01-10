@@ -665,6 +665,17 @@ public abstract class AutonomousNew extends LinearOpMode {
         return speed; // default
     }
 
+    double rampSpeed(double currentVal, double initVal, double targetVal, double speed) {
+        double MIN_SPEED = .1;
+        double rampRange = .1*(targetVal-initVal);
+        if (abs(currentVal-initVal) <= rampRange) {
+            return ((currentVal-initVal) / rampRange) * (speed-MIN_SPEED) + MIN_SPEED;
+        } else if (abs(targetVal-currentVal) <= rampRange) {
+            return (targetVal-currentVal) / rampRange * (speed-MIN_SPEED) + MIN_SPEED;
+        }
+        return speed;
+    }
+
     public void moveUntilLaser(double speed, double distance, double maxRevs, boolean PID) throws InterruptedException {
         if (distance - robot.backDistance.getDistance(DistanceUnit.CM) > 0) {
             backwardUntilLaser(speed, distance, maxRevs, PID);

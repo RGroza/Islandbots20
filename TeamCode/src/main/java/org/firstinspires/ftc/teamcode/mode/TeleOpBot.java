@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 @TeleOp(name="TeleOpBot", group="Competition")
@@ -33,8 +34,6 @@ public class TeleOpBot extends LinearOpMode {
         GamepadButton intakeButton = new GamepadButton(300, false);
         GamepadButton reverseIntakeButton = new GamepadButton(300, false);
         GamepadButton capStoneButton = new GamepadButton(300, false);
-
-        int slidePos = robot.SlideMotor.getCurrentPosition();
 
         boolean slideActive = false;
 
@@ -88,38 +87,42 @@ public class TeleOpBot extends LinearOpMode {
             }
 
             if (slide_y > .05) {
+                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 robot.SlideMotor.setPower(slide_y * slide_y);
                 slideActive = true;
             } else if (slide_y < -.05) {
+                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 robot.SlideMotor.setPower(-(slide_y * slide_y));
                 slideActive = true;
             } else if (slideUpButton.buttonStatus) {
+                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 robot.SlideMotor.setPower(-.75);
                 slideActive = true;
             } else if (slideDownButton.buttonStatus) {
+                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 robot.SlideMotor.setPower(.75);
                 slideActive = true;
             } else {
-                robot.SlideMotor.setPower(0);
+                // no active control
+                if (slideActive) {
+                    // slide was active in previous loop - so we just released controls
+                    robot.SlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.SlideMotor.setTargetPosition(robot.SlideMotor.getCurrentPosition());
+                    robot.SlideMotor.setPower(.5);
+                    slideActive = false;
+                }
             }
 
             // Slide and arm homing function
-/*
             if (slideHomeButton.buttonStatus) {
-                if (robot.SlideMotor.getCurrentPosition() > 500) {
-                    while (robot.SlideMotor.getCurrentPosition() > 500) {
-                        robot.SlideMotor.setTargetPosition(500);
-                        robot.SlideMotor.setPower(.75);
-                    }
-                    robot.armRotateServo.setPosition(CompetitionBot.ARM_IN);
-                }
+                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.armRotateServo.setPosition(CompetitionBot.ARM_IN);
                 while (robot.SlideMotor.getCurrentPosition() > 5) {
                     robot.SlideMotor.setTargetPosition(0);
                     robot.SlideMotor.setPower(.5);
                 }
                 robot.SlideMotor.setPower(0);
             }
-*/
 
             if (grabberServoButton.pressed) {
                 robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
