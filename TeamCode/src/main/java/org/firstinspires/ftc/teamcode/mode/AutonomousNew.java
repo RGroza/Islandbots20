@@ -715,7 +715,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void forwardUntilLaser(double speed, double distance, double maxRevs, boolean PID) throws InterruptedException {
-        double currentDistance = robot.sideDistance.getDistance(DistanceUnit.CM);
+        double currentVal = robot.sideDistance.getDistance(DistanceUnit.CM);
         double targetVal = distance;
 
         int maxSteps = (int) (maxRevs*CompetitionBot.DRIVETAIN_PPR);
@@ -732,9 +732,9 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
 
         double gyroCorrection;
-        while(currentDistance >= targetVal && abs(currentPos - initPos) < maxSteps && opModeIsActive()) {
+        while(currentVal < targetVal && abs(currentPos - initPos) < maxSteps && opModeIsActive()) {
             currentPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
-            currentDistance = robot.sideDistance.getDistance(DistanceUnit.CM);
+            currentVal = robot.sideDistance.getDistance(DistanceUnit.CM);
 
             if (PID) {
                 actualPitch = robot.getPitch();
@@ -770,7 +770,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
 
         double gyroCorrection;
-        while(currentDistance >= targetVal && abs(currentPos - initPos) < maxSteps && opModeIsActive()) {
+        while(currentDistance > targetVal && abs(currentPos - initPos) < maxSteps && opModeIsActive()) {
             currentPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
             currentDistance = robot.sonarDistance.getVoltage();
 
@@ -824,7 +824,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void backwardUntilLaser(double speed, double distance, double maxRevs, boolean PID) throws InterruptedException {
-        double currentDistance = robot.sideDistance.getDistance(DistanceUnit.CM);
+        double currentVal = robot.sideDistance.getDistance(DistanceUnit.CM);
         double targetVal = distance;
 
         int maxSteps = (int) (maxRevs*CompetitionBot.DRIVETAIN_PPR);
@@ -841,9 +841,9 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
 
         double gyroCorrection;
-        while(currentDistance >= targetVal && abs(currentPos - initPos) < maxSteps && opModeIsActive()) {
+        while(currentVal > targetVal && abs(currentPos - initPos) < maxSteps && opModeIsActive()) {
             currentPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
-            currentDistance = robot.sideDistance.getDistance(DistanceUnit.CM);
+            currentVal = robot.sideDistance.getDistance(DistanceUnit.CM);
 
             if (PID) {
                 actualPitch = robot.getPitch();
@@ -862,7 +862,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void backwardUntilSonar(double speed, double voltage, double maxRevs, boolean PID) throws InterruptedException {
-        double currentDistance = robot.sonarDistance.getVoltage();
+        double currentVal = robot.sonarDistance.getVoltage();
         double targetVal = voltage;
 
         int maxSteps = (int) (maxRevs*CompetitionBot.DRIVETAIN_PPR);
@@ -879,9 +879,9 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
 
         double gyroCorrection;
-        while(currentDistance >= targetVal && abs(currentPos - initPos) < maxSteps && opModeIsActive()) {
+        while(currentVal < targetVal && abs(currentPos - initPos) < maxSteps && opModeIsActive()) {
             currentPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
-            currentDistance = robot.sonarDistance.getVoltage();
+            currentVal = robot.sonarDistance.getVoltage();
 
             if (PID) {
                 actualPitch = robot.getPitch();
