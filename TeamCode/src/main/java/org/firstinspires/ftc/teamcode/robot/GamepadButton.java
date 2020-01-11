@@ -26,6 +26,9 @@ public class GamepadButton {
             justPressed = true;
         }
     }
+
+    public void pressedSwitchStatus() { this.pressed = !this.pressed; }
+
     public void pressedStatusFalse() {
         this.pressed = false;
     }

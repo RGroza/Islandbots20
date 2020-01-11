@@ -107,19 +107,39 @@ public class TeleOpBot extends LinearOpMode {
                 if (slideActive) {
                     // slide was active in previous loop - so we just released controls
                     robot.SlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.SlideMotor.setTargetPosition(robot.SlideMotor.getCurrentPosition());
+                    robot.SlideMotor.setTargetPosition(robot.SlideMotor.getCurrentPosition() + 10);
                     robot.SlideMotor.setPower(.5);
                     slideActive = false;
                 }
             }
 
             // Slide and arm homing function
-            if (slideHomeButton.buttonStatus) {
+            if (slideHomeButton.justPressed) {
                 robot.SlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.armRotateServo.setPosition(CompetitionBot.ARM_IN);
-                while (robot.SlideMotor.getCurrentPosition() > 5) {
+//                if (robot.SlideMotor.getCurrentPosition() > -400 && robot.armRotateServo.getPosition() == CompetitionBot.ARM_OUT) {
+//                    while (robot.SlideMotor.getCurrentPosition() > -400) {
+//                        robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                        robot.SlideMotor.setPower(.75);
+//                    }
+//                    robot.SlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                    robot.SlideMotor.setTargetPosition(400);
+//                    robot.SlideMotor.setPower(.5);
+//                }
+                if (robot.armRotateServo.getPosition() == CompetitionBot.ARM_OUT) {
+                    if (robot.SlideMotor.getCurrentPosition() > -1000) {
+                        robot.SlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        robot.SlideMotor.setTargetPosition(robot.SlideMotor.getCurrentPosition());
+                    }
+                    robot.armRotateServo.setPosition(CompetitionBot.ARM_IN);
+                    armRotateButton.pressedSwitchStatus();
+
+                    if (robot.SlideMotor.getCurrentPosition() > -1000) sleep(500);
+
+                    robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                }
+                while (robot.SlideMotor.getCurrentPosition() < -100) {
                     robot.SlideMotor.setTargetPosition(0);
-                    robot.SlideMotor.setPower(.5);
+                    robot.SlideMotor.setPower(.75);
                 }
                 robot.SlideMotor.setPower(0);
             }
@@ -176,6 +196,7 @@ public class TeleOpBot extends LinearOpMode {
             telemetry.addData("X: ", slowToggleButton.pressed);
             Orientation angOrientation = robot.gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             telemetry.addData("Orientation", angOrientation.firstAngle);
+            telemetry.addData("Slide Pos: ", robot.SlideMotor.getCurrentPosition());
             telemetry.update();
 
         }
