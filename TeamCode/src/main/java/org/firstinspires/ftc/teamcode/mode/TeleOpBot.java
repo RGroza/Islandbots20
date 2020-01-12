@@ -106,8 +106,8 @@ public class TeleOpBot extends LinearOpMode {
                 // no active control
                 if (slideActive) {
                     // slide was active in previous loop - so we just released controls
-                    robot.SlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     robot.SlideMotor.setTargetPosition(robot.SlideMotor.getCurrentPosition() + 10);
+                    robot.SlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     robot.SlideMotor.setPower(.5);
                     slideActive = false;
                 }
@@ -115,6 +115,7 @@ public class TeleOpBot extends LinearOpMode {
 
             // Slide and arm homing function
             if (slideHomeButton.justPressed) {
+                robot.SlideMotor.setTargetPosition(robot.SlideMotor.getCurrentPosition() + 10);
                 robot.SlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //                if (robot.SlideMotor.getCurrentPosition() > -400 && robot.armRotateServo.getPosition() == CompetitionBot.ARM_OUT) {
 //                    while (robot.SlideMotor.getCurrentPosition() > -400) {
@@ -197,6 +198,7 @@ public class TeleOpBot extends LinearOpMode {
             Orientation angOrientation = robot.gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             telemetry.addData("Orientation", angOrientation.firstAngle);
             telemetry.addData("Slide Pos: ", robot.SlideMotor.getCurrentPosition());
+            telemetry.addData("Sonar: ", robot.sonarDistance.getVoltage());
             telemetry.update();
 
         }
