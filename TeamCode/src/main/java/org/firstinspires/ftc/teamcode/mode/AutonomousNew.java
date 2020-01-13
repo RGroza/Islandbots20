@@ -79,6 +79,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
 
     private double[] patternVoltages = {.16, .20, .25};
+    private double[] patternDistances = {1, 2, 2.5};
 
     private double gyroCorrectConst = .02;
 
@@ -100,14 +101,14 @@ public abstract class AutonomousNew extends LinearOpMode {
         rightUntil(.3, 25, 5, true);
         turnUntil(.5, currentAngle + 180);
 
-        double patternV = patternVoltages[2];
+        double patternDist = patternDistances[2];
         if (!pattern.equals("C") && !pattern.equals("None")) {
             if (pattern.equals("A")) {
-                patternV = patternVoltages[0];
+                patternDist = patternDistances[0];
             } else if (pattern.equals("B")) {
-                patternV = patternVoltages[1];
+                patternDist = patternDistances[1];
             }
-            moveUntilSonar(.3, patternV, 5, true);
+            moveUntilSonar(.3, patternDist, 5, true);
 
             left(.3, 2.25, true);
             turnUntil(.5, currentAngle + 180);
@@ -119,8 +120,8 @@ public abstract class AutonomousNew extends LinearOpMode {
 
             right(.3, 2.5, true);
         } else { // Pattern C and default condition
-            moveUntilSonar(.3, patternV, 5, true);
-            turnBy(.5, currentAngle - 135);
+            forward(.3, patternDist, true);
+            turnUntil(.5, currentAngle - 135);
 
             robot.IntakeMotor.setPower(1);
             forward(.3, 3, true);
@@ -131,17 +132,18 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         turnUntil(.5, currentAngle + 180);
 
-        moveUntilSonar(.4, .3, 5, true);
-        sleep(250);
-        backward(.5, 6, true);
-
-        turnUntil(.5, currentAngle + 90);
-
-        grabBlueFoundation(telemetry);
-        depositBlock(telemetry);
-
-        forward(.5, 8, true);
-
+        moveUntilSonar(.4, .4, 5, true);
+        forward(.3, .5, true);
+//        sleep(250);
+//        backward(.5, 6, true);
+//
+//        turnUntil(.5, currentAngle + 90);
+//
+//        grabBlueFoundation(telemetry);
+//        depositBlock(telemetry);
+//
+//        forward(.5, 8, true);
+//
     }
 
     public void runRedBlocksAuto(Telemetry telemetry) throws InterruptedException {
@@ -152,51 +154,51 @@ public abstract class AutonomousNew extends LinearOpMode {
         telemetry.addData("Pattern: ", pattern);
         telemetry.update();
 
-        rightUntil(.3, 20, 5, true);
+        rightUntil(.3, 25, 5, true);
         turnUntil(.5, currentAngle);
 
-        double patternV = patternVoltages[2];
+        double patternDist = patternDistances[2];
         if (!pattern.equals("C") && !pattern.equals("None")) {
             if (pattern.equals("A")) {
-                patternV = patternVoltages[0];
+                patternDist = patternDistances[0];
             } else if (pattern.equals("B")) {
-                patternV = patternVoltages[1];
+                patternDist = patternDistances[1];
             }
-            moveUntilSonar(.3, patternV, 5, true);
+            moveUntilSonar(.3, patternDist, 5, true);
 
             right(.25, 2.5, true);
             turnUntil(.5, currentAngle);
 
             robot.IntakeMotor.setPower(1);
-            forward(.3, 3.5, true);
+            forward(.3, 1.5, true);
             sleep(500);
             robot.IntakeMotor.setPower(0);
 
             left(.25, 2.5, true);
         } else { // Pattern C and default condition
-            moveUntilSonar(.3, patternV, 5, true);
-            turnBy(.4, currentAngle + 45);
+            backward(.3, patternDist, true);
+            turnUntil(.4, currentAngle - 45);
 
             robot.IntakeMotor.setPower(1);
-            forward(.3, 5, true);
+            forward(.3, 4, true);
             sleep(500);
             robot.IntakeMotor.setPower(0);
-            backward(.3, 5, true);
+            backward(.3, 6, true);
         }
 
         turnUntil(.5, currentAngle);
 
-        moveUntilSonar(.4, .3, 5, true);
-        sleep(250);
-        backward(.5, 6, true);
-
-        turnUntil(.5, currentAngle - 90);
-
-        grabRedFoundation(telemetry);
-        depositBlock(telemetry);
-
-        forward(.4, 8, true);
-
+        moveUntilSonar(.4, .4, 5, true);
+        forward(.3, .5, true);
+//        sleep(250);
+//        backward(.5, 6, true);
+//
+//        turnUntil(.5, currentAngle - 90);
+//
+//        grabRedFoundation(telemetry);
+//        depositBlock(telemetry);
+//
+//        forward(.4, 8, true);
     }
 
     public void runBlueFoundationAuto(Telemetry telemetry) throws InterruptedException {
@@ -228,23 +230,30 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void grabBlueFoundation(Telemetry telemetry) throws InterruptedException {
+        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
+        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
+
         double currentAngle = robot.getPitch();
+
+        left(.3, 1, true);
+        turnUntil(.5, currentAngle);
 
         moveUntilLaser(.4, 3.0, 10, true); // using backDistance
         turnUntil(.5, currentAngle);
 
-        backward(.25, 1, true);
+        backward(.25, .75, true);
 
+        turnUntil(.5, currentAngle);
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
-        turnUntil(.5, currentAngle);
-
         sleep(500);
 
-        moveUntilSonar(.4, .1, 10, true);
-        turnUntil(.5, currentAngle + 90);
-        right(.3, 3, true);
-        turnUntil(.5, currentAngle + 90);
+        turnUntil(.5, currentAngle);
+
+        moveUntilSonar(.4, .11, 10, true);
+        turnUntil(.35, currentAngle + 90);
+        right(.3, 2, true);
+        turnUntil(.35, currentAngle + 90);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
@@ -256,23 +265,30 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void grabRedFoundation(Telemetry telemetry) throws InterruptedException {
+        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
+        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
+
         double currentAngle = robot.getPitch();
+
+        left(.3, 1, true);
+        turnUntil(.5, currentAngle);
 
         moveUntilLaser(.4, 3.0, 10, true); // using backDistance
         turnUntil(.5, currentAngle);
 
-        backward(.25, 1, true);
+        backward(.25, .75, true);
 
+        turnUntil(.5, currentAngle);
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
-        turnUntil(.5, currentAngle);
-
         sleep(500);
 
-        moveUntilSonar(.4, .1, 10, true);
-        turnUntil(.5, currentAngle - 90);
-        left(.3, 3, true);
-        turnUntil(.5, currentAngle - 90);
+        turnUntil(.5, currentAngle);
+
+        moveUntilSonar(.4, .11, 10, true);
+        turnUntil(.35, currentAngle - 90);
+        left(.3, 2, true);
+        turnUntil(.35, currentAngle - 90);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
@@ -377,12 +393,17 @@ public abstract class AutonomousNew extends LinearOpMode {
         double output;
 
         double maxDist = 1000;
-        double avgPos = (int) ((robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition()) / 2.0);
+        double currentPos = (int) ((robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition()) / 2.0);
+        double initPos = currentPos;
+
+        double currentTime = System.currentTimeMillis();
+        double initTime = currentTime;
 
         while (opModeIsActive()) {
-            // check all the trackable targets to see which one (if any) is visible, while the measured distance > 5 cm
-            while (!isStopRequested() && robot.sideDistance.getDistance(DistanceUnit.CM) > 25 && avgPos < maxDist) {
-                avgPos = (int) ((robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition()) / 2.0);
+            // check all the trackable targets to see which one (if any) is visible, while the measured distance > 5 cm and timeout after 4s
+            while (opModeIsActive() && robot.sideDistance.getDistance(DistanceUnit.CM) > 25 && abs(currentPos - initPos) < maxDist && currentTime - initTime < 4000) {
+                currentPos = (int) ((robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition()) / 2.0);
+                currentTime = System.currentTimeMillis();
 
                 actualPitch = robot.getPitch();
                 output = PIDControl.getOutput(actualPitch, targetPitch);
@@ -428,9 +449,12 @@ public abstract class AutonomousNew extends LinearOpMode {
                     }
                 }
             }
+            robot.setMotors(0, 0, 0 ,0);
+            telemetry.addLine("Not found!");
+            telemetry.update();
+            sleep(500);
+            return returnVal;
         }
-        telemetry.addLine("Not found!");
-        telemetry.update();
         return returnVal;
     }
 
@@ -443,7 +467,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         int headingCorrection = robot.getPitch() > Math.abs(robot.getPitch() - 180) ? 0 : 180;
 
-        while ((colorSensor.blue() < BLUE_THRESHOLD || colorSensor.red() < RED_THRESHOLD)
+        while (opModeIsActive() && (colorSensor.blue() < BLUE_THRESHOLD || colorSensor.red() < RED_THRESHOLD)
                 && Math.abs(currentPos - initialPos) > maxDist && opModeIsActive()) {
             double power = isForward ? .3 : -.3;
             robot.setMotors(power, power, power, power);
@@ -567,7 +591,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         double direction = diff > 0 ? 1 : -1;
         double adjustedSpeed;
 
-        while (abs(diff) > .5 && opModeIsActive()) {
+        while (opModeIsActive() && abs(diff) > .5) {
             // adjust speed when difference is smaller
             telemetry.addData("Gyro: ", robot.getPitch());
             adjustedSpeed = abs(diff) < 30 ? (abs(diff) < 10 ? 0.2 : speed/2) : speed;
@@ -595,7 +619,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     private void rest(double seconds) {
         // delay function
         timer.reset();
-        while(timer.time() < seconds && opModeIsActive()) {
+        while (opModeIsActive() && timer.time() < seconds) {
         }
     }
 
@@ -707,7 +731,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
 
         double gyroCorrection;
-        while(avgPos < targetPos && opModeIsActive()) {
+        while (opModeIsActive() && avgPos < targetPos) {
             avgPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 4.0);
             double rampedSpeed = rampSpeed(avgPos, initPos, targetPos, speed, true);
 
@@ -745,7 +769,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
 
         double gyroCorrection;
-        while(currentVal < targetVal && abs(currentPos - initPos) < maxSteps && opModeIsActive()) {
+        while (opModeIsActive() && currentVal < targetVal && abs(currentPos - initPos) < maxSteps) {
             currentPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
             currentVal = robot.backDistance.getDistance(DistanceUnit.CM);
 
@@ -784,7 +808,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
 
         double gyroCorrection;
-        while(currentVal > targetVal && abs(currentPos - initPos) < maxSteps && opModeIsActive()) {
+        while (opModeIsActive() && currentVal > targetVal && abs(currentPos - initPos) < maxSteps) {
             currentPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
             // Condition used to eliminate noise
             currentVal = robot.sonarDistance.getVoltage() > .075 ? robot.sonarDistance.getVoltage() : currentVal;
@@ -822,7 +846,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
 
         double gyroCorrection;
-        while (avgPos > targetPos && opModeIsActive()) {
+        while (opModeIsActive() && avgPos > targetPos) {
             avgPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 4.0);
             double rampedSpeed = rampSpeed(avgPos, initPos, targetPos, speed, true);
 
@@ -860,7 +884,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
 
         double gyroCorrection;
-        while(currentVal > targetVal && abs(currentPos - initPos) < maxSteps && opModeIsActive()) {
+        while (opModeIsActive() && currentVal > targetVal && abs(currentPos - initPos) < maxSteps) {
             currentPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
             currentVal = robot.backDistance.getDistance(DistanceUnit.CM);
 
@@ -899,7 +923,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
 
         double gyroCorrection;
-        while(currentVal < targetVal && abs(currentPos - initPos) < maxSteps && opModeIsActive()) {
+        while (opModeIsActive() && currentVal < targetVal && abs(currentPos - initPos) < maxSteps) {
             currentPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
             // Condition used to eliminate noise
             currentVal = robot.sonarDistance.getVoltage() > .075 ? robot.sonarDistance.getVoltage() : currentVal;
@@ -937,21 +961,21 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
 
         double gyroCorrection;
-        while(avgPos < targetPos && opModeIsActive()) {
+        while (opModeIsActive() && avgPos < targetPos) {
             avgPos = (int) ((robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition()) / 2.0);
             double rampedSpeed = rampSpeed(avgPos, initPos, targetPos, speed, true);
 
             if (PID) {
                 actualPitch = robot.getPitch();
                 output = PIDControl.getOutput(actualPitch, targetPitch);
-                robot.setMotors(clamp(-rampedSpeed - output), clamp(rampedSpeed - output),
-                                clamp(rampedSpeed + output), clamp(-rampedSpeed + output));
+                robot.setMotors(clamp(-speed - output), clamp(speed - output),
+                                clamp(speed + output), clamp(-speed + output));
             } else {
                 gyroCorrection = gyroCorrect(targetPitch, robot.getPitch());
-                robot.setMotors(clamp(-rampedSpeed - gyroCorrection),
-                        clamp(rampedSpeed - gyroCorrection),
-                        clamp(rampedSpeed + gyroCorrection),
-                        clamp(-rampedSpeed + gyroCorrection));
+                robot.setMotors(clamp(-speed - gyroCorrection),
+                        clamp(speed - gyroCorrection),
+                        clamp(speed + gyroCorrection),
+                        clamp(-speed + gyroCorrection));
             }
         }
         robot.setMotors(0,0,0,0);
@@ -973,7 +997,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
 
         double gyroCorrection;
-        while(currentDistance >= distance && abs(currentPos - initPos) < maxSteps && opModeIsActive()) {
+        while (opModeIsActive() && currentDistance >= distance && abs(currentPos - initPos) < maxSteps) {
             currentPos = (int) ((robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition()) / 2.0);
             currentDistance = robot.sideDistance.getDistance(DistanceUnit.CM);
             if (PID) {
@@ -1008,21 +1032,21 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         double gyroCorrection;
         double distanceCorrection;
-        while(avgPos < targetPos && opModeIsActive()) {
+        while (opModeIsActive() && avgPos < targetPos) {
             avgPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
             double rampedSpeed = rampSpeed(avgPos, initPos, targetPos, speed, true);
 
             if (PID) {
                 actualPitch = robot.getPitch();
                 output = PIDControl.getOutput(actualPitch, targetPitch);
-                robot.setMotors(clamp(rampedSpeed - output), clamp(-rampedSpeed - output),
-                        clamp(-rampedSpeed + output), clamp(rampedSpeed + output));
+                robot.setMotors(clamp(speed - output), clamp(-speed - output),
+                        clamp(-speed + output), clamp(speed + output));
             } else {
                 gyroCorrection = gyroCorrect(targetPitch, robot.getPitch());
-                robot.setMotors(clamp(rampedSpeed - gyroCorrection),
-                        clamp(-rampedSpeed - gyroCorrection),
-                        clamp(-rampedSpeed + gyroCorrection),
-                        clamp(rampedSpeed + gyroCorrection));
+                robot.setMotors(clamp(speed - gyroCorrection),
+                        clamp(-speed - gyroCorrection),
+                        clamp(-speed + gyroCorrection),
+                        clamp(speed + gyroCorrection));
             }
         }
         robot.setMotors(0,0,0,0);
@@ -1044,7 +1068,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
 
         double gyroCorrection;
-        while(currentDistance >= distance && abs(currentPos - initPos) < maxSteps && opModeIsActive()) {
+        while (opModeIsActive() && currentDistance >= distance && abs(currentPos - initPos) < maxSteps) {
             currentPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
             currentDistance = robot.sideDistance.getDistance(DistanceUnit.CM);
             if (PID) {
