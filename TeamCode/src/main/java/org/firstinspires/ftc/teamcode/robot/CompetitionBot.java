@@ -25,7 +25,7 @@ public class CompetitionBot {
     public Servo grabberServo, armRotateServo, capStoneServo, Lfoundation, Rfoundation;
     public DistanceSensor sideDistance, backDistance;
 
-    public ColorSensor LcolorSensor, RcolorSensor;
+    public NormalizedColorSensor LcolorSensor, RcolorSensor;
 
     // Servo constants
     public static final double GRABBER_OPEN = .7;
@@ -68,8 +68,8 @@ public class CompetitionBot {
         gyro = hwMap.get(BNO055IMU.class, "gyro");
 
         // color sensors
-        LcolorSensor = hwMap.colorSensor.get("LcolorSensor");
-        RcolorSensor = hwMap.colorSensor.get("RcolorSensor");
+        LcolorSensor = hwMap.get(NormalizedColorSensor.class, "LcolorSensor");
+        RcolorSensor = hwMap.get(NormalizedColorSensor.class, "RcolorSensor");
 
         // analog sensors
         sonarDistance = hwMap.analogInput.get("sonarDistance");

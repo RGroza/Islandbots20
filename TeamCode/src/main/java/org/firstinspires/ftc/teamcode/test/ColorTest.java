@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.test;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 
@@ -11,19 +12,21 @@ public class ColorTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         CompetitionBot robot = new CompetitionBot(hardwareMap, telemetry);
-        robot.LcolorSensor.enableLed(true);
-        robot.RcolorSensor.enableLed(true);
+//        robot.LcolorSensor.enableLed(true);
+//        robot.RcolorSensor.enableLed(true);
 
         waitForStart();
         while(opModeIsActive()) {
-            telemetry.addData("left R: ", robot.LcolorSensor.red());
-            telemetry.addData("left G: ", robot.LcolorSensor.green());
-            telemetry.addData("left B: ", robot.LcolorSensor.blue());
-            telemetry.addData("left A: ", robot.LcolorSensor.alpha());
-            telemetry.addData("right R: ", robot.RcolorSensor.red());
-            telemetry.addData("right G: ", robot.RcolorSensor.green());
-            telemetry.addData("right B: ", robot.RcolorSensor.blue());
-            telemetry.addData("right A: ", robot.RcolorSensor.alpha());
+            NormalizedRGBA colorsL = robot.LcolorSensor.getNormalizedColors();
+            telemetry.addData("left R: ", colorsL.red);
+            telemetry.addData("left G: ", colorsL.green);
+            telemetry.addData("left B: ", colorsL.blue);
+            telemetry.addData("left A: ", colorsL.alpha);
+            NormalizedRGBA colorsR = robot.RcolorSensor.getNormalizedColors();
+            telemetry.addData("right R: ", colorsR.red);
+            telemetry.addData("right G: ", colorsR.green);
+            telemetry.addData("right B: ", colorsR.blue);
+            telemetry.addData("right A: ", colorsR.alpha);
             telemetry.update();
         }
     }
