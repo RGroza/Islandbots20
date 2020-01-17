@@ -81,7 +81,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
 
     private double[] patternVoltages = {.16, .20, .25};
-    private double[] patternDistances = {1, 2, 2.5};
+    private double[] patternDistances = {.5, 1.5, 2.5};
 
     private double gyroCorrectConst = .02;
 
@@ -135,17 +135,15 @@ public abstract class AutonomousNew extends LinearOpMode {
         turnUntil(.5, currentAngle + 180);
 
         moveUntilSonar(.4, .4, 5, true);
-        forward(.3, .5, true);
-//        sleep(250);
-//        backward(.5, 6, true);
-//
-//        turnUntil(.5, currentAngle + 90);
-//
-//        grabBlueFoundation(telemetry);
-//        depositBlock(telemetry);
-//
-//        forward(.5, 8, true);
-//
+        backward(.5, 6, true);
+
+        turnUntil(.5, currentAngle + 90);
+
+        grabBlueFoundation(telemetry);
+        depositBlock(telemetry);
+
+        forward(.5, 8, true);
+
     }
 
     public void runRedBlocksAuto(Telemetry telemetry) throws InterruptedException {
@@ -191,16 +189,14 @@ public abstract class AutonomousNew extends LinearOpMode {
         turnUntil(.5, currentAngle);
 
         moveUntilSonar(.4, .4, 5, true);
-        forward(.3, .5, true);
-//        sleep(250);
-//        backward(.5, 6, true);
-//
-//        turnUntil(.5, currentAngle - 90);
-//
-//        grabRedFoundation(telemetry);
-//        depositBlock(telemetry);
-//
-//        forward(.4, 8, true);
+        backward(.5, 6, true);
+
+        turnUntil(.5, currentAngle - 90);
+
+        grabRedFoundation(telemetry);
+        depositBlock(telemetry);
+
+        forward(.4, 8, true);
     }
 
     public void runBlueFoundationAuto(Telemetry telemetry) throws InterruptedException {
