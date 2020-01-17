@@ -203,7 +203,7 @@ public class CompetitionBot {
         SlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    private double Singleclamp(double power) {
+    private double SingleClamp(double power) {
         // ensures power does not exceed abs(1)
         if (power > 1) {
             return 1;

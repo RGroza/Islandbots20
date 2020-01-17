@@ -127,7 +127,7 @@ public class TeleOpBot extends LinearOpMode {
 //                    robot.SlideMotor.setPower(.5);
 //                }
                 if (robot.armRotateServo.getPosition() == CompetitionBot.ARM_OUT) {
-                    if (robot.SlideMotor.getCurrentPosition() > -1000) {
+                    if (robot.SlideMotor.getCurrentPosition() > -1250) {
                         robot.SlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         robot.SlideMotor.setTargetPosition(robot.SlideMotor.getCurrentPosition());
                     }
