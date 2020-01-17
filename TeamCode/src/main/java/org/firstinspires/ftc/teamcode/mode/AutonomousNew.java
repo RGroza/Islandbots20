@@ -110,7 +110,7 @@ public abstract class AutonomousNew extends LinearOpMode {
             } else if (pattern.equals("B")) {
                 patternDist = patternDistances[1];
             }
-            moveUntilSonar(.3, patternDist, 5, true);
+            backward(.3, patternDist, true);
 
             left(.3, 2.25, true);
             turnUntil(.5, currentAngle + 180);
@@ -122,7 +122,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
             right(.3, 2.5, true);
         } else { // Pattern C and default condition
-            forward(.3, patternDist, true);
+            backward(.3, patternDist, true);
             turnUntil(.5, currentAngle - 135);
 
             robot.IntakeMotor.setPower(1);
@@ -166,7 +166,7 @@ public abstract class AutonomousNew extends LinearOpMode {
             } else if (pattern.equals("B")) {
                 patternDist = patternDistances[1];
             }
-            moveUntilSonar(.3, patternDist, 5, true);
+            backward(.3, patternDist, true);
 
             right(.25, 2.5, true);
             turnUntil(.5, currentAngle);
@@ -489,6 +489,17 @@ public abstract class AutonomousNew extends LinearOpMode {
         turnUntil(.4, 0);
     }
 
+    public void encoderPatternTest(Telemetry telemetry) throws InterruptedException {
+        backward(.3, patternDistances[0], true);
+        turnUntil(.4, 0);
+        sleep(1000);
+        backward(.3, patternDistances[1]-patternDistances[0], true);
+        turnUntil(.4, 0);
+        sleep(1000);
+        backward(.3, patternDistances[2]-patternDistances[1], true);
+        turnUntil(.4, 0);
+        sleep(1000);
+    }
 
     private void detectLineAndStop(boolean isForward, int maxDist, Telemetry telemetry, boolean useDistanceSensor) throws InterruptedException {
         NormalizedRGBA colorsL = robot.LcolorSensor.getNormalizedColors();
@@ -796,14 +807,14 @@ public abstract class AutonomousNew extends LinearOpMode {
             if (PID) {
                 actualPitch = robot.getPitch();
                 output = PIDControl.getOutput(actualPitch, targetPitch);
-                robot.setMotors(clamp(speed - output), clamp(speed - output),
-                                clamp(speed + output), clamp(speed + output));
+                robot.setMotors(clamp(rampedSpeed - output), clamp(rampedSpeed - output),
+                                clamp(rampedSpeed + output), clamp(rampedSpeed + output));
             } else {
                 gyroCorrection = gyroCorrect(targetPitch, robot.getPitch());
-                robot.setMotors(clamp(speed - gyroCorrection),
-                        clamp(speed - gyroCorrection),
-                        clamp(speed + gyroCorrection),
-                        clamp(speed + gyroCorrection));
+                robot.setMotors(clamp(rampedSpeed - gyroCorrection),
+                        clamp(rampedSpeed - gyroCorrection),
+                        clamp(rampedSpeed + gyroCorrection),
+                        clamp(rampedSpeed + gyroCorrection));
             }
         }
         robot.setMotors(0,0,0,0);
@@ -914,14 +925,14 @@ public abstract class AutonomousNew extends LinearOpMode {
             if (PID) {
                 actualPitch = robot.getPitch();
                 output = PIDControl.getOutput(actualPitch, targetPitch);
-                robot.setMotors(clamp(-speed - output), clamp(-speed - output),
-                        clamp(-speed + output), clamp(-speed + output));
+                robot.setMotors(clamp(-rampedSpeed - output), clamp(-rampedSpeed - output),
+                        clamp(-rampedSpeed + output), clamp(-rampedSpeed + output));
             } else {
                 gyroCorrection = gyroCorrect(targetPitch, robot.getPitch());
-                robot.setMotors(clamp(-speed - gyroCorrection),
-                        clamp(-speed - gyroCorrection),
-                        clamp(-speed + gyroCorrection),
-                        clamp(-speed + gyroCorrection));
+                robot.setMotors(clamp(-rampedSpeed - gyroCorrection),
+                        clamp(-rampedSpeed - gyroCorrection),
+                        clamp(-rampedSpeed + gyroCorrection),
+                        clamp(-rampedSpeed + gyroCorrection));
             }
         }
         robot.setMotors(0,0,0,0);
@@ -991,14 +1002,14 @@ public abstract class AutonomousNew extends LinearOpMode {
             if (PID) {
                 actualPitch = robot.getPitch();
                 output = PIDControl.getOutput(actualPitch, targetPitch);
-                robot.setMotors(clamp(-speed - output), clamp(speed - output),
-                                clamp(speed + output), clamp(-speed + output));
+                robot.setMotors(clamp(-rampedSpeed - output), clamp(rampedSpeed - output),
+                                clamp(rampedSpeed + output), clamp(-rampedSpeed + output));
             } else {
                 gyroCorrection = gyroCorrect(targetPitch, robot.getPitch());
-                robot.setMotors(clamp(-speed - gyroCorrection),
-                        clamp(speed - gyroCorrection),
-                        clamp(speed + gyroCorrection),
-                        clamp(-speed + gyroCorrection));
+                robot.setMotors(clamp(-rampedSpeed - gyroCorrection),
+                        clamp(rampedSpeed - gyroCorrection),
+                        clamp(rampedSpeed + gyroCorrection),
+                        clamp(-rampedSpeed + gyroCorrection));
             }
         }
         robot.setMotors(0,0,0,0);
@@ -1061,14 +1072,14 @@ public abstract class AutonomousNew extends LinearOpMode {
             if (PID) {
                 actualPitch = robot.getPitch();
                 output = PIDControl.getOutput(actualPitch, targetPitch);
-                robot.setMotors(clamp(speed - output), clamp(-speed - output),
-                        clamp(-speed + output), clamp(speed + output));
+                robot.setMotors(clamp(rampedSpeed - output), clamp(-rampedSpeed - output),
+                        clamp(-rampedSpeed + output), clamp(rampedSpeed + output));
             } else {
                 gyroCorrection = gyroCorrect(targetPitch, robot.getPitch());
-                robot.setMotors(clamp(speed - gyroCorrection),
-                        clamp(-speed - gyroCorrection),
-                        clamp(-speed + gyroCorrection),
-                        clamp(speed + gyroCorrection));
+                robot.setMotors(clamp(rampedSpeed - gyroCorrection),
+                        clamp(-rampedSpeed - gyroCorrection),
+                        clamp(-rampedSpeed + gyroCorrection),
+                        clamp(rampedSpeed + gyroCorrection));
             }
         }
         robot.setMotors(0,0,0,0);
