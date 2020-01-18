@@ -81,7 +81,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
 
     private double[] patternVoltages = {.16, .20, .25};
-    private double[] patternDistances = {.5, 1.5, 2.5};
+    private double[] patternDistances = {.5, 1.5, 2.25};
 
     private double gyroCorrectConst = .02;
 
@@ -111,6 +111,7 @@ public abstract class AutonomousNew extends LinearOpMode {
                 patternDist = patternDistances[1];
             }
             backward(.3, patternDist, true);
+            turnUntil(.5, currentAngle + 180);
 
             left(.3, 2.25, true);
             turnUntil(.5, currentAngle + 180);
@@ -122,27 +123,27 @@ public abstract class AutonomousNew extends LinearOpMode {
 
             right(.3, 2.5, true);
         } else { // Pattern C and default condition
+            turnUntil(.5, currentAngle - 180);
             backward(.3, patternDist, true);
             turnUntil(.5, currentAngle - 135);
 
             robot.IntakeMotor.setPower(1);
-            forward(.3, 3, true);
+            forward(.3, 4, true);
             sleep(500);
             robot.IntakeMotor.setPower(0);
-            backward(.3, 3, true);
+            backward(.3, 5, true);
         }
 
         turnUntil(.5, currentAngle + 180);
 
-        moveUntilSonar(.4, .4, 5, true);
-        backward(.5, 6, true);
+        backward(.3, 11 - patternDist, true);
 
         turnUntil(.5, currentAngle + 90);
 
         grabBlueFoundation(telemetry);
         depositBlock(telemetry);
 
-        forward(.5, 8, true);
+        forward(.3, 4, true);
 
     }
 
@@ -165,6 +166,7 @@ public abstract class AutonomousNew extends LinearOpMode {
                 patternDist = patternDistances[1];
             }
             backward(.3, patternDist, true);
+            turnUntil(.5, currentAngle);
 
             right(.25, 2.5, true);
             turnUntil(.5, currentAngle);
@@ -176,27 +178,27 @@ public abstract class AutonomousNew extends LinearOpMode {
 
             left(.25, 2.5, true);
         } else { // Pattern C and default condition
+            turnUntil(.5, currentAngle - 180);
             backward(.3, patternDist, true);
-            turnUntil(.4, currentAngle - 45);
+            turnUntil(.5, currentAngle - 45);
 
             robot.IntakeMotor.setPower(1);
             forward(.3, 4, true);
             sleep(500);
             robot.IntakeMotor.setPower(0);
-            backward(.3, 6, true);
+            backward(.3, 5, true);
         }
 
         turnUntil(.5, currentAngle);
 
-        moveUntilSonar(.4, .4, 5, true);
-        backward(.5, 6, true);
+        backward(.3, 11 - patternDist, true);
 
         turnUntil(.5, currentAngle - 90);
 
         grabRedFoundation(telemetry);
         depositBlock(telemetry);
 
-        forward(.4, 8, true);
+        forward(.3, 4, true);
     }
 
     public void runBlueFoundationAuto(Telemetry telemetry) throws InterruptedException {
@@ -233,7 +235,6 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         double currentAngle = robot.getPitch();
 
-        right(.3, 1, true);
         turnUntil(.5, currentAngle);
 
         moveUntilLaser(.4, 3.0, 10, true); // using backDistance
@@ -268,7 +269,6 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         double currentAngle = robot.getPitch();
 
-        left(.3, 1, true);
         turnUntil(.5, currentAngle);
 
         moveUntilLaser(.4, 3.0, 10, true); // using backDistance
@@ -315,10 +315,6 @@ public abstract class AutonomousNew extends LinearOpMode {
         robot.SlideMotor.setPower(.75);
         sleep(600);
         robot.SlideMotor.setPower(0);
-    }
-
-    public void runTestLineDetect(Telemetry telemetry) throws InterruptedException {
-//        detectLineAndStop(false, 1800, telemetry, false);
     }
 
     public void initVuforia() {
@@ -497,100 +493,92 @@ public abstract class AutonomousNew extends LinearOpMode {
         sleep(1000);
     }
 
-    private void detectLineAndStop(boolean isForward, int maxDist, Telemetry telemetry, boolean useDistanceSensor) throws InterruptedException {
+    public void detectLineAndStop(boolean isForward, double speed, int maxDist, Telemetry telemetry) throws InterruptedException {
         NormalizedRGBA colorsL = robot.LcolorSensor.getNormalizedColors();
         NormalizedRGBA colorsR = robot.RcolorSensor.getNormalizedColors();
-        telemetry.addData("Left  Level: ",  colorsL.blue);
-        telemetry.addData("Right  Level: ",  colorsR.blue);
-        telemetry.addData("Left Alpha  Level: ",  colorsL.alpha);
-        telemetry.addData("Right Alpha  Level: ",  colorsR.alpha);
+        telemetry.addData("Left R: ",  colorsL.red);
+        telemetry.addData("Right R: ",  colorsR.red);
+        telemetry.addData("Left G: ",  colorsL.green);
+        telemetry.addData("Right G: ",  colorsR.green);
+        telemetry.addData("Left B: ",  colorsL.blue);
+        telemetry.addData("Right B: ",  colorsR.blue);
+        telemetry.addData("Left A: ",  colorsL.alpha);
+        telemetry.addData("Right A: ",  colorsR.alpha);
         telemetry.update();
-        final int R_COLOR_THRESHOLD = 200;
-        final int L_COLOR_THRESHOLD = 160;
-        double RSpeed = .7;
-        double LSpeed = .7;
-        int direction = 1;
+        final double R_COLOR_THRESHOLD = .02;
+        final double  L_COLOR_THRESHOLD = .02;
+        double RSpeed = speed;
+        double LSpeed = speed;
 
-        if(!isForward) {
-            direction = -1;
+        int maxSteps = (int) (maxDist*CompetitionBot.DRIVETAIN_PPR);
+
+        int dir = 1;
+
+        if (!isForward) {
+            dir = -1;
         }
 
         int initialPosition = (int) ((robot.LFmotor.getCurrentPosition() + robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 4.0);
         int currentPosition = initialPosition;
-        while(abs(currentPosition - initialPosition) < maxDist && (LSpeed != 0 || RSpeed != 0) && opModeIsActive()) {
+        int maxPos = initialPosition + maxSteps;
+        while(opModeIsActive() && abs(currentPosition - initialPosition) < maxPos && (LSpeed != 0 || RSpeed != 0)) {
             currentPosition = (int) ((robot.LFmotor.getCurrentPosition() + robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 4.0);
             colorsL = robot.LcolorSensor.getNormalizedColors();
             colorsR = robot.RcolorSensor.getNormalizedColors();
 
-//            if(abs(currentPosition - initialPosition) > abs(.6 * (double) maxDist)) {
-//                RSpeed = .2;
-//                LSpeed = .2;
-//            }
-
-//            if(useDistanceSensor && robot.wallDistanceFront.getVoltage() < .12) { // .098 = 30 in
-//                RSpeed = .2;
-//                LSpeed = .2;
-//            }
-
-            if(colorsL.blue > L_COLOR_THRESHOLD) {
+            if (colorsL.blue > L_COLOR_THRESHOLD || colorsL.red > L_COLOR_THRESHOLD) {
                 LSpeed = 0;
             }
-            if(colorsR.blue > R_COLOR_THRESHOLD) {
+            if (colorsR.blue > R_COLOR_THRESHOLD || colorsR.red > R_COLOR_THRESHOLD) {
                 RSpeed = 0;
             }
 
-//            robot.setMotors(direction * ramp(currentPosition, maxDist, LSpeed), direction * ramp(currentPosition, maxDist, LSpeed),
-//                    direction * ramp(currentPosition, maxDist, RSpeed), direction * ramp(currentPosition, maxDist, RSpeed));
-            robot.setMotors(direction * LSpeed, direction * LSpeed, direction * RSpeed, direction * RSpeed);
+            robot.setMotors(dir*LSpeed, dir*LSpeed, dir*RSpeed, dir*RSpeed);
         }
         robot.setMotors(0,0,0,0);
     }
 
-    private void detectLineAndContinue(boolean isForward, Telemetry telemetry, boolean useDistanceSensor) throws InterruptedException {
+    public void detectLineAndContinue(boolean isForward, double speed, int maxDist, Telemetry telemetry) throws InterruptedException {
         NormalizedRGBA colorsL = robot.LcolorSensor.getNormalizedColors();
         NormalizedRGBA colorsR = robot.RcolorSensor.getNormalizedColors();
-        telemetry.addData("Left  Level: ",  colorsL.blue);
-        telemetry.addData("Right  Level: ",  colorsR.blue);
-        telemetry.addData("Left Alpha  Level: ",  colorsL.alpha);
-        telemetry.addData("Right Alpha  Level: ",  colorsR.alpha);
+        telemetry.addData("Left R: ",  colorsL.red);
+        telemetry.addData("Right R: ",  colorsR.red);
+        telemetry.addData("Left G: ",  colorsL.green);
+        telemetry.addData("Right G: ",  colorsR.green);
+        telemetry.addData("Left B: ",  colorsL.blue);
+        telemetry.addData("Right B: ",  colorsR.blue);
+        telemetry.addData("Left A: ",  colorsL.alpha);
+        telemetry.addData("Right A: ",  colorsR.alpha);
         telemetry.update();
-        final int R_COLOR_THRESHOLD = 200;
-        final int L_COLOR_THRESHOLD = 160;
-        double RSpeed = .3;
-        double LSpeed = .3;
-        int direction = 1;
+        final double R_COLOR_THRESHOLD = .02;
+        final double  L_COLOR_THRESHOLD = .02;
+        double RSpeed = speed;
+        double LSpeed = speed;
 
-        if(!isForward) {
-            direction = -1;
+        int maxSteps = (int) (maxDist*CompetitionBot.DRIVETAIN_PPR);
+
+        int dir = 1;
+
+        if (!isForward) {
+            dir = -1;
         }
 
         int initialPosition = (int) ((robot.LFmotor.getCurrentPosition() + robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 4.0);
         int currentPosition = initialPosition;
-        while(LSpeed != 0 || RSpeed != 0 && opModeIsActive()) {
+        int maxPos = initialPosition + maxSteps;
+        while(opModeIsActive() && abs(currentPosition - initialPosition) < maxPos && (LSpeed != 0 || RSpeed != 0)) {
             currentPosition = (int) ((robot.LFmotor.getCurrentPosition() + robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 4.0);
             colorsL = robot.LcolorSensor.getNormalizedColors();
             colorsR = robot.RcolorSensor.getNormalizedColors();
 
-//            if(abs(currentPosition - initialPosition) > abs(.6 * (double) maxDist)) {
-//                RSpeed = .2;
-//                LSpeed = .2;
-//            }
-
-//            if(useDistanceSensor && robot.wallDistanceFront.getVoltage() < .12) { // .098 = 30 in
-//                RSpeed = .2;
-//                LSpeed = .2;
-//            }
-
-            if(colorsL.blue > L_COLOR_THRESHOLD) {
+            if (colorsL.blue > L_COLOR_THRESHOLD || colorsL.red > L_COLOR_THRESHOLD) {
                 LSpeed = 0;
             }
-            if(colorsR.blue > R_COLOR_THRESHOLD) {
+            if (colorsR.blue > R_COLOR_THRESHOLD || colorsR.red > R_COLOR_THRESHOLD) {
                 RSpeed = 0;
             }
 
-//            robot.setMotors(direction * ramp(currentPosition, maxDist, LSpeed), direction * ramp(currentPosition, maxDist, LSpeed),
-//                    direction * ramp(currentPosition, maxDist, RSpeed), direction * ramp(currentPosition, maxDist, RSpeed));
-            robot.setMotors(direction * LSpeed, direction * LSpeed, direction * RSpeed, direction * RSpeed);
+            robot.setMotors(dir*LSpeed, dir*LSpeed, dir*RSpeed, dir*RSpeed);
         }
     }
 
