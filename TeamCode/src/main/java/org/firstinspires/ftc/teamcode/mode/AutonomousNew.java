@@ -81,7 +81,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
 
     private double[] patternVoltages = {.16, .20, .25};
-    private double[] patternDistances = {.5, 1.5, 2.25};
+    private double[] patternDistances = {.5, 1.25, 2.25};
 
     private double gyroCorrectConst = .02;
 
@@ -134,16 +134,22 @@ public abstract class AutonomousNew extends LinearOpMode {
             backward(.3, 5, true);
         }
 
+        // Park after BlockAuto
         turnUntil(.5, currentAngle + 180);
+        backward(.3, 6, true);
 
-        backward(.3, 11 - patternDist, true);
+        forward(.3, 3, true);
 
-        turnUntil(.5, currentAngle + 90);
-
-        grabBlueFoundation(telemetry);
-        depositBlock(telemetry);
-
-        forward(.3, 4, true);
+        // Transition to FoundationAuto
+//        turnUntil(.5, currentAngle + 180);
+//        backward(.3, 11 - patternDist, true);
+//
+//        turnUntil(.5, currentAngle + 90);
+//
+//        grabBlueFoundation(telemetry);
+//        depositBlock(telemetry);
+//
+//        forward(.3, 4, true);
 
     }
 
@@ -165,7 +171,7 @@ public abstract class AutonomousNew extends LinearOpMode {
             } else if (pattern.equals("B")) {
                 patternDist = patternDistances[1];
             }
-            backward(.3, patternDist, true);
+            forward(.3, patternDist, true);
             turnUntil(.5, currentAngle);
 
             right(.25, 2.5, true);
@@ -179,7 +185,7 @@ public abstract class AutonomousNew extends LinearOpMode {
             left(.25, 2.5, true);
         } else { // Pattern C and default condition
             turnUntil(.5, currentAngle - 180);
-            backward(.3, patternDist, true);
+            forward(.3, patternDist, true);
             turnUntil(.5, currentAngle - 45);
 
             robot.IntakeMotor.setPower(1);
@@ -202,31 +208,39 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void runBlueFoundationAuto(Telemetry telemetry) throws InterruptedException {
+        right(.3, 1, true);
         grabBlueFoundation(telemetry);
 
         double currentAngle = robot.getPitch();
 
-        moveUntilSonar(.4, .135, 15, true);
-        turnUntil(.4, currentAngle);
+        turnUntil(.5, currentAngle);
 
-        sleep(500);
+        forward(.3, 5, true);
 
-        runBlueBlocksAuto(telemetry);
-
+//        moveUntilSonar(.4, .135, 15, true);
+//        turnUntil(.4, currentAngle);
+//
+//        sleep(500);
+//
+//        runBlueBlocksAuto(telemetry);
     }
 
     public void runRedFoundationAuto(Telemetry telemetry) throws InterruptedException {
+        left(.3, 1, true);
         grabRedFoundation(telemetry);
 
         double currentAngle = robot.getPitch();
 
-        moveUntilSonar(.4, .135, 15, true);
-        turnUntil(.4, currentAngle);
+        turnUntil(.5, currentAngle);
 
-        sleep(500);
+        forward(.3, 5, true);
 
-        runRedBlocksAuto(telemetry);
-
+//        moveUntilSonar(.4, .135, 15, true);
+//        turnUntil(.4, currentAngle);
+//
+//        sleep(500);
+//
+//        runRedBlocksAuto(telemetry);
     }
 
     public void grabBlueFoundation(Telemetry telemetry) throws InterruptedException {
@@ -237,7 +251,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         turnUntil(.5, currentAngle);
 
-        moveUntilLaser(.4, 3.0, 10, true); // using backDistance
+        moveUntilLaser(.3, 3.0, 10, true); // using backDistance
         turnUntil(.5, currentAngle);
 
         backward(.25, .75, true);
@@ -249,9 +263,9 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         turnUntil(.5, currentAngle);
 
-        moveUntilSonar(.4, .11, 10, true);
+        forward(.3, 3, true);
         turnUntil(.35, currentAngle + 90);
-        right(.3, 2, true);
+        right(.3, 1, true);
         turnUntil(.35, currentAngle + 90);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
@@ -259,7 +273,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         sleep(500);
 
-        left(.3, 1.5, true);
+        right(.3, 2, true);
         turnUntil(.5, currentAngle + 90);
     }
 
@@ -271,7 +285,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         turnUntil(.5, currentAngle);
 
-        moveUntilLaser(.4, 3.0, 10, true); // using backDistance
+        moveUntilLaser(.3, 3.0, 10, true); // using backDistance
         turnUntil(.5, currentAngle);
 
         backward(.25, .75, true);
@@ -283,9 +297,9 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         turnUntil(.5, currentAngle);
 
-        moveUntilSonar(.4, .11, 10, true);
+        forward(.3, 3, true);
         turnUntil(.35, currentAngle - 90);
-        left(.3, 2, true);
+        left(.3, 1, true);
         turnUntil(.35, currentAngle - 90);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
@@ -293,7 +307,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         sleep(500);
 
-        right(.3, 1.5, true);
+        left(.3, 2, true);
         turnUntil(.4, currentAngle - 90);
     }
 

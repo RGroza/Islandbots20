@@ -8,9 +8,9 @@ public class RedFoundationAutonomous extends AutonomousNew {
     public void runOpMode() throws InterruptedException {
         robot = new CompetitionBot(hardwareMap, telemetry);
 
-        initVuforia();
-        telemetry.addLine("Vuforia Initialized!");
-        telemetry.update();
+//        initVuforia();
+//        telemetry.addLine("Vuforia Initialized!");
+//        telemetry.update();
 
         waitForStart();
         runRedFoundationAuto(telemetry);
