@@ -13,7 +13,7 @@ public class RedBlocksAutonomous extends AutonomousNew {
         telemetry.update();
 
         waitForStart();
-        runRedBlocksAuto(telemetry);
+        runRedBlocksAuto(true, telemetry);
 
     }
 }

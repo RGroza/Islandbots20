@@ -95,6 +95,7 @@ public class CompetitionBot {
 
         Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
+        grabberServo.setPosition(CompetitionBot.GRABBER_OPEN);
 
         gyro.initialize(parameters);
         telemetry.addData("Successfully Initialized", null);

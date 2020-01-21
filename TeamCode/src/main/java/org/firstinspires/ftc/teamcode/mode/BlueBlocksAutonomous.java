@@ -13,6 +13,6 @@ public class BlueBlocksAutonomous extends AutonomousNew {
         telemetry.update();
 
         waitForStart();
-        runBlueBlocksAuto(telemetry);
+        runBlueBlocksAuto(true, telemetry);
     }
 }

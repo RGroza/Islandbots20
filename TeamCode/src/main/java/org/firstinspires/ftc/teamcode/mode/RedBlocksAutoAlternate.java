@@ -15,7 +15,7 @@ public class RedBlocksAutoAlternate extends AutonomousNew {
         waitForStart();
         sleep(10000);
         forward(.4, 7.5, true);
-        runRedBlocksAuto(telemetry);
+        runRedBlocksAuto(true, telemetry);
 
     }
 }

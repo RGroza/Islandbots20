@@ -15,7 +15,7 @@ public class BlueBlocksAutoAlternate extends AutonomousNew {
         waitForStart();
         sleep(10000);
         backward(.4, 7.5, true);
-        runBlueBlocksAuto(telemetry);
+        runBlueBlocksAuto(true, telemetry);
 
     }
 }
