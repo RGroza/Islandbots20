@@ -101,7 +101,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         telemetry.update();
 
         rightUntil(.3, 25, 5, true);
-        turnUntil(.5, currentAngle + 180);
+        turnUntil(.4, currentAngle + 180);
 
         double patternDist = patternDistances[2];
         if (!pattern.equals("C") && !pattern.equals("None")) {
@@ -129,10 +129,10 @@ public abstract class AutonomousNew extends LinearOpMode {
             turnUntil(.5, currentAngle - 135);
 
             robot.IntakeMotor.setPower(1);
-            forward(.3, 4, true);
+            forward(.25, 3.5, true);
             sleep(500);
             robot.IntakeMotor.setPower(0);
-            backward(.3, 5, true);
+            backward(.3, 4, true);
         }
 
         if (!runFoundation) {
@@ -142,24 +142,20 @@ public abstract class AutonomousNew extends LinearOpMode {
 
             turnUntil(.5, currentAngle);
 
-            detectLineAndStop(false, true, .3, 5, telemetry);
+            detectLineAndStop(false, true, .3, 5, robot.getPitch(), telemetry);
             robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
-//            forward(.3, 3, true);
         } else {
             // Transition to FoundationAuto
             turnUntil(.5, currentAngle + 180);
-            detectLineAndStop(false, false, .3, 10, telemetry);
+            detectLineAndStop(false, false, .3, 10, robot.getPitch(), telemetry);
             robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
-            backward(.3, 6.5, true);
-//            backward(.3, 9 - patternDist, true);
+            backward(.3, 6.5, false);
 
             turnUntil(.5, currentAngle + 90);
 
-            grabBlueFoundation(telemetry);
-            depositBlock(telemetry);
+            grabBlueFoundation(true, telemetry);
 
-            detectLineAndStop(true, true, .3, 10, telemetry);
-//            forward(.3, 4, true);
+            detectLineAndStop(true, true, .3, 10, robot.getPitch(), telemetry);
         }
 
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_OPEN);
@@ -203,10 +199,10 @@ public abstract class AutonomousNew extends LinearOpMode {
             turnUntil(.5, currentAngle - 45);
 
             robot.IntakeMotor.setPower(1);
-            forward(.3, 4, true);
+            forward(.25, 3.5, true);
             sleep(500);
             robot.IntakeMotor.setPower(0);
-            backward(.3, 5, true);
+            backward(.25, 4, true);
         }
 
         if (!runFoundation) {
@@ -214,24 +210,20 @@ public abstract class AutonomousNew extends LinearOpMode {
             turnUntil(.5, currentAngle);
             backward(.3, 7 - patternDist, true);
 
-            detectLineAndStop(true, true, .3, 5, telemetry);
+            detectLineAndStop(true, true, .3, 5, robot.getPitch(), telemetry);
             robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
-//            forward(.3, 3, true);
         } else {
             // Transition to FoundationAuto
             turnUntil(.5, currentAngle);
-            detectLineAndStop(false, false, .3, 10, telemetry);
+            detectLineAndStop(false, false, .3, 10, robot.getPitch(), telemetry);
             robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
-            backward(.3, 6.5, true);
-//            backward(.3, 11 - patternDist, true);
+            backward(.3, 6.5, false);
 
             turnUntil(.5, currentAngle - 90);
 
-            grabRedFoundation(telemetry);
-            depositBlock(telemetry);
+            grabRedFoundation(true, telemetry);
 
-            detectLineAndStop(true, true, .3, 5, telemetry);
-//            forward(.3, 4, true);
+            detectLineAndStop(true, true, .3, 5, robot.getPitch(), telemetry);
         }
 
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_OPEN);
@@ -240,7 +232,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
     public void runBlueFoundationAuto(Telemetry telemetry) throws InterruptedException {
         right(.3, 1, true);
-        grabBlueFoundation(telemetry);
+        grabBlueFoundation(false, telemetry);
 
         double currentAngle = robot.getPitch();
 
@@ -258,7 +250,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
     public void runRedFoundationAuto(Telemetry telemetry) throws InterruptedException {
         left(.3, 1, true);
-        grabRedFoundation(telemetry);
+        grabRedFoundation(false, telemetry);
 
         double currentAngle = robot.getPitch();
 
@@ -274,7 +266,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 //        runRedBlocksAuto(telemetry);
     }
 
-    public void grabBlueFoundation(Telemetry telemetry) throws InterruptedException {
+    public void grabBlueFoundation(boolean depositBlock, Telemetry telemetry) throws InterruptedException {
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
 
@@ -286,8 +278,6 @@ public abstract class AutonomousNew extends LinearOpMode {
         turnUntil(.5, currentAngle);
 
         backward(.1, .25, true);
-
-        turnUntil(.5, currentAngle);
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
         sleep(500);
@@ -296,19 +286,23 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         forward(.3, 3, true);
         turnUntil(.35, currentAngle + 90);
-        right(.3, 1, true);
+        right(.3, 2, true);
         turnUntil(.35, currentAngle + 90);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
 
-        sleep(500);
+        if (depositBlock) {
+            depositBlock(telemetry);
+        } else {
+            sleep(500);
+        }
 
-        right(.3, 2, true);
+        right(.3, 1, true);
         turnUntil(.5, currentAngle + 90);
     }
 
-    public void grabRedFoundation(Telemetry telemetry) throws InterruptedException {
+    public void grabRedFoundation(boolean depositBlock, Telemetry telemetry) throws InterruptedException {
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
 
@@ -320,8 +314,6 @@ public abstract class AutonomousNew extends LinearOpMode {
         turnUntil(.5, currentAngle);
 
         backward(.1, .25, true);
-
-        turnUntil(.5, currentAngle);
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
         sleep(500);
@@ -330,15 +322,19 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         forward(.3, 3, true);
         turnUntil(.35, currentAngle - 90);
-        left(.3, 1, true);
+        left(.3, 2, true);
         turnUntil(.35, currentAngle - 90);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
 
-        sleep(500);
+        if (depositBlock) {
+            depositBlock(telemetry);
+        } else {
+            sleep(500);
+        }
 
-        left(.3, 2, true);
+        left(.3, 1, true);
         turnUntil(.4, currentAngle - 90);
     }
 
@@ -545,7 +541,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         sleep(1000);
     }
 
-    public void detectLineAndStop(boolean isForward, boolean parkOnLine, double speed, double maxDist, Telemetry telemetry) throws InterruptedException {
+    public void detectLineAndStop(boolean isForward, boolean parkOnLine, double speed, double maxDist, double currentAngle, Telemetry telemetry) throws InterruptedException {
         NormalizedRGBA colorsL = robot.LcolorSensor.getNormalizedColors();
         NormalizedRGBA colorsR = robot.RcolorSensor.getNormalizedColors();
         telemetry.addData("Left R: ",  colorsL.red);
@@ -574,19 +570,31 @@ public abstract class AutonomousNew extends LinearOpMode {
         int currentPosition = initialPosition;
         int maxPos = initialPosition + maxSteps;
 
+        double initAngle = robot.getPitch();
+
         boolean LStop = false, RStop = false;
+        int stopCount = 0;
         while(opModeIsActive() && abs(currentPosition - initialPosition) < maxPos && (!LStop && !RStop)) {
             currentPosition = (int) avgMotorPos();
             colorsL = robot.LcolorSensor.getNormalizedColors();
             colorsR = robot.RcolorSensor.getNormalizedColors();
 
-            if (colorsL.blue > L_COLOR_THRESHOLD || colorsL.red > L_COLOR_THRESHOLD) {
+            if (!LStop && colorsL.blue > L_COLOR_THRESHOLD || colorsL.red > L_COLOR_THRESHOLD) {
                 LSpeed = 0;
                 LStop = true;
+                stopCount++;
             }
-            if (colorsR.blue > R_COLOR_THRESHOLD || colorsR.red > R_COLOR_THRESHOLD) {
+            if (!RStop && colorsR.blue > R_COLOR_THRESHOLD || colorsR.red > R_COLOR_THRESHOLD) {
                 RSpeed = 0;
                 RStop = true;
+                stopCount++;
+            }
+
+            if (stopCount == 1 && abs(robot.getPitch() - initAngle) > 5) {
+                LSpeed = 0; RSpeed = 0;
+                LStop = false; RStop = false;
+                robot.setMotors(0, 0, 0, 0);
+                break;
             }
 
             robot.setMotors(dir*LSpeed, dir*LSpeed, dir*RSpeed, dir*RSpeed);
@@ -599,7 +607,9 @@ public abstract class AutonomousNew extends LinearOpMode {
         // If robot overshoots, return to line in second pass
         if (parkOnLine && abs(currentPos - initPos) > 100) {
             double posDiff = ((abs(currentPos - initPos)) / CompetitionBot.DRIVETAIN_PPR) + 1;
-            detectLineAndStop(!isForward, false, .1, posDiff, telemetry);
+            detectLineAndStop(!isForward, false, .1, posDiff, currentAngle, telemetry);
+        } else {
+            turnUntil(.5, currentAngle);
         }
     }
 
