@@ -34,6 +34,8 @@ public class TeleOpBot extends LinearOpMode {
         GamepadButton intakeButton = new GamepadButton(300, false);
         GamepadButton reverseIntakeButton = new GamepadButton(300, false);
         GamepadButton capStoneButton = new GamepadButton(300, false);
+        GamepadButton tapeMeasureOutButton = new GamepadButton(300, false);
+        GamepadButton tapeMeasureInButton = new GamepadButton(300, false);
 
         boolean slideActive = false;
 
@@ -64,6 +66,9 @@ public class TeleOpBot extends LinearOpMode {
             boolean intakeBool = gamepad2.x;
             boolean reverseIntakeBool = gamepad2.b;
 
+            boolean tapeMeasureOutBool = gamepad2.dpad_right;
+            boolean tapeMeasureInBool = gamepad2.dpad_left;
+
             // BUTTON DEBOUNCE
             // Gamepad 1
             slowToggleButton.checkStatus(slowToggleBool);
@@ -79,6 +84,8 @@ public class TeleOpBot extends LinearOpMode {
             capStoneButton.checkStatus(capStoneServoBool);
             intakeButton.checkStatus(intakeBool);
             reverseIntakeButton.checkStatus(reverseIntakeBool);
+            tapeMeasureOutButton.checkStatus(tapeMeasureOutBool);
+            tapeMeasureInButton.checkStatus(tapeMeasureInBool);
 
 
             if(reverseToggleButton.pressed) {
@@ -179,6 +186,14 @@ public class TeleOpBot extends LinearOpMode {
             } else {
                 robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
                 robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
+            }
+
+            if (tapeMeasureOutButton.buttonStatus) {
+                robot.TapeMeasure.setPower(1);
+            } else if (tapeMeasureInButton.buttonStatus) {
+                robot.TapeMeasure.setPower(-1);
+            } else {
+                robot.TapeMeasure.setPower(0);
             }
 
             // MOVEMENT

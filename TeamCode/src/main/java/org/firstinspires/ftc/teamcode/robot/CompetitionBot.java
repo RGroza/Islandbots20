@@ -21,7 +21,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 public class CompetitionBot {
     public BNO055IMU gyro;
     public AnalogInput sonarDistance;
-    public DcMotor RFmotor, RBmotor, LFmotor, LBmotor, SlideMotor, IntakeMotor, LEDPower;
+    public DcMotor RFmotor, RBmotor, LFmotor, LBmotor, SlideMotor, IntakeMotor, TapeMeasure, LEDPower;
     public Servo grabberServo, armRotateServo, capStoneServo, Lfoundation, Rfoundation;
     public DistanceSensor sideDistance, backDistance;
 
@@ -63,6 +63,7 @@ public class CompetitionBot {
         SlideMotor = hwMap.dcMotor.get("SlideMotor");
         IntakeMotor = hwMap.dcMotor.get("IntakeMotor");
         LEDPower = hwMap.dcMotor.get("LEDPower");
+        TapeMeasure = hwMap.dcMotor.get("TapeMeasure");
 
         // gyro hwMap
         gyro = hwMap.get(BNO055IMU.class, "gyro");
