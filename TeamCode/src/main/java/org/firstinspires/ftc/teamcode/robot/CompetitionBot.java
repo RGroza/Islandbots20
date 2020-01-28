@@ -29,19 +29,19 @@ public class CompetitionBot {
 
     // Servo constants
     public static final double GRABBER_OPEN = .7;
-    public static final double GRABBER_CLOSED = .17;
+    public static final double GRABBER_CLOSED = .3;
 
-    public static final double ARM_OUT = .61;
-    public static final double ARM_IN = .27;
+    public static final double ARM_OUT = .59;
+    public static final double ARM_IN = .28;
 
     public static final double L_FOUND_UP = .75;
     public static final double L_FOUND_DOWN = .45;
 
-    public static final double R_FOUND_UP = .05;
-    public static final double R_FOUND_DOWN = .45;
+    public static final double R_FOUND_UP = .2;
+    public static final double R_FOUND_DOWN = .5;
 
-    public static final double CAPSTONE_OPEN = .7;
-    public static final double CAPSTONE_CLOSED = .25;
+    public static final double CAPSTONE_OPEN = .6;
+    public static final double CAPSTONE_CLOSED = .21;
 
     public static final double MAX_SPEED = .5;
 
