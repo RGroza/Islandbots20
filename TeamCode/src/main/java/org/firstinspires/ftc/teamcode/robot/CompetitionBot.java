@@ -31,8 +31,8 @@ public class CompetitionBot {
     public static final double GRABBER_OPEN = .7;
     public static final double GRABBER_CLOSED = .3;
 
-    public static final double ARM_OUT = .59;
-    public static final double ARM_IN = .28;
+    public static final double ARM_OUT = .61;
+    public static final double ARM_IN = .25;
 
     public static final double L_FOUND_UP = .75;
     public static final double L_FOUND_DOWN = .45;
