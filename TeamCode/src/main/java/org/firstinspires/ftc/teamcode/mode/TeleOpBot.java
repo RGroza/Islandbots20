@@ -15,6 +15,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 @TeleOp(name="TeleOpBot", group="Competition")
 public class TeleOpBot extends LinearOpMode {
 
+    public boolean waitAndContinue(long initTime, long duration) {
+        return (System.currentTimeMillis() - initTime < duration);
+    }
+
     @Override
     public void runOpMode() throws InterruptedException {
         CompetitionBot robot = new CompetitionBot(hardwareMap, telemetry);
@@ -38,6 +42,9 @@ public class TeleOpBot extends LinearOpMode {
         GamepadButton tapeMeasureInButton = new GamepadButton(300, false);
 
         boolean slideActive = false;
+
+        long initTime = 0;
+        boolean waitForArm = false;
 
         waitForStart();
         while(opModeIsActive()) {
@@ -121,6 +128,7 @@ public class TeleOpBot extends LinearOpMode {
             }
 
             // Slide and arm homing function
+/*
             if (slideHomeButton.justPressed) {
                 robot.SlideMotor.setTargetPosition(robot.SlideMotor.getCurrentPosition() + 10);
                 robot.SlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -150,6 +158,29 @@ public class TeleOpBot extends LinearOpMode {
                     robot.SlideMotor.setPower(.75);
                 }
                 robot.SlideMotor.setPower(0);
+            }
+*/
+
+            if (slideHomeButton.pressed) {
+                if (robot.armRotateServo.getPosition() == CompetitionBot.ARM_OUT) {
+                    if (robot.SlideMotor.getCurrentPosition() > -1250) {
+                        robot.SlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        robot.SlideMotor.setTargetPosition(robot.SlideMotor.getCurrentPosition() + 10);
+                    }
+                    robot.armRotateServo.setPosition(CompetitionBot.ARM_IN);
+                    armRotateButton.pressedSwitchStatus();
+
+                    initTime = System.currentTimeMillis();
+                    waitForArm = false;
+                    if (robot.SlideMotor.getCurrentPosition() > -1000) waitForArm = true;
+                }
+                if (!waitForArm || waitAndContinue(initTime, 500)) {
+                    robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    while (robot.SlideMotor.getCurrentPosition() < -100) {
+                        robot.SlideMotor.setPower(.75);
+                    }
+                    robot.SlideMotor.setPower(0);
+                }
             }
 
             if (grabberServoButton.pressed) {

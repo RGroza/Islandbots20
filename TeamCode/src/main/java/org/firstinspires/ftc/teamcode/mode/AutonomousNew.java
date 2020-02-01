@@ -82,7 +82,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
 
     private double[] patternVoltages = {.16, .20, .25};
-    private double[] patternDistances = {.5, 1.25, 2.5};
+    private double[] patternDistances = {.5, 1.25, 2.75};
 
     private double gyroCorrectConst = .02;
 
@@ -126,13 +126,14 @@ public abstract class AutonomousNew extends LinearOpMode {
             robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
         } else { // Pattern C and default condition
             backward(.3, patternDist, true);
+            sleep(250);
             turnUntil(.5, currentAngle - 135);
 
             robot.IntakeMotor.setPower(1);
-            forward(.2, 3, true);
+            forward(.2, 2.75, true);
             sleep(500);
+            backward(.4, 2.25, true);
             robot.IntakeMotor.setPower(0);
-            backward(.3, 3, true);
         }
 
         if (!runFoundation) {
@@ -142,23 +143,19 @@ public abstract class AutonomousNew extends LinearOpMode {
 
             turnUntil(.5, currentAngle);
 
-            detectLineAndStop(false, true, .3, 5, robot.getPitch(), telemetry);
+            detectLineAndStop(false, true, .3, 6, robot.getPitch(), telemetry);
             robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
         } else {
             // Transition to FoundationAuto
             turnUntil(.5, currentAngle + 180);
-            detectLineAndStop(false, false, .3, 10, robot.getPitch(), telemetry);
+            detectLineAndStop(false, false, .3, 6, robot.getPitch(), telemetry);
             robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
-            backward(.3, 6.5, false);
+            backward(.4, 6, false);
 
             turnUntil(.5, currentAngle + 90);
 
             grabBlueFoundation(true, telemetry);
-
-            detectLineAndStop(true, true, .3, 10, robot.getPitch(), telemetry);
         }
-
-        robot.grabberServo.setPosition(CompetitionBot.GRABBER_OPEN);
 
     }
 
@@ -180,7 +177,7 @@ public abstract class AutonomousNew extends LinearOpMode {
             } else if (pattern.equals("B")) {
                 patternDist = patternDistances[1];
             }
-            forward(.3, patternDist, true);
+            backward(.3, patternDist + .5, true);
             turnUntil(.5, currentAngle);
 
             right(.25, 2.5, true);
@@ -194,14 +191,15 @@ public abstract class AutonomousNew extends LinearOpMode {
             left(.25, 2.5, true);
             robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
         } else { // Pattern C and default condition
-            forward(.3, patternDist, true);
+            backward(.3, patternDist, true);
+            sleep(250);
             turnUntil(.5, currentAngle - 45);
 
             robot.IntakeMotor.setPower(1);
-            forward(.2, 3, true);
+            forward(.2, 2.75, true);
             sleep(500);
+            backward(.4, 2.25, true);
             robot.IntakeMotor.setPower(0);
-            backward(.3, 3, true);
         }
 
         if (!runFoundation) {
@@ -209,60 +207,30 @@ public abstract class AutonomousNew extends LinearOpMode {
             turnUntil(.5, currentAngle);
             backward(.3, 7 - patternDist, true);
 
-            detectLineAndStop(true, true, .3, 5, robot.getPitch(), telemetry);
+            detectLineAndStop(true, true, .3, 6, robot.getPitch(), telemetry);
             robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
         } else {
             // Transition to FoundationAuto
             turnUntil(.5, currentAngle);
-            detectLineAndStop(false, false, .3, 10, robot.getPitch(), telemetry);
+            detectLineAndStop(false, false, .3, 6, robot.getPitch(), telemetry);
             robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
-            backward(.3, 6.5, false);
+            backward(.4, 6, false);
 
-            turnUntil(.5, currentAngle - 90);
+            turnUntil(.5, currentAngle + 90);
 
             grabRedFoundation(true, telemetry);
-
-            detectLineAndStop(true, true, .3, 5, robot.getPitch(), telemetry);
         }
-
-        robot.grabberServo.setPosition(CompetitionBot.GRABBER_OPEN);
 
     }
 
     public void runBlueFoundationAuto(Telemetry telemetry) throws InterruptedException {
         right(.3, 1, true);
         grabBlueFoundation(false, telemetry);
-
-        double currentAngle = robot.getPitch();
-
-        turnUntil(.5, currentAngle);
-
-        forward(.3, 5, true);
-
-//        moveUntilSonar(.4, .135, 15, true);
-//        turnUntil(.4, currentAngle);
-//
-//        sleep(500);
-//
-//        runBlueBlocksAuto(telemetry);
     }
 
     public void runRedFoundationAuto(Telemetry telemetry) throws InterruptedException {
         left(.3, 1, true);
         grabRedFoundation(false, telemetry);
-
-        double currentAngle = robot.getPitch();
-
-        turnUntil(.5, currentAngle);
-
-        forward(.3, 5, true);
-
-//        moveUntilSonar(.4, .135, 15, true);
-//        turnUntil(.4, currentAngle);
-//
-//        sleep(500);
-//
-//        runRedBlocksAuto(telemetry);
     }
 
     public void grabBlueFoundation(boolean depositBlock, Telemetry telemetry) throws InterruptedException {
@@ -276,7 +244,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         moveUntilLaser(.3, 6.0, 10, true); // using backDistance
         turnUntil(.5, currentAngle);
 
-        backward(.1, .25, true);
+        backward(.2, .25, true);
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
         sleep(500);
@@ -286,14 +254,17 @@ public abstract class AutonomousNew extends LinearOpMode {
         if (depositBlock) {
             depositBlock(telemetry);
         }
-        moveUntilSonar(.3, .055, 5, true);
-        turnUntil(.5, currentAngle + 90);
+        moveUntilSonar(.4, .07, 5, true);
+        turnUntil(.5, currentAngle + 95);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
 
-        right(.3, 1, true);
-        turnUntil(.5, currentAngle + 90);
+//        right(.5, 1, true);
+//        turnUntil(.5, currentAngle + 90);
+
+        forward(.5, 4, true);
+//        detectLineAndStop(true, true, .3, 5, robot.getPitch(), telemetry);
     }
 
     public void grabRedFoundation(boolean depositBlock, Telemetry telemetry) throws InterruptedException {
@@ -307,7 +278,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         moveUntilLaser(.3, 6.0, 10, true); // using backDistance
         turnUntil(.5, currentAngle);
 
-        backward(.1, .25, true);
+        backward(.2, .25, true);
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
         sleep(500);
@@ -317,14 +288,17 @@ public abstract class AutonomousNew extends LinearOpMode {
         if (depositBlock) {
             depositBlock(telemetry);
         }
-        moveUntilSonar(.3, .055, 5, true);
-        turnUntil(.5, currentAngle - 90);
+        moveUntilSonar(.4, .07, 5, true);
+        turnUntil(.5, currentAngle - 80);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
 
-        left(.3, 1, true);
-        turnUntil(.4, currentAngle - 90);
+//        left(.5, 1, true);
+//        turnUntil(.5, currentAngle - 90);
+
+        forward(.5, 4, true);
+//        detectLineAndStop(true, true, .3, 5, robot.getPitch(), telemetry);
     }
 
     public void depositBlock(Telemetry telemetry) throws InterruptedException {
@@ -344,9 +318,6 @@ public abstract class AutonomousNew extends LinearOpMode {
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_OPEN);
         sleep(500);
         robot.armRotateServo.setPosition(CompetitionBot.ARM_IN);
-
-        robot.SlideMotor.setTargetPosition(initPos);
-        robot.SlideMotor.setPower(-.75);
 
         robot.setMotors(0, 0, 0, 0);
 
@@ -658,22 +629,28 @@ public abstract class AutonomousNew extends LinearOpMode {
         double currentAngle = robot.getPitch();
         double targetAngle = (currentAngle + deltaAngle) % 360;
         double diff = angleDiff(currentAngle, targetAngle);
+        double diffPercent = diff / deltaAngle;
         double direction = diff > 0 ? 1 : -1;
         double adjustedSpeed;
+        double minSpeed = .15;
 
         while (opModeIsActive() && abs(diff) > .5) {
-            // adjust speed when difference is smaller
-            telemetry.addData("Gyro: ", robot.getPitch());
-//            adjustedSpeed = abs(diff) < 30 ? (abs(diff) < 10 ? 0.2 : speed/2) : speed;
-            adjustedSpeed = abs(diff) < 15 ? speed/2 : speed;
+            currentAngle = robot.getPitch();
+            diff = angleDiff(currentAngle, targetAngle);
+            diffPercent = diff / deltaAngle;
+            direction = diff > 0 ? 1 : -1;
+
+            // adjust speed proportionally
+            adjustedSpeed = abs(diff) < 30 ? (abs(diff) < 10 ? .2 : .3) : speed;
             robot.LFmotor.setPower(-direction * adjustedSpeed);
             robot.LBmotor.setPower(-direction * adjustedSpeed);
             robot.RFmotor.setPower(direction * adjustedSpeed);
             robot.RBmotor.setPower(direction * adjustedSpeed);
-            currentAngle = robot.getPitch();
-            diff = angleDiff(currentAngle, targetAngle);
-            direction = diff > 0 ? 1 : -1;
+
+            telemetry.addData("Gyro: ", robot.getPitch());
             telemetry.addData("Diff: ", diff);
+            telemetry.addData("diffPercent: ", diffPercent);
+            telemetry.addData("adjustedSpeed: ", adjustedSpeed);
             telemetry.update();
 
         }

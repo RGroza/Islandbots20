@@ -41,7 +41,7 @@ public class CompetitionBot {
     public static final double R_FOUND_DOWN = .5;
 
     public static final double CAPSTONE_OPEN = .6;
-    public static final double CAPSTONE_CLOSED = .21;
+    public static final double CAPSTONE_CLOSED = .2;
 
     public static final double MAX_SPEED = .5;
 
