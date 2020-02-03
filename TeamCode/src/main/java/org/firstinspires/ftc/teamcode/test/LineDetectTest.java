@@ -13,6 +13,6 @@ public class LineDetectTest extends AutonomousNew {
         robot = new CompetitionBot(hardwareMap, telemetry);
 
         waitForStart();
-        detectLineAndStop(false, true, .3, 10, robot.getPitch(), telemetry);
+        detectLineAndStop(true, true, .3, 10, robot.getPitch(), telemetry);
     }
 }

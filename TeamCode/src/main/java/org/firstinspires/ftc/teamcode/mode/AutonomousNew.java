@@ -82,7 +82,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
 
     private double[] patternVoltages = {.16, .20, .25};
-    private double[] patternDistances = {.5, 1.25, 2.75};
+    private double[] patternDistances = {.5, 1.25, 2.5};
 
     private double gyroCorrectConst = .02;
 
@@ -118,7 +118,7 @@ public abstract class AutonomousNew extends LinearOpMode {
             turnUntil(.5, currentAngle + 180);
 
             robot.IntakeMotor.setPower(1);
-            forward(.3, 1, true);
+            forward(.3, .75, true);
             sleep(500);
             robot.IntakeMotor.setPower(0);
 
@@ -148,9 +148,9 @@ public abstract class AutonomousNew extends LinearOpMode {
         } else {
             // Transition to FoundationAuto
             turnUntil(.5, currentAngle + 180);
-            detectLineAndStop(false, false, .3, 6, robot.getPitch(), telemetry);
+            detectLineAndStop(false, false, .3, 10, robot.getPitch(), telemetry);
             robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
-            backward(.4, 6, false);
+            backward(.4, 5.5, false);
 
             turnUntil(.5, currentAngle + 90);
 
@@ -184,7 +184,7 @@ public abstract class AutonomousNew extends LinearOpMode {
             turnUntil(.5, currentAngle);
 
             robot.IntakeMotor.setPower(1);
-            forward(.3, 1, true);
+            forward(.3, .75, true);
             sleep(500);
             robot.IntakeMotor.setPower(0);
 
@@ -212,9 +212,9 @@ public abstract class AutonomousNew extends LinearOpMode {
         } else {
             // Transition to FoundationAuto
             turnUntil(.5, currentAngle);
-            detectLineAndStop(false, false, .3, 6, robot.getPitch(), telemetry);
+            detectLineAndStop(false, false, .3, 10, robot.getPitch(), telemetry);
             robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
-            backward(.4, 6, false);
+            backward(.4, 5.5, false);
 
             turnUntil(.5, currentAngle + 90);
 
@@ -254,17 +254,15 @@ public abstract class AutonomousNew extends LinearOpMode {
         if (depositBlock) {
             depositBlock(telemetry);
         }
-        moveUntilSonar(.4, .07, 5, true);
-        turnUntil(.5, currentAngle + 95);
+        moveUntilSonar(.6, .07, 5, true);
+        turnUntil(.75, currentAngle + 90);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
 
-//        right(.5, 1, true);
-//        turnUntil(.5, currentAngle + 90);
-
-        forward(.5, 4, true);
-//        detectLineAndStop(true, true, .3, 5, robot.getPitch(), telemetry);
+        left(.5, 2, true);
+        forward(.6, 2, true);
+        detectLineAndStop(true, true, .3, 15, robot.getPitch(), telemetry);
     }
 
     public void grabRedFoundation(boolean depositBlock, Telemetry telemetry) throws InterruptedException {
@@ -288,17 +286,15 @@ public abstract class AutonomousNew extends LinearOpMode {
         if (depositBlock) {
             depositBlock(telemetry);
         }
-        moveUntilSonar(.4, .07, 5, true);
-        turnUntil(.5, currentAngle - 80);
+        moveUntilSonar(.6, .07, 5, true);
+        turnUntil(.75, currentAngle - 90);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
 
-//        left(.5, 1, true);
-//        turnUntil(.5, currentAngle - 90);
-
-        forward(.5, 4, true);
-//        detectLineAndStop(true, true, .3, 5, robot.getPitch(), telemetry);
+        right(.5, 2, true);
+        forward(.6, 2, true);
+        detectLineAndStop(true, true, .3, 15, robot.getPitch(), telemetry);
     }
 
     public void depositBlock(Telemetry telemetry) throws InterruptedException {
@@ -323,6 +319,10 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+
+//    public void TeleOpEndGame(Telemetry telemetry) throws InterruptedException {
+//        right(.3, 5, true);
+//    }
 
     public void initVuforia() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());

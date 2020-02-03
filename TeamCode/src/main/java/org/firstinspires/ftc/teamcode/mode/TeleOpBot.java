@@ -28,11 +28,12 @@ public class TeleOpBot extends LinearOpMode {
         GamepadButton slowToggleButton = new GamepadButton(300, false);
         GamepadButton reverseToggleButton = new GamepadButton(300, false);
         GamepadButton foundationServosButton = new GamepadButton(300, false);
+//        GamepadButton endGameButton = new GamepadButton(300, false);
 
         // Gamepad 2
         GamepadButton slideUpButton = new GamepadButton(300, false);
         GamepadButton slideDownButton = new GamepadButton(300, false);
-        GamepadButton slideHomeButton = new GamepadButton(300, false);
+//        GamepadButton slideHomeButton = new GamepadButton(300, false);
         GamepadButton grabberServoButton = new GamepadButton(300, false);
         GamepadButton armRotateButton = new GamepadButton(300, false);
         GamepadButton intakeButton = new GamepadButton(300, false);
@@ -59,9 +60,11 @@ public class TeleOpBot extends LinearOpMode {
 
             boolean foundationServosBool = gamepad1.a;
 
+//            boolean endGameBool = gamepad1.x;
+
             // Gamepad 2
             double slide_y = gamepad2.left_stick_y;
-            boolean slideHome = gamepad2.a;
+//            boolean slideHome = gamepad2.a;
 
             boolean slideUpBool = gamepad2.dpad_up;
             boolean slideDownBool = gamepad2.dpad_down;
@@ -81,9 +84,10 @@ public class TeleOpBot extends LinearOpMode {
             slowToggleButton.checkStatus(slowToggleBool);
             reverseToggleButton.checkStatus(reverseToggleBool);
             foundationServosButton.checkStatus(foundationServosBool);
+//            endGameButton.checkStatus(endGameBool);
 
             // Gamepad 2
-            slideHomeButton.checkStatus(slideHome);
+//            slideHomeButton.checkStatus(slideHome);
             slideUpButton.checkStatus(slideUpBool);
             slideDownButton.checkStatus(slideDownBool);
             grabberServoButton.checkStatus(grabberServoBool);
@@ -95,10 +99,14 @@ public class TeleOpBot extends LinearOpMode {
             tapeMeasureInButton.checkStatus(tapeMeasureInBool);
 
 
-            if(reverseToggleButton.pressed) {
+            if (reverseToggleButton.pressed) {
                 x = gamepad1.left_stick_x;
                 y = gamepad1.left_stick_y;
             }
+
+//            if (endGameButton.justPressed) {
+//
+//            }
 
             if (slide_y > .05) {
                 robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -161,6 +169,7 @@ public class TeleOpBot extends LinearOpMode {
             }
 */
 
+/*
             if (slideHomeButton.pressed) {
                 if (robot.armRotateServo.getPosition() == CompetitionBot.ARM_OUT) {
                     if (robot.SlideMotor.getCurrentPosition() > -1250) {
@@ -182,6 +191,7 @@ public class TeleOpBot extends LinearOpMode {
                     robot.SlideMotor.setPower(0);
                 }
             }
+*/
 
             if (grabberServoButton.pressed) {
                 robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
