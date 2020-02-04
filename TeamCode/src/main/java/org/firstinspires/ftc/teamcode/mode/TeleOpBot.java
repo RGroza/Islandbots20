@@ -16,7 +16,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 public class TeleOpBot extends LinearOpMode {
 
     public boolean waitAndContinue(long initTime, long duration) {
-        return (System.currentTimeMillis() - initTime < duration);
+        return (System.currentTimeMillis() - initTime > duration);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class TeleOpBot extends LinearOpMode {
         // Gamepad 2
         GamepadButton slideUpButton = new GamepadButton(300, false);
         GamepadButton slideDownButton = new GamepadButton(300, false);
-//        GamepadButton slideHomeButton = new GamepadButton(300, false);
+        GamepadButton slideHomeButton = new GamepadButton(300, false);
         GamepadButton grabberServoButton = new GamepadButton(300, false);
         GamepadButton armRotateButton = new GamepadButton(300, false);
         GamepadButton intakeButton = new GamepadButton(300, false);
@@ -64,7 +64,7 @@ public class TeleOpBot extends LinearOpMode {
 
             // Gamepad 2
             double slide_y = gamepad2.left_stick_y;
-//            boolean slideHome = gamepad2.a;
+            boolean slideHome = gamepad2.a;
 
             boolean slideUpBool = gamepad2.dpad_up;
             boolean slideDownBool = gamepad2.dpad_down;
@@ -87,7 +87,7 @@ public class TeleOpBot extends LinearOpMode {
 //            endGameButton.checkStatus(endGameBool);
 
             // Gamepad 2
-//            slideHomeButton.checkStatus(slideHome);
+            slideHomeButton.checkStatus(slideHome);
             slideUpButton.checkStatus(slideUpBool);
             slideDownButton.checkStatus(slideDownBool);
             grabberServoButton.checkStatus(grabberServoBool);
@@ -169,29 +169,26 @@ public class TeleOpBot extends LinearOpMode {
             }
 */
 
-/*
             if (slideHomeButton.pressed) {
                 if (robot.armRotateServo.getPosition() == CompetitionBot.ARM_OUT) {
-                    if (robot.SlideMotor.getCurrentPosition() > -1250) {
-                        robot.SlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        robot.SlideMotor.setTargetPosition(robot.SlideMotor.getCurrentPosition() + 10);
-                    }
                     robot.armRotateServo.setPosition(CompetitionBot.ARM_IN);
                     armRotateButton.pressedSwitchStatus();
 
                     initTime = System.currentTimeMillis();
                     waitForArm = false;
-                    if (robot.SlideMotor.getCurrentPosition() > -1000) waitForArm = true;
+                    if (robot.SlideMotor.getCurrentPosition() > -1500) waitForArm = true;
                 }
                 if (!waitForArm || waitAndContinue(initTime, 500)) {
                     robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    while (robot.SlideMotor.getCurrentPosition() < -100) {
+                    if (robot.SlideMotor.getCurrentPosition() < -100) {
                         robot.SlideMotor.setPower(.75);
                     }
-                    robot.SlideMotor.setPower(0);
+                    else {
+                        robot.SlideMotor.setPower(0);
+                        slideHomeButton.pressedSwitchStatus();
+                    }
                 }
             }
-*/
 
             if (grabberServoButton.pressed) {
                 robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
