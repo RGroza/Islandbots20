@@ -19,13 +19,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
 public class CompetitionBot {
+    // sensors
     public BNO055IMU gyro;
     public AnalogInput sonarDistance;
-    public DcMotor RFmotor, RBmotor, LFmotor, LBmotor, SlideMotor, IntakeMotor, TapeMeasure, LEDPower;
-    public Servo grabberServo, armRotateServo, capStoneServo, Lfoundation, Rfoundation;
     public DistanceSensor sideDistance, backDistance;
-
     public NormalizedColorSensor LcolorSensor, RcolorSensor;
+
+    // motors
+    public DcMotor RFmotor, RBmotor, LFmotor, LBmotor, SlideMotor, IntakeMotor, TapeMeasure, LEDPower;
+    public Servo grabberServo, armRotateServo, capStoneServo, Lfoundation, Rfoundation, beamsServo;
 
     // Servo constants
     public static final double GRABBER_OPEN = .7;
@@ -42,6 +44,9 @@ public class CompetitionBot {
 
     public static final double CAPSTONE_OPEN = .6;
     public static final double CAPSTONE_CLOSED = .2;
+
+    public static final double BEAMS_UP = .75;
+    public static final double BEAMS_DOWN = .25;
 
     public static final double MAX_SPEED = .5;
 
@@ -92,6 +97,7 @@ public class CompetitionBot {
         capStoneServo = hwMap.servo.get("capStoneServo");
         Lfoundation = hwMap.servo.get("Lfoundation");
         Rfoundation = hwMap.servo.get("Rfoundation");
+        beamsServo = hwMap.servo.get("beamsServo");
         // TODO: move servos to initial positions
 
         Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);

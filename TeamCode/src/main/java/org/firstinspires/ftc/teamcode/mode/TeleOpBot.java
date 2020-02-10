@@ -28,7 +28,6 @@ public class TeleOpBot extends LinearOpMode {
         GamepadButton slowToggleButton = new GamepadButton(300, false);
         GamepadButton reverseToggleButton = new GamepadButton(300, false);
         GamepadButton foundationServosButton = new GamepadButton(300, false);
-//        GamepadButton endGameButton = new GamepadButton(300, false);
 
         // Gamepad 2
         GamepadButton slideUpButton = new GamepadButton(300, false);
@@ -41,6 +40,7 @@ public class TeleOpBot extends LinearOpMode {
         GamepadButton capStoneButton = new GamepadButton(300, false);
         GamepadButton tapeMeasureOutButton = new GamepadButton(300, false);
         GamepadButton tapeMeasureInButton = new GamepadButton(300, false);
+        GamepadButton beamsButton = new GamepadButton(300, false);
 
         boolean slideActive = false;
 
@@ -60,8 +60,6 @@ public class TeleOpBot extends LinearOpMode {
 
             boolean foundationServosBool = gamepad1.a;
 
-//            boolean endGameBool = gamepad1.x;
-
             // Gamepad 2
             double slide_y = gamepad2.left_stick_y;
             boolean slideHome = gamepad2.a;
@@ -79,12 +77,13 @@ public class TeleOpBot extends LinearOpMode {
             boolean tapeMeasureOutBool = gamepad2.dpad_right;
             boolean tapeMeasureInBool = gamepad2.dpad_left;
 
+            boolean beamsBool = gamepad2.y;
+
             // BUTTON DEBOUNCE
             // Gamepad 1
             slowToggleButton.checkStatus(slowToggleBool);
             reverseToggleButton.checkStatus(reverseToggleBool);
             foundationServosButton.checkStatus(foundationServosBool);
-//            endGameButton.checkStatus(endGameBool);
 
             // Gamepad 2
             slideHomeButton.checkStatus(slideHome);
@@ -97,16 +96,13 @@ public class TeleOpBot extends LinearOpMode {
             reverseIntakeButton.checkStatus(reverseIntakeBool);
             tapeMeasureOutButton.checkStatus(tapeMeasureOutBool);
             tapeMeasureInButton.checkStatus(tapeMeasureInBool);
+            beamsButton.checkStatus(beamsBool);
 
 
             if (reverseToggleButton.pressed) {
                 x = gamepad1.left_stick_x;
                 y = gamepad1.left_stick_y;
             }
-
-//            if (endGameButton.justPressed) {
-//
-//            }
 
             if (slide_y > .05) {
                 robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -134,40 +130,6 @@ public class TeleOpBot extends LinearOpMode {
                     slideActive = false;
                 }
             }
-
-            // Slide and arm homing function
-/*
-            if (slideHomeButton.justPressed) {
-                robot.SlideMotor.setTargetPosition(robot.SlideMotor.getCurrentPosition() + 10);
-                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                if (robot.SlideMotor.getCurrentPosition() > -400 && robot.armRotateServo.getPosition() == CompetitionBot.ARM_OUT) {
-//                    while (robot.SlideMotor.getCurrentPosition() > -400) {
-//                        robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//                        robot.SlideMotor.setPower(.75);
-//                    }
-//                    robot.SlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                    robot.SlideMotor.setTargetPosition(400);
-//                    robot.SlideMotor.setPower(.5);
-//                }
-                if (robot.armRotateServo.getPosition() == CompetitionBot.ARM_OUT) {
-                    if (robot.SlideMotor.getCurrentPosition() > -1250) {
-                        robot.SlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        robot.SlideMotor.setTargetPosition(robot.SlideMotor.getCurrentPosition());
-                    }
-                    robot.armRotateServo.setPosition(CompetitionBot.ARM_IN);
-                    armRotateButton.pressedSwitchStatus();
-
-                    if (robot.SlideMotor.getCurrentPosition() > -1000) sleep(500);
-
-                    robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                }
-                while (robot.SlideMotor.getCurrentPosition() < -100) {
-                    robot.SlideMotor.setTargetPosition(0);
-                    robot.SlideMotor.setPower(.75);
-                }
-                robot.SlideMotor.setPower(0);
-            }
-*/
 
             if (slideHomeButton.pressed) {
                 if (robot.armRotateServo.getPosition() == CompetitionBot.ARM_OUT) {
@@ -232,6 +194,12 @@ public class TeleOpBot extends LinearOpMode {
                 robot.TapeMeasure.setPower(-1);
             } else {
                 robot.TapeMeasure.setPower(0);
+            }
+
+            if (beamsButton.pressed) {
+                robot.beamsServo.setPosition(CompetitionBot.BEAMS_DOWN);
+            } else {
+                robot.beamsServo.setPosition(CompetitionBot.BEAMS_UP);
             }
 
             // MOVEMENT
