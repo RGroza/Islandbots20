@@ -13,7 +13,7 @@ public class BlueFoundationAutonomous extends AutonomousNew {
 //        telemetry.update();
 
         waitForStart();
-        runBlueFoundationAuto(telemetry);
+        runBlueFoundationAuto(true, telemetry);
 
     }
 }

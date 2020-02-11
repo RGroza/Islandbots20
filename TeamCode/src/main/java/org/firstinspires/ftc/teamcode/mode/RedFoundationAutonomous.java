@@ -13,7 +13,7 @@ public class RedFoundationAutonomous extends AutonomousNew {
 //        telemetry.update();
 
         waitForStart();
-        runRedFoundationAuto(telemetry);
+        runRedFoundationAuto(true, telemetry);
 
     }
 }

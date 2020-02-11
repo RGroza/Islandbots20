@@ -106,6 +106,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         telemetry.update();
 
         currentPattern = 1;
+
         if (currentPattern == 0) {
             right(.3, 1, true);
             turnUntil(.5, currentAngle);
@@ -114,26 +115,42 @@ public abstract class AutonomousNew extends LinearOpMode {
             turnUntil(.5, currentAngle);
         }
 
-        moveUntilLaser(true, .3, 5.0, 5, true);
+        forwardUntilLaser(true, .3, 10, 5, true);
         turnUntil(.5, currentAngle);
 
         robot.IntakeMotor.setPower(1);
-        forward(.3, 5, true);
+        forward(.3, 3, true);
         sleep(500);
-        backward(.3, 5, true);
+        backward(.3, 4, true);
         robot.IntakeMotor.setPower(0);
 
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
         turnUntil(.4, currentAngle - 90);
 
         detectLineAndStop(false, false, .3, 10, robot.getPitch(), telemetry);
-        robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
         backward(.4, 5.5, false);
 
+        turnUntil(.5, currentAngle - 180);
+
+        grabBlueFoundation(true, true, telemetry);
+
+    }
+
+    public void blueWallBlockAuto(Telemetry telemetry) throws InterruptedException {
+        runBlueFoundationAuto(false, telemetry);
+        sleep(500);
+        right(.4, 1, true);
+
+        double currentAngle = robot.getPitch();
+
+        moveUntilSonar(.5, .05, 30, true);
+
         turnUntil(.5, currentAngle + 90);
+        forwardUntilLaser(true, .3, 10, 5, true);
 
-        grabBlueFoundation(true, telemetry);
+        currentAngle = robot.getPitch();
 
+        turnUntil(.5, currentAngle - 30);
     }
 
     public void runBlueBlocksAuto(boolean runFoundation, Telemetry telemetry) throws InterruptedException {
@@ -196,7 +213,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
             turnUntil(.5, currentAngle + 90);
 
-            grabBlueFoundation(true, telemetry);
+            grabBlueFoundation(true, true, telemetry);
         }
 
     }
@@ -259,22 +276,22 @@ public abstract class AutonomousNew extends LinearOpMode {
 
             turnUntil(.5, currentAngle + 90);
 
-            grabRedFoundation(true, telemetry);
+            grabRedFoundation(true, true, telemetry);
         }
 
     }
 
-    public void runBlueFoundationAuto(Telemetry telemetry) throws InterruptedException {
+    public void runBlueFoundationAuto(boolean park, Telemetry telemetry) throws InterruptedException {
         right(.4, 1.5, true);
-        grabBlueFoundation(false, telemetry);
+        grabBlueFoundation(false, park, telemetry);
     }
 
-    public void runRedFoundationAuto(Telemetry telemetry) throws InterruptedException {
+    public void runRedFoundationAuto(boolean park, Telemetry telemetry) throws InterruptedException {
         left(.4, 1.5, true);
-        grabRedFoundation(false, telemetry);
+        grabRedFoundation(false, park, telemetry);
     }
 
-    public void grabBlueFoundation(boolean depositBlock, Telemetry telemetry) throws InterruptedException {
+    public void grabBlueFoundation(boolean depositBlock, boolean park, Telemetry telemetry) throws InterruptedException {
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
 
@@ -295,18 +312,21 @@ public abstract class AutonomousNew extends LinearOpMode {
         if (depositBlock) {
             depositBlock(telemetry);
         }
-        moveUntilSonar(.6, .08, 5, true);
-        robot.TapeMeasure.setPower(.75);
+        forward(.6, 5, true);
         turnUntil(.75, currentAngle + 90);
-        robot.TapeMeasure.setPower(1);
-        backward(.3, 1, false);
-        robot.TapeMeasure.setPower(0);
+        if (park) robot.TapeMeasure.setPower(1);
+        backward(.5, 1, false);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
+
+        if (park) {
+            right(.4, 2, true);
+            robot.TapeMeasure.setPower(0);
+        }
     }
 
-    public void grabRedFoundation(boolean depositBlock, Telemetry telemetry) throws InterruptedException {
+    public void grabRedFoundation(boolean depositBlock, boolean park, Telemetry telemetry) throws InterruptedException {
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
 
@@ -327,15 +347,18 @@ public abstract class AutonomousNew extends LinearOpMode {
         if (depositBlock) {
             depositBlock(telemetry);
         }
-        moveUntilSonar(.6, .08, 5, true);
-        robot.TapeMeasure.setPower(.75);
+        forward(.6, 5, true);
         turnUntil(.75, currentAngle - 90);
-        robot.TapeMeasure.setPower(1);
-        backward(.3, 1, false);
-        robot.TapeMeasure.setPower(0);
+        if (park) robot.TapeMeasure.setPower(1);
+        backward(.5, 1, false);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
+
+        if (park) {
+            left(.4, 2, true);
+            robot.TapeMeasure.setPower(0);
+        }
     }
 
     public void depositBlock(Telemetry telemetry) throws InterruptedException {
@@ -559,30 +582,10 @@ public abstract class AutonomousNew extends LinearOpMode {
         turnUntil(.3, headingCorrection);
     }
 
-    public void sonarPatternTest(Telemetry telemetry) throws InterruptedException {
-        moveUntilSonar(.25, patternVoltages[0], 10, true);
-        turnUntil(.4, 0);
+    public void encoderRampTest(Telemetry telemetry) throws InterruptedException {
+        forward(.5, 5, true);
         sleep(1000);
-        moveUntilSonar(.25, patternVoltages[1], 10, true);
-        turnUntil(.4, 0);
-        sleep(1000);
-        moveUntilSonar(.25, patternVoltages[2], 10, true);
-        turnUntil(.4, 0);
-        sleep(1000);
-        moveUntilSonar(.25, .45, 10, true);
-        turnUntil(.4, 0);
-    }
-
-    public void encoderPatternTest(Telemetry telemetry) throws InterruptedException {
-        backward(.3, patternDistances[0], true);
-        turnUntil(.4, 0);
-        sleep(1000);
-        backward(.3, patternDistances[1]-patternDistances[0], true);
-        turnUntil(.4, 0);
-        sleep(1000);
-        backward(.3, patternDistances[2]-patternDistances[1], true);
-        turnUntil(.4, 0);
-        sleep(1000);
+        backward(.5, 5, true);
     }
 
     public void detectLineAndStop(boolean isForward, boolean parkOnLine, double speed, double maxDist, double currentAngle, Telemetry telemetry) throws InterruptedException {
@@ -851,18 +854,15 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     private double rampSpeed(double currentVal, double initVal, double targetVal, double speed, double minSpeed, boolean linearRamp) {
-        double rampRange = .1*(targetVal-initVal);
+        double brakeRange = .25*(targetVal-initVal);
+        double rampRange = .2*(targetVal-initVal);
         if (abs(currentVal-initVal) <= rampRange) {
-            if (linearRamp) {
-                return ((currentVal-initVal) / rampRange) * (speed-minSpeed) + minSpeed;
+            return ((currentVal-initVal) / rampRange) * (speed-minSpeed)*(linearRamp ? 1 : (speed-minSpeed)) + minSpeed;
+        } else if (abs(targetVal-currentVal) <= brakeRange) {
+            if (abs(targetVal-currentVal) <= rampRange) {
+                return ((targetVal - currentVal) / rampRange) * (speed - minSpeed) * (linearRamp ? 1 : (speed - minSpeed)) + minSpeed;
             } else {
-                return ((currentVal-initVal) / rampRange) * (speed-minSpeed)*(speed-minSpeed) + minSpeed;
-            }
-        } else if (abs(targetVal-currentVal) <= rampRange) {
-            if (linearRamp) {
-                return (targetVal-currentVal) / rampRange * (speed-minSpeed) + minSpeed;
-            } else {
-                return (targetVal-currentVal) / rampRange * (speed-minSpeed)*(speed-minSpeed) + minSpeed;
+                return 0;
             }
         }
         return speed;
@@ -968,7 +968,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
 
         double gyroCorrection;
-        while (opModeIsActive() && currentVal < targetVal && abs(currentPos - initPos) < maxSteps) {
+        while (opModeIsActive() && (currentVal - targetVal) > .5 && abs(currentPos - initPos) < maxSteps) {
             currentPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
             currentVal = frontSensor ? robot.frontDistance.getDistance(DistanceUnit.CM)
                                      : robot.backDistance.getDistance(DistanceUnit.CM);
@@ -1010,10 +1010,10 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
 
         double gyroCorrection;
-        while (opModeIsActive() && currentVal > targetVal && abs(currentPos - initPos) < maxSteps) {
+        while (opModeIsActive() && (currentVal - targetVal) > .5 && abs(currentPos - initPos) < maxSteps) {
             currentPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
             // Condition used to eliminate noise
-            currentVal = robot.sonarDistance.getVoltage() > .05 ? robot.sonarDistance.getVoltage() : currentVal;
+//            currentVal = robot.sonarDistance.getVoltage() > .05 ? robot.sonarDistance.getVoltage() : currentVal;
 
             double rampedSpeed = rampSpeed(currentVal, initVal, targetVal, speed, .1, false);
 
@@ -1133,7 +1133,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         while (opModeIsActive() && currentVal < targetVal && abs(currentPos - initPos) < maxSteps) {
             currentPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
             // Condition used to eliminate noise
-            currentVal = robot.sonarDistance.getVoltage() > .075 ? robot.sonarDistance.getVoltage() : currentVal;
+//            currentVal = robot.sonarDistance.getVoltage() > .075 ? robot.sonarDistance.getVoltage() : currentVal;
 
             double rampedSpeed = rampSpeed(currentVal, initVal, targetVal, speed, .1, false);
 

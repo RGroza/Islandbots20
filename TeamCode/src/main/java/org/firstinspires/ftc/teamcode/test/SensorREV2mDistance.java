@@ -61,7 +61,7 @@ public class SensorREV2mDistance extends LinearOpMode {
 
         waitForStart();
         while(opModeIsActive()) {
-            telemetry.addData("side: ", robot.sideDistance.getDistance(DistanceUnit.CM));
+            telemetry.addData("front: ", robot.frontDistance.getDistance(DistanceUnit.CM));
             telemetry.addData("back: ", robot.backDistance.getDistance(DistanceUnit.CM));
 
             telemetry.update();
