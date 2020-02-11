@@ -22,7 +22,7 @@ public class CompetitionBot {
     // sensors
     public BNO055IMU gyro;
     public AnalogInput sonarDistance;
-    public DistanceSensor sideDistance, backDistance;
+    public DistanceSensor frontDistance, backDistance;
     public NormalizedColorSensor LcolorSensor, RcolorSensor;
 
     // motors
@@ -45,8 +45,8 @@ public class CompetitionBot {
     public static final double CAPSTONE_OPEN = .6;
     public static final double CAPSTONE_CLOSED = .2;
 
-    public static final double BEAMS_UP = .75;
-    public static final double BEAMS_DOWN = .25;
+    public static final double BEAMS_UP = .5;
+    public static final double BEAMS_DOWN = .11;
 
     public static final double MAX_SPEED = .5;
 
@@ -81,7 +81,7 @@ public class CompetitionBot {
         sonarDistance = hwMap.analogInput.get("sonarDistance");
 
         // distance sensors
-        sideDistance = hwMap.get(DistanceSensor.class, "sideDistance");
+        frontDistance = hwMap.get(DistanceSensor.class, "frontDistance");
         backDistance = hwMap.get(DistanceSensor.class, "backDistance");
 
         // motor encoders init
