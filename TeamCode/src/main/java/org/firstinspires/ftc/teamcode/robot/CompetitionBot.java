@@ -36,17 +36,15 @@ public class CompetitionBot {
     public static final double ARM_OUT = .61;
     public static final double ARM_IN = .25;
 
-    public static final double L_FOUND_UP = .45;
-    public static final double L_FOUND_DOWN = .75;
-
-    public static final double R_FOUND_UP = .5;
-    public static final double R_FOUND_DOWN = .2;
+    public static final double FOUND_LEFT = .8;
+    public static final double FOUND_DOWN = .5;
+    public static final double FOUND_RIGHT = .2;
 
     public static final double CAPSTONE_OPEN = .6;
     public static final double CAPSTONE_CLOSED = .2;
 
-    public static final double BEAMS_UP = .5;
-    public static final double BEAMS_DOWN = .14;
+    public static final double BEAMS_UP = .6;
+    public static final double BEAMS_DOWN = .2;
 
     public static final double MAX_SPEED = .5;
 
@@ -100,9 +98,10 @@ public class CompetitionBot {
         beamsServo = hwMap.servo.get("beamsServo");
         // TODO: move servos to initial positions
 
-        Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
-        Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
+        Lfoundation.setPosition(CompetitionBot.FOUND_RIGHT);
+        Rfoundation.setPosition(CompetitionBot.FOUND_LEFT);
         grabberServo.setPosition(CompetitionBot.GRABBER_OPEN);
+        beamsServo.setPosition(CompetitionBot.BEAMS_UP);
 
         gyro.initialize(parameters);
         telemetry.addData("Successfully Initialized", null);

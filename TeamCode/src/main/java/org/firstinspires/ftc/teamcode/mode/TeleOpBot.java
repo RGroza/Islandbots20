@@ -181,11 +181,11 @@ public class TeleOpBot extends LinearOpMode {
             }
 
             if (foundationServosButton.pressed) {
-                robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
-                robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
+                robot.Lfoundation.setPosition(CompetitionBot.FOUND_DOWN);
+                robot.Rfoundation.setPosition(CompetitionBot.FOUND_DOWN);
             } else {
-                robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
-                robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
+                robot.Lfoundation.setPosition(CompetitionBot.FOUND_RIGHT);
+                robot.Rfoundation.setPosition(CompetitionBot.FOUND_LEFT);
             }
 
             if (tapeMeasureOutButton.buttonStatus) {

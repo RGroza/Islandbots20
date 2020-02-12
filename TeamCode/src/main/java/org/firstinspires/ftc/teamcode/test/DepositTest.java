@@ -12,8 +12,8 @@ public class DepositTest extends AutonomousNew {
     public void runOpMode() throws InterruptedException {
         robot = new CompetitionBot(hardwareMap, telemetry);
 
-        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
-        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
+        robot.Lfoundation.setPosition(CompetitionBot.FOUND_RIGHT);
+        robot.Rfoundation.setPosition(CompetitionBot.FOUND_LEFT);
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
 
         waitForStart();
