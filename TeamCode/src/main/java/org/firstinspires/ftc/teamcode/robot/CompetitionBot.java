@@ -44,7 +44,7 @@ public class CompetitionBot {
     public static final double CAPSTONE_CLOSED = .2;
 
     public static final double BEAMS_UP = .6;
-    public static final double BEAMS_DOWN = .2;
+    public static final double BEAMS_DOWN = .11;
 
     public static final double MAX_SPEED = .5;
 

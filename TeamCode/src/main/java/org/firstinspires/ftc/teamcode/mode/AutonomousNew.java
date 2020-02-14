@@ -121,7 +121,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         robot.IntakeMotor.setPower(1);
         forward(.3, 3, true);
         sleep(500);
-        backward(.4, 4, true);
+        backward(.4, 3, true);
         robot.IntakeMotor.setPower(0);
 
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
@@ -372,7 +372,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         if (depositBlock) {
             depositBlock(telemetry);
         }
-        forward(.75, 3, true);
+        forward(.6, 2.5, true);
         turnUntil(.75, currentAngle + 90);
         if (park) robot.TapeMeasure.setPower(1);
         backward(.5, 1, false);
@@ -408,7 +408,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         if (depositBlock) {
             depositBlock(telemetry);
         }
-        forward(.75, 3, true);
+        forward(.6, 2.5, true);
         turnUntil(.75, currentAngle - 90);
         if (park) robot.TapeMeasure.setPower(1);
         backward(.5, 1, false);
@@ -560,25 +560,27 @@ public abstract class AutonomousNew extends LinearOpMode {
         double maxDist = 5*CompetitionBot.DRIVETAIN_PPR;
         double currentPos = (int) ((robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition()) / 2.0);
         double initPos = currentPos;
-//        double speed;
+        double speed;
 
         double currentTime = System.currentTimeMillis();
         double initTime = currentTime;
 
+        double laserDist = robot.frontDistance.getDistance(DistanceUnit.CM);
+
         // check all the trackable targets to see which one (if any) is visible, while the measured distance > 5 cm and timeout after 8s
-        while (opModeIsActive() && robot.frontDistance.getDistance(DistanceUnit.CM) > 30 && !targetVisible && abs(currentPos - initPos) < maxDist && currentTime - initTime < 8000) {
+        while (opModeIsActive() && laserDist > 30 && !targetVisible && abs(currentPos - initPos) < maxDist && currentTime - initTime < 8000) {
             currentPos = (int) ((robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition()) / 2.0);
             currentTime = System.currentTimeMillis();
 
             actualPitch = robot.getPitch();
             output = PIDControl.getOutput(actualPitch, targetPitch);
-            // Increase speed in beginning for necessary increase in torque
-//            speed = abs(currentPos - initPos) < 200 ? .25 : .15;
-//            robot.setMotors(clamp(speed - output), clamp(-speed - output),
-//                            clamp(-speed + output), clamp(speed + output));
 
-            robot.setMotors(clamp(.2 - output), clamp(.2 - output),
-                            clamp(.2 + output), clamp(.2 + output));
+            laserDist = robot.frontDistance.getDistance(DistanceUnit.CM);
+
+            speed = (laserDist < 60 && laserDist > 50) ? .125 : .2; // Reduce speed in the detecting range of the camera
+
+            robot.setMotors(clamp(speed - output), clamp(speed - output),
+                            clamp(speed + output), clamp(speed + output));
 
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() && trackable.getName() == "Stone Target") {
