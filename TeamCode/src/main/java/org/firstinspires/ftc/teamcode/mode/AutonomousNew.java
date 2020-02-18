@@ -98,7 +98,8 @@ public abstract class AutonomousNew extends LinearOpMode {
     public void detectAndGrabSkyStone(Telemetry telemetry) throws InterruptedException {
         double currentAngle = robot.getPitch();
 
-        robot.beamsServo.setPosition(CompetitionBot.BEAMS_DOWN);
+        robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_DOWN);
+        robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_DOWN);
 
         if (!targetVisible) {
             detectSkyStone(true, telemetry);
@@ -171,7 +172,8 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         turnUntil(.5, currentAngle + 90);
 
-        robot.beamsServo.setPosition(CompetitionBot.BEAMS_DOWN);
+        robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_DOWN);
+        robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_DOWN);
 
         moveUntilLaser(true, .3, 35, 5, true);
 
@@ -197,7 +199,8 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         turnUntil(.5, currentAngle - 90);
 
-        robot.beamsServo.setPosition(CompetitionBot.BEAMS_DOWN);
+        robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_DOWN);
+        robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_DOWN);
 
         moveUntilLaser(true, .3, 35, 5, true);
 
@@ -374,15 +377,15 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
         forward(.6, 2.5, true);
         turnUntil(.75, currentAngle + 90);
-        if (park) robot.TapeMeasure.setPower(1);
         backward(.5, 1, false);
 
         robot.Lfoundation.setPosition(CompetitionBot.FOUND_LEFT);
         robot.Rfoundation.setPosition(CompetitionBot.FOUND_LEFT);
 
         if (park) {
-            right(.4, 2, true);
-            sleep(250);
+            robot.TapeMeasure.setPower(1);
+            turnBy(.5, 45);
+            sleep(500);
             robot.TapeMeasure.setPower(0);
         }
     }
@@ -410,13 +413,14 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
         forward(.6, 2.5, true);
         turnUntil(.75, currentAngle - 90);
-        if (park) robot.TapeMeasure.setPower(1);
         backward(.5, 1, false);
 
         robot.Lfoundation.setPosition(CompetitionBot.FOUND_RIGHT);
         robot.Rfoundation.setPosition(CompetitionBot.FOUND_RIGHT);
 
         if (park) {
+            robot.TapeMeasure.setPower(0);
+            turnBy(.5, -45);
             left(.4, 2, true);
             sleep(250);
             robot.TapeMeasure.setPower(0);
