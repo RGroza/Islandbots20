@@ -27,7 +27,7 @@ public class CompetitionBot {
 
     // motors
     public DcMotor RFmotor, RBmotor, LFmotor, LBmotor, SlideMotor, IntakeMotor, TapeMeasure, LEDPower;
-    public Servo grabberServo, armRotateServo, capStoneServo, Lfoundation, Rfoundation, beamsServo;
+    public Servo grabberServo, armRotateServo, capStoneServo, Lfoundation, Rfoundation, LbeamServo, RbeamServo;
 
     // Servo constants
     public static final double GRABBER_OPEN = .7;
@@ -43,10 +43,12 @@ public class CompetitionBot {
     public static final double CAPSTONE_OPEN = .6;
     public static final double CAPSTONE_CLOSED = .2;
 
-    public static final double BEAMS_UP = .6;
-    public static final double BEAMS_DOWN = .11;
+    public static final double L_BEAM_UP = .44;
+    public static final double L_BEAM_DOWN = .29;
+    public static final double R_BEAM_UP = .41;
+    public static final double R_BEAM_DOWN = .65;
 
-    public static final double MAX_SPEED = .5;
+    public static final double MAX_SPEED = .7;
 
     public static final double DRIVETAIN_RPM = 1150;
     public static final double DRIVETAIN_PPR = 146;
@@ -95,13 +97,15 @@ public class CompetitionBot {
         capStoneServo = hwMap.servo.get("capStoneServo");
         Lfoundation = hwMap.servo.get("Lfoundation");
         Rfoundation = hwMap.servo.get("Rfoundation");
-        beamsServo = hwMap.servo.get("beamsServo");
+        LbeamServo = hwMap.servo.get("LbeamServo");
+        RbeamServo = hwMap.servo.get("RbeamServo");
         // TODO: move servos to initial positions
 
         Lfoundation.setPosition(CompetitionBot.FOUND_RIGHT);
         Rfoundation.setPosition(CompetitionBot.FOUND_LEFT);
         grabberServo.setPosition(CompetitionBot.GRABBER_OPEN);
-        beamsServo.setPosition(CompetitionBot.BEAMS_UP);
+        LbeamServo.setPosition(CompetitionBot.L_BEAM_DOWN);
+        RbeamServo.setPosition(CompetitionBot.R_BEAM_DOWN);
 
         gyro.initialize(parameters);
         telemetry.addData("Successfully Initialized", null);

@@ -197,9 +197,11 @@ public class TeleOpBot extends LinearOpMode {
             }
 
             if (beamsButton.pressed) {
-                robot.beamsServo.setPosition(CompetitionBot.BEAMS_DOWN);
+                robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_DOWN);
+                robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_DOWN);
             } else {
-                robot.beamsServo.setPosition(CompetitionBot.BEAMS_UP);
+                robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_UP);
+                robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_UP);
             }
 
             // MOVEMENT
