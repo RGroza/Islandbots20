@@ -6,8 +6,6 @@ import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.robot.VuforiaFrame;
 
 @Autonomous(name="BmpSkystoneDetector", group="Test")
@@ -40,12 +38,21 @@ public class BitmapSkyStoneDetector extends LinearOpMode {
 
         while (opModeIsActive()) {
             Bitmap rgbBitmap = vuforia.getBitmap();
+
             int imgWidth = rgbBitmap.getWidth();
             int imgHeight = rgbBitmap.getHeight();
+            telemetry.addData("BMP W: ", imgWidth);
+            telemetry.addData("BMP H: ", imgHeight);
 
             Bitmap stoneLeft = Bitmap.createBitmap(rgbBitmap, (imgWidth - STONE_WIDTH) / 2 - (STONE_WIDTH + 50), (imgHeight - STONE_HEIGHT) / 2, STONE_WIDTH, STONE_HEIGHT);
+            telemetry.addData("Left W: ", stoneLeft.getWidth());
+            telemetry.addData("Left H: ", stoneLeft.getHeight());
             Bitmap stoneCenter = Bitmap.createBitmap(rgbBitmap, (imgWidth - STONE_WIDTH) / 2, (imgHeight - STONE_HEIGHT) / 2, STONE_WIDTH, STONE_HEIGHT);
+            telemetry.addData("Center W: ", stoneCenter.getWidth());
+            telemetry.addData("Center H: ", stoneCenter.getHeight());
             Bitmap stoneRight = Bitmap.createBitmap(rgbBitmap, (imgWidth - STONE_WIDTH) / 2 + (STONE_WIDTH + 50), (imgHeight - STONE_HEIGHT) / 2, STONE_WIDTH, STONE_HEIGHT);
+            telemetry.addData("Right W: ", stoneRight.getWidth());
+            telemetry.addData("Right H: ", stoneRight.getHeight());
 
             double ratioL = getColorVal(stoneLeft, ACTIVE_BLACK) / getColorVal(stoneLeft, ACTIVE_YELLOW);
             double ratioC = getColorVal(stoneCenter, ACTIVE_BLACK) / getColorVal(stoneCenter, ACTIVE_YELLOW);
