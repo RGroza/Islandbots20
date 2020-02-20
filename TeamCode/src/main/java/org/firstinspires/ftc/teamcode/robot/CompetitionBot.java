@@ -36,17 +36,22 @@ public class CompetitionBot {
     public static final double ARM_OUT = .61;
     public static final double ARM_IN = .25;
 
-    public static final double FOUND_LEFT = .8;
-    public static final double FOUND_DOWN = .5;
-    public static final double FOUND_RIGHT = .2;
+//    public static final double FOUND_LEFT = .8;
+//    public static final double FOUND_DOWN = .5;
+//    public static final double FOUND_RIGHT = .2;
+
+    public static final double L_FOUND_UP = .27;
+    public static final double L_FOUND_DOWN = .74;
+    public static final double R_FOUND_UP = .85;
+    public static final double R_FOUND_DOWN = .28;
 
     public static final double CAPSTONE_OPEN = .6;
     public static final double CAPSTONE_CLOSED = .2;
 
-    public static final double L_BEAM_UP = .44;
-    public static final double L_BEAM_DOWN = .29;
-    public static final double R_BEAM_UP = .41;
-    public static final double R_BEAM_DOWN = .65;
+    public static final double L_BEAM_UP = .59;
+    public static final double L_BEAM_DOWN = .19;
+    public static final double R_BEAM_UP = .28;
+    public static final double R_BEAM_DOWN = .69;
 
     public static final double MAX_SPEED = .7;
 
@@ -101,8 +106,8 @@ public class CompetitionBot {
         RbeamServo = hwMap.servo.get("RbeamServo");
         // TODO: move servos to initial positions
 
-        Lfoundation.setPosition(CompetitionBot.FOUND_RIGHT);
-        Rfoundation.setPosition(CompetitionBot.FOUND_LEFT);
+        Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
+        Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
         grabberServo.setPosition(CompetitionBot.GRABBER_OPEN);
         LbeamServo.setPosition(CompetitionBot.L_BEAM_DOWN);
         RbeamServo.setPosition(CompetitionBot.R_BEAM_DOWN);

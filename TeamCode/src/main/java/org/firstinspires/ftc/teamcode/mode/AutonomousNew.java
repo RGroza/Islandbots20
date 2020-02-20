@@ -355,8 +355,8 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void grabBlueFoundation(boolean depositBlock, boolean park, Telemetry telemetry) throws InterruptedException {
-        robot.Lfoundation.setPosition(CompetitionBot.FOUND_RIGHT);
-        robot.Rfoundation.setPosition(CompetitionBot.FOUND_LEFT);
+        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
+        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
 
         double currentAngle = robot.getPitch();
 
@@ -366,8 +366,8 @@ public abstract class AutonomousNew extends LinearOpMode {
         turnUntil(.5, currentAngle);
 
         backward(.3, .25, true);
-        robot.Lfoundation.setPosition(CompetitionBot.FOUND_DOWN);
-        robot.Rfoundation.setPosition(CompetitionBot.FOUND_DOWN);
+        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
+        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
         sleep(500);
 
         turnUntil(.5, currentAngle);
@@ -379,8 +379,8 @@ public abstract class AutonomousNew extends LinearOpMode {
         turnUntil(.75, currentAngle + 90);
         backward(.5, 1, false);
 
-        robot.Lfoundation.setPosition(CompetitionBot.FOUND_LEFT);
-        robot.Rfoundation.setPosition(CompetitionBot.FOUND_LEFT);
+        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
+        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
 
         if (park) {
             robot.TapeMeasure.setPower(1);
@@ -391,8 +391,8 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void grabRedFoundation(boolean depositBlock, boolean park, Telemetry telemetry) throws InterruptedException {
-        robot.Lfoundation.setPosition(CompetitionBot.FOUND_RIGHT);
-        robot.Rfoundation.setPosition(CompetitionBot.FOUND_LEFT);
+        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
+        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
 
         double currentAngle = robot.getPitch();
 
@@ -402,8 +402,8 @@ public abstract class AutonomousNew extends LinearOpMode {
         turnUntil(.5, currentAngle);
 
         backward(.3, .25, true);
-        robot.Lfoundation.setPosition(CompetitionBot.FOUND_DOWN);
-        robot.Rfoundation.setPosition(CompetitionBot.FOUND_DOWN);
+        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
+        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
         sleep(500);
 
         turnUntil(.5, currentAngle);
@@ -415,8 +415,8 @@ public abstract class AutonomousNew extends LinearOpMode {
         turnUntil(.75, currentAngle - 90);
         backward(.5, 1, false);
 
-        robot.Lfoundation.setPosition(CompetitionBot.FOUND_RIGHT);
-        robot.Rfoundation.setPosition(CompetitionBot.FOUND_RIGHT);
+        robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
+        robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
 
         if (park) {
             robot.TapeMeasure.setPower(0);
