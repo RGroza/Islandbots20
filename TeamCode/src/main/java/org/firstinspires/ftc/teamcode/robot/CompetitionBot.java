@@ -109,8 +109,8 @@ public class CompetitionBot {
         Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
         grabberServo.setPosition(CompetitionBot.GRABBER_OPEN);
-        LbeamServo.setPosition(CompetitionBot.L_BEAM_DOWN);
-        RbeamServo.setPosition(CompetitionBot.R_BEAM_DOWN);
+        LbeamServo.setPosition(CompetitionBot.L_BEAM_UP);
+        RbeamServo.setPosition(CompetitionBot.R_BEAM_UP);
 
         gyro.initialize(parameters);
         telemetry.addData("Successfully Initialized", null);
@@ -143,11 +143,13 @@ public class CompetitionBot {
         return Magnitude;
     }
 
-    public double[] mecanumMove(double joystickX, double joystickY, double rotation, boolean slowToggle, Telemetry telemetry) {
+    public double[] mecanumMove(double joystickX, double joystickY, double rotation, boolean slowToggle, boolean fastHold, Telemetry telemetry) {
         double SPEED_REDUCTION;
 
         if (slowToggle){
             SPEED_REDUCTION = .5*MAX_SPEED;
+        } else if (fastHold) {
+            SPEED_REDUCTION = 1;
         } else {
             SPEED_REDUCTION = MAX_SPEED;
         }
@@ -156,6 +158,8 @@ public class CompetitionBot {
         double vAngle = getVAngle(joystickX, joystickY);
 
         vMagnitude *= vMagnitude; // Non-linear magnitude input
+
+        rotation = Math.abs(rotation) < .05 ? 0 : rotation;
 
         double LB = vMagnitude * Math.cos(vAngle) + (.7 * rotation);
         double RB = vMagnitude * Math.sin(vAngle) - (.7 * rotation);

@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.mode;
 import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="BlueFoundAuto", group="Autonomous")
-public class BlueFoundationAutonomous extends AutonomousNew {
+public class BlueFoundAuto extends AutonomousNew {
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new CompetitionBot(hardwareMap, telemetry);
@@ -13,7 +13,6 @@ public class BlueFoundationAutonomous extends AutonomousNew {
 //        telemetry.update();
 
         waitForStart();
-        runBlueFoundationAuto(true, telemetry);
-
+        blueFoundAuto(true, telemetry);
     }
 }

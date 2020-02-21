@@ -26,6 +26,7 @@ public class TeleOpBot extends LinearOpMode {
         // BUTTON DECLARE
         // Gamepad 1
         GamepadButton slowToggleButton = new GamepadButton(300, false);
+        GamepadButton fastHoldButton = new GamepadButton(300, false);
         GamepadButton reverseToggleButton = new GamepadButton(300, false);
         GamepadButton foundationServosButton = new GamepadButton(300, false);
 
@@ -60,6 +61,8 @@ public class TeleOpBot extends LinearOpMode {
 
             boolean foundationServosBool = gamepad1.a;
 
+            boolean fastHoldBool = gamepad1.right_bumper;
+
             // Gamepad 2
             double slide_y = gamepad2.left_stick_y;
             boolean slideHome = gamepad2.a;
@@ -84,6 +87,7 @@ public class TeleOpBot extends LinearOpMode {
             slowToggleButton.checkStatus(slowToggleBool);
             reverseToggleButton.checkStatus(reverseToggleBool);
             foundationServosButton.checkStatus(foundationServosBool);
+            fastHoldButton.checkStatus(fastHoldBool);
 
             // Gamepad 2
             slideHomeButton.checkStatus(slideHome);
@@ -181,11 +185,11 @@ public class TeleOpBot extends LinearOpMode {
             }
 
             if (foundationServosButton.pressed) {
-                robot.Lfoundation.setPosition(CompetitionBot.FOUND_DOWN);
-                robot.Rfoundation.setPosition(CompetitionBot.FOUND_DOWN);
+                robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
+                robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
             } else {
-                robot.Lfoundation.setPosition(CompetitionBot.FOUND_RIGHT);
-                robot.Rfoundation.setPosition(CompetitionBot.FOUND_LEFT);
+                robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
+                robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
             }
 
             if (tapeMeasureOutButton.buttonStatus) {
@@ -205,7 +209,7 @@ public class TeleOpBot extends LinearOpMode {
             }
 
             // MOVEMENT
-            double[] powerList = robot.mecanumMove(x, y, rotation, slowToggleButton.pressed, telemetry);
+            double[] powerList = robot.mecanumMove(x, y, rotation, slowToggleButton.pressed, fastHoldButton.buttonStatus, telemetry);
 
             telemetry.addData("LF Pos: ", robot.LFmotor.getCurrentPosition());
             telemetry.addData("LF Pow: ", Math.round(powerList[0] * 100.0) / 100.0);

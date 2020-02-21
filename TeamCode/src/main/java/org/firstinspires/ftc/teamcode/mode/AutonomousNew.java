@@ -43,54 +43,41 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 public abstract class AutonomousNew extends LinearOpMode {
     protected CompetitionBot robot;
 
-    private ElapsedTime timer = new ElapsedTime();
-
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
     private static final boolean PHONE_IS_PORTRAIT = false;
-
 
     private static final String VUFORIA_KEY =
             "AcRyVZf/////AAABmREbKz1DvE7yhFdOr9qQLSoq6MI/3Yoi9NEy+Z3poiBeamQswbGIX8ZqwRY5ElAoJe/4zqmdgZE73HPdbwsSDNk+9I17X4m8LGxRQaGOYsypI2HUvoFR+o141WvrzIYX2hhkANH7r+z5K0bY58wV6DUq3WCqN1fXWehixX956vv0wfXX2+YkVOo06U9llZwgmgE7gWKsgfcxmChr6PqXdiUtGsT4YztGG6Yr/c4Wlc6NDMIBgfmZWocJxl33oLpzO2DMkYWmgR3WOqsSBcjOEL2lvs5/D1UAVvuGe8uY6uMRjvZINIJznXnQbOJQrElTTT9G9mhjLR2ArCquvZbv/iCOh3k1DQMxsSkJXuyNAMle";
 
-    // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
-    // We will define some constants and conversions here
-    private static final float mmPerInch        = 25.4f;
-    private static final float mmTargetHeight   = (6) * mmPerInch;          // the height of the center of the target image above the floor
+    private static final float mmPerInch = 25.4f;
+    private static final float mmTargetHeight = (6) * mmPerInch;
 
     // Constant for Stone Target
     private static final float stoneZ = 2.00f * mmPerInch;
 
-    // Constants for the center support targets
-    private static final float bridgeZ = 6.42f * mmPerInch;
-    private static final float bridgeY = 23 * mmPerInch;
-    private static final float bridgeX = 5.18f * mmPerInch;
-    private static final float bridgeRotY = 59;                                 // Units are degrees
-    private static final float bridgeRotZ = 180;
-
     // Constants for perimeter targets
     private static final float halfField = 72 * mmPerInch;
-    private static final float quadField  = 36 * mmPerInch;
+    private static final float quadField = 36 * mmPerInch;
 
     // Class Members
     private OpenGLMatrix lastLocation = null;
     private VuforiaLocalizer vuforia = null;
     private boolean targetVisible = false;
-    private float phoneXRotate    = 0;
-    private float phoneYRotate    = 0;
-    private float phoneZRotate    = 0;
+    private float phoneXRotate = 0;
+    private float phoneYRotate = 0;
+    private float phoneZRotate = 0;
 
     List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
 
-    private int currentPattern = -1; // patterns: {-1: None, 0: A, 1: B, 2: C}
+    private int currentPattern = -1;
 
-    private double[] patternVoltages = {.16, .20, .25};
     private double[] patternDistances = {.5, 1.25, 2.5};
 
     private double gyroCorrectConst = .02;
 
     private PIDController PIDControl = new PIDController(.01, .075, .15);
 
-    public void initPIDControl(Telemetry telemetry, PIDController PID) {
+    public void initPIDCorrection(Telemetry telemetry, PIDController PID) {
         PID.setOutputLimits(-.05, .05);
         PID.setSetpoint(0);
     }
@@ -128,7 +115,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
     }
 
-    public void newBlueBlocksAuto(Telemetry telemetry) throws InterruptedException {
+    public void blueBlocksAuto(Telemetry telemetry) throws InterruptedException {
         detectAndGrabSkyStone(telemetry);
 
         double currentAngle = robot.getPitch();
@@ -145,7 +132,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
     }
 
-    public void newRedBlocksAuto(Telemetry telemetry) throws InterruptedException {
+    public void redBlocksAuto(Telemetry telemetry) throws InterruptedException {
         detectAndGrabSkyStone(telemetry);
 
         double currentAngle = robot.getPitch();
@@ -163,7 +150,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void blueWallBlockAuto(Telemetry telemetry) throws InterruptedException {
-        runBlueFoundationAuto(false, telemetry);
+        blueFoundAuto(false, telemetry);
         right(.4, 2, true);
 
         double currentAngle = robot.getPitch();
@@ -190,7 +177,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void redWallBlockAuto(Telemetry telemetry) throws InterruptedException {
-        runRedFoundationAuto(false, telemetry);
+        redFoundAuto(false, telemetry);
         left(.4, 2, true);
 
         double currentAngle = robot.getPitch();
@@ -216,140 +203,12 @@ public abstract class AutonomousNew extends LinearOpMode {
         robot.IntakeMotor.setPower(0);
     }
 
-    public void runBlueBlocksAuto(boolean runFoundation, Telemetry telemetry) throws InterruptedException {
-        double currentAngle = robot.getPitch();
-
-        if (!targetVisible) {
-            detectSkyStone(true, telemetry);
-        }
-
-        telemetry.addData("Pattern: ", currentPattern);
-        telemetry.update();
-
-//        rightUntil(.3, 25, 5, true);
-        turnUntil(.4, currentAngle + 180);
-
-        double patternDist = patternDistances[2];
-        if (currentPattern != 2 && currentPattern != -1) {
-            patternDist = patternDistances[currentPattern];
-
-            backward(.3, patternDist, true);
-            turnUntil(.5, currentAngle + 180);
-
-            left(.3, 2.25, true);
-            turnUntil(.5, currentAngle + 180);
-
-            robot.IntakeMotor.setPower(1);
-            forward(.3, .75, true);
-            sleep(500);
-            robot.IntakeMotor.setPower(0);
-
-            right(.3, 2.5, true);
-            robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
-        } else { // Pattern C and default condition
-            backward(.3, patternDist, true);
-            sleep(250);
-            turnUntil(.5, currentAngle - 135);
-
-            robot.IntakeMotor.setPower(1);
-            forward(.2, 2.75, true);
-            sleep(500);
-            backward(.4, 2.25, true);
-            robot.IntakeMotor.setPower(0);
-        }
-
-        if (!runFoundation) {
-            // Park after BlockAuto
-            turnUntil(.5, currentAngle + 180);
-            backward(.3, 7 - patternDist, true);
-
-            turnUntil(.5, currentAngle);
-
-            detectLineAndStop(false, true, .3, 6, robot.getPitch(), telemetry);
-            robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
-        } else {
-            // Transition to FoundationAuto
-            turnUntil(.5, currentAngle + 180);
-            detectLineAndStop(false, false, .3, 10, robot.getPitch(), telemetry);
-            robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
-            backward(.4, 5.5, false);
-
-            turnUntil(.5, currentAngle + 90);
-
-            grabBlueFoundation(true, true, telemetry);
-        }
-
-    }
-
-    public void runRedBlocksAuto(boolean runFoundation, Telemetry telemetry) throws InterruptedException {
-        double currentAngle = robot.getPitch();
-
-        if (!targetVisible) {
-            detectSkyStone(true, telemetry);
-        }
-
-        telemetry.addData("Pattern: ", currentPattern);
-        telemetry.update();
-
-//        rightUntil(.3, 25, 5, true);
-        turnUntil(.5, currentAngle);
-
-        double patternDist = patternDistances[2];
-        if (currentPattern != 2 && currentPattern != -1) {
-            patternDist = patternDistances[currentPattern];
-
-            backward(.3, patternDist + .5, true);
-            turnUntil(.5, currentAngle);
-
-            right(.25, 2.5, true);
-            turnUntil(.5, currentAngle);
-
-            robot.IntakeMotor.setPower(1);
-            forward(.3, .75, true);
-            sleep(500);
-            robot.IntakeMotor.setPower(0);
-
-            left(.25, 2.5, true);
-            robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
-        } else { // Pattern C and default condition
-            backward(.3, patternDist, true);
-            sleep(250);
-            turnUntil(.5, currentAngle - 45);
-
-            robot.IntakeMotor.setPower(1);
-            forward(.2, 2.75, true);
-            sleep(500);
-            backward(.4, 2.25, true);
-            robot.IntakeMotor.setPower(0);
-        }
-
-        if (!runFoundation) {
-            // Park after BlockAuto
-            turnUntil(.5, currentAngle);
-            backward(.3, 7 - patternDist, true);
-
-            detectLineAndStop(true, true, .3, 6, robot.getPitch(), telemetry);
-            robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
-        } else {
-            // Transition to FoundationAuto
-            turnUntil(.5, currentAngle);
-            detectLineAndStop(false, false, .3, 10, robot.getPitch(), telemetry);
-            robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
-            backward(.4, 5.5, false);
-
-            turnUntil(.5, currentAngle + 90);
-
-            grabRedFoundation(true, true, telemetry);
-        }
-
-    }
-
-    public void runBlueFoundationAuto(boolean park, Telemetry telemetry) throws InterruptedException {
+    public void blueFoundAuto(boolean park, Telemetry telemetry) throws InterruptedException {
         right(.4, 1.5, true);
         grabBlueFoundation(false, park, telemetry);
     }
 
-    public void runRedFoundationAuto(boolean park, Telemetry telemetry) throws InterruptedException {
+    public void redFoundAuto(boolean park, Telemetry telemetry) throws InterruptedException {
         left(.4, 1.5, true);
         grabRedFoundation(false, park, telemetry);
     }
@@ -362,7 +221,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         turnUntil(.5, currentAngle);
 
-        moveUntilLaser(false, .3, 6.0, 10, true); // using backDistance
+        moveUntilLaser(false, .3, 7.0, 10, true); // using backDistance
         turnUntil(.5, currentAngle);
 
         backward(.3, .25, true);
@@ -372,9 +231,8 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         turnUntil(.5, currentAngle);
 
-        if (depositBlock) {
-            depositBlock(telemetry);
-        }
+        if (depositBlock) depositBlock(telemetry);
+
         forward(.6, 2.5, true);
         turnUntil(.75, currentAngle + 90);
         backward(.5, 1, false);
@@ -398,7 +256,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         turnUntil(.5, currentAngle);
 
-        moveUntilLaser(false, .3, 6.0, 10, true); // using backDistance
+        moveUntilLaser(false, .3, 7.0, 10, true); // using backDistance
         turnUntil(.5, currentAngle);
 
         backward(.3, .25, true);
@@ -408,9 +266,8 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         turnUntil(.5, currentAngle);
 
-        if (depositBlock) {
-            depositBlock(telemetry);
-        }
+        if (depositBlock) depositBlock(telemetry);
+
         forward(.6, 2.5, true);
         turnUntil(.75, currentAngle - 90);
         backward(.5, 1, false);
@@ -556,7 +413,8 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void detectSkyStone(boolean isBlue, Telemetry telemetry) throws InterruptedException {
-        initPIDControl(telemetry, PIDControl);
+        initPIDCorrection(telemetry, PIDControl);
+
         double actualPitch = robot.getPitch();
         double targetPitch = actualPitch;
         double output;
@@ -937,21 +795,6 @@ public abstract class AutonomousNew extends LinearOpMode {
         return speed;
     }
 
-/*
-    private double rampSpeed(double currentVal, double initVal, double targetVal, double speed, double minSpeed, boolean linearRamp) throws InterruptedException {
-        double rampRange = .2*(targetVal-initVal);
-        double runToPosRange = .05*(targetVal-initVal);
-        if (abs(currentVal-initVal) <= rampRange) {
-            if (abs(currentVal-initVal) <= runToPosRange) {
-                stopMotors(250);
-            } else {
-                return ((targetVal-currentVal) / rampRange) * (speed-minSpeed)*(linearRamp ? 1 : (speed-minSpeed)) + minSpeed;
-            }
-        }
-        return speed;
-    }
-*/
-
     private double avgMotorPos() throws InterruptedException {
         return ((robot.LFmotor.getCurrentPosition() + robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 4.0);
     }
@@ -1016,7 +859,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         double output;
 
         if (PID) {
-            initPIDControl(telemetry, PIDControl);
+            initPIDCorrection(telemetry, PIDControl);
         }
 
 //        double gyroCorrection;
@@ -1056,7 +899,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         double output;
 
         if (PID) {
-            initPIDControl(telemetry, PIDControl);
+            initPIDCorrection(telemetry, PIDControl);
         }
 
 //        double gyroCorrection;
@@ -1098,7 +941,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         double output;
 
         if (PID) {
-            initPIDControl(telemetry, PIDControl);
+            initPIDCorrection(telemetry, PIDControl);
         }
 
 //        double gyroCorrection;
@@ -1136,7 +979,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         double output;
 
         if (PID) {
-            initPIDControl(telemetry, PIDControl);
+            initPIDCorrection(telemetry, PIDControl);
         }
 
 //        double gyroCorrection;
@@ -1176,7 +1019,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         double output;
 
         if (PID) {
-            initPIDControl(telemetry, PIDControl);
+            initPIDCorrection(telemetry, PIDControl);
         }
 
 //        double gyroCorrection;
@@ -1218,7 +1061,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         double output;
 
         if (PID) {
-            initPIDControl(telemetry, PIDControl);
+            initPIDCorrection(telemetry, PIDControl);
         }
 
 //        double gyroCorrection;
@@ -1256,7 +1099,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         double output;
 
         if (PID) {
-            initPIDControl(telemetry, PIDControl);
+            initPIDCorrection(telemetry, PIDControl);
         }
 
 //        double gyroCorrection;
@@ -1328,7 +1171,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         double output;
 
         if (PID) {
-            initPIDControl(telemetry, PIDControl);
+            initPIDCorrection(telemetry, PIDControl);
         }
 
 //        double gyroCorrection;
