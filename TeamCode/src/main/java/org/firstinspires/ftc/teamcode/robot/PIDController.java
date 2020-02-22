@@ -115,7 +115,7 @@ public class PIDController {
         }
     }
 
-    public void  setDirection(boolean reversed) {
+    public void setDirection(boolean reversed) {
         this.reversed=reversed;
     }
 

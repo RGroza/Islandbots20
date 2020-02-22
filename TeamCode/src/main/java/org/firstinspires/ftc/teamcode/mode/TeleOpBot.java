@@ -28,7 +28,9 @@ public class TeleOpBot extends LinearOpMode {
         GamepadButton slowToggleButton = new GamepadButton(300, false);
         GamepadButton fastHoldButton = new GamepadButton(300, false);
         GamepadButton reverseToggleButton = new GamepadButton(300, false);
-        GamepadButton foundationServosButton = new GamepadButton(300, false);
+        GamepadButton foundationDownButton = new GamepadButton(300, false);
+        GamepadButton foundationInterButton = new GamepadButton(300, false);
+        GamepadButton foundationUpButton = new GamepadButton(300, false);
 
         // Gamepad 2
         GamepadButton slideUpButton = new GamepadButton(300, false);
@@ -59,7 +61,9 @@ public class TeleOpBot extends LinearOpMode {
             boolean slowToggleBool = gamepad1.right_stick_button;
             boolean reverseToggleBool = gamepad1.left_stick_button;
 
-            boolean foundationServosBool = gamepad1.a;
+            boolean foundationDownBool = gamepad1.a;
+            boolean foundationInterBool = gamepad1.b;
+            boolean foundationUpBool = gamepad1.y;
 
             boolean fastHoldBool = gamepad1.right_bumper;
 
@@ -86,7 +90,9 @@ public class TeleOpBot extends LinearOpMode {
             // Gamepad 1
             slowToggleButton.checkStatus(slowToggleBool);
             reverseToggleButton.checkStatus(reverseToggleBool);
-            foundationServosButton.checkStatus(foundationServosBool);
+            foundationDownButton.checkStatus(foundationDownBool);
+            foundationInterButton.checkStatus(foundationInterBool);
+            foundationUpButton.checkStatus(foundationUpBool);
             fastHoldButton.checkStatus(fastHoldBool);
 
             // Gamepad 2
@@ -184,12 +190,23 @@ public class TeleOpBot extends LinearOpMode {
                 }
             }
 
-            if (foundationServosButton.pressed) {
+            if (foundationDownButton.justPressed) {
                 robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
                 robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
-            } else {
+                foundationUpButton.pressed = false;
+                foundationInterButton.pressed = false;
+            }
+            if (foundationInterButton.justPressed) {
+                robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_INTER);
+                robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_INTER);
+                foundationDownButton.pressed = false;
+                foundationUpButton.pressed = false;
+            }
+            if (foundationUpButton.justPressed) {
                 robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
                 robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
+                foundationDownButton.pressed = false;
+                foundationInterButton.pressed = false;
             }
 
             if (tapeMeasureOutButton.buttonStatus) {

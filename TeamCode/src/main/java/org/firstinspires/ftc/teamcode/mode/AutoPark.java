@@ -9,6 +9,6 @@ public class AutoPark extends AutonomousNew {
         robot = new CompetitionBot(hardwareMap, telemetry);
 
         waitForStart();
-        backward(.3, .5, true);
+        forward(.3, .5, true, false, telemetry);
     }
 }

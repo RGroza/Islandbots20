@@ -36,22 +36,20 @@ public class CompetitionBot {
     public static final double ARM_OUT = .61;
     public static final double ARM_IN = .25;
 
-//    public static final double FOUND_LEFT = .8;
-//    public static final double FOUND_DOWN = .5;
-//    public static final double FOUND_RIGHT = .2;
-
     public static final double L_FOUND_UP = .27;
+    public static final double L_FOUND_INTER = .62;
     public static final double L_FOUND_DOWN = .74;
-    public static final double R_FOUND_UP = .85;
+    public static final double R_FOUND_UP = .75;
+    public static final double R_FOUND_INTER = .4;
     public static final double R_FOUND_DOWN = .28;
 
     public static final double CAPSTONE_OPEN = .6;
     public static final double CAPSTONE_CLOSED = .2;
 
     public static final double L_BEAM_UP = .59;
-    public static final double L_BEAM_DOWN = .19;
+    public static final double L_BEAM_DOWN = .21;
     public static final double R_BEAM_UP = .28;
-    public static final double R_BEAM_DOWN = .69;
+    public static final double R_BEAM_DOWN = .68;
 
     public static final double MAX_SPEED = .7;
 
