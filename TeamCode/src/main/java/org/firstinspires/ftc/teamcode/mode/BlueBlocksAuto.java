@@ -12,7 +12,7 @@ public class BlueBlocksAuto extends AutonomousNew {
         telemetry.addLine("Vuforia Initialized!");
         telemetry.update();
 
-        detectSkyStoneWhileInit(true, telemetry);
+//        detectSkyStoneWhileInit(true, telemetry);
 
         waitForStart();
         blueBlocksAuto(telemetry);

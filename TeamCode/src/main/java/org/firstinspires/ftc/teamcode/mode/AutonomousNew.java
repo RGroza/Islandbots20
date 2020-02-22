@@ -119,6 +119,8 @@ public abstract class AutonomousNew extends LinearOpMode {
         robot.IntakeMotor.setPower(0);
 
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
+        robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_UP);
+        robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_UP);
     }
 
     public void blueBlocksAuto(Telemetry telemetry) throws InterruptedException {
@@ -128,8 +130,9 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         turnUntil(.4, currentAngle - 90);
 
-        detectLineAndStop(false, false, .3, 10, robot.getPitch(), telemetry);
-        backward(.5, 5.25, false, false, telemetry);
+//        detectLineAndStop(false, false, .3, 10, currentAngle - 90, telemetry);
+//        backward(.5, 5.5, true, false, telemetry);
+        backward(.5, 11.5, true, false, telemetry);
         sleep(250);
 
         turnUntil(.5, currentAngle - 180);
@@ -145,8 +148,9 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         turnUntil(.4, currentAngle + 90);
 
-        detectLineAndStop(false, false, .3, 10, robot.getPitch(), telemetry);
-        backward(.5, 5.25, false, false, telemetry);
+//        detectLineAndStop(false, false, .3, 10, currentAngle + 90, telemetry);
+//        backward(.5, 5.5, true, false, telemetry);
+        backward(.5, 11.5, true, false, telemetry);
         sleep(250);
 
         turnUntil(.5, currentAngle + 180);
@@ -227,7 +231,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         turnUntil(.5, currentAngle);
 
-        moveUntilLaser(false, .3, 7.0, 10, true, false); // using backDistance
+        moveUntilLaser(false, .3, 7.5, 7.5, true, false); // using backDistance
         turnUntil(.5, currentAngle);
 
         backward(.3, .25, true, false, telemetry);
@@ -239,8 +243,9 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         if (depositBlock) depositBlock(telemetry);
 
-        forward(.6, 2.5, true, false, telemetry);
-        turnUntil(.75, currentAngle + 90);
+//        forward(.5, .5, true, false, telemetry);
+        sleep(250);
+        turnUntil(.5, currentAngle + 90);
         backward(.5, 1, false, false, telemetry);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
@@ -248,8 +253,9 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         if (park) {
             robot.TapeMeasure.setPower(1);
-            turnBy(.5, 45);
-            sleep(500);
+            forward(.5, .5, true, false, telemetry);
+            turnBy(.5, 20);
+            sleep(1250);
             robot.TapeMeasure.setPower(0);
         }
     }
@@ -262,7 +268,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         turnUntil(.5, currentAngle);
 
-        moveUntilLaser(false, .3, 7.0, 10, true, false); // using backDistance
+        moveUntilLaser(false, .3, 7.5, 7.5, true, false); // using backDistance
         turnUntil(.5, currentAngle);
 
         backward(.3, .25, true, false, telemetry);
@@ -274,25 +280,24 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         if (depositBlock) depositBlock(telemetry);
 
-        forward(.6, 2.5, true, false, telemetry);
-        turnUntil(.75, currentAngle - 90);
+//        forward(.5, .5, true, false, telemetry);
+        sleep(250);
+        turnUntil(.5, currentAngle - 90);
         backward(.5, 1, false, false, telemetry);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
 
         if (park) {
-            robot.TapeMeasure.setPower(0);
-            turnBy(.5, -45);
-            left(.4, 2, true);
-            sleep(250);
+            robot.TapeMeasure.setPower(1);
+            forward(.5, .5, true, false, telemetry);
+            turnBy(.5, -20);
+            sleep(1250);
             robot.TapeMeasure.setPower(0);
         }
     }
 
     public void depositBlock(Telemetry telemetry) throws InterruptedException {
-        int initPos = robot.SlideMotor.getCurrentPosition();
-
         robot.setMotors(.3, .3, .3, .3);
 
         robot.SlideMotor.setPower(.75);
@@ -510,7 +515,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         turnUntil(.3, headingCorrection);
     }
 
-    public void detectLineAndStop(boolean isForward, boolean parkOnLine, double speed, double maxDist, double currentAngle, Telemetry telemetry) throws InterruptedException {
+    public void detectLineAndStop(boolean isForward, boolean parkOnLine, double speed, double maxDist, double targetPitch, Telemetry telemetry) throws InterruptedException {
         NormalizedRGBA colorsL = robot.LcolorSensor.getNormalizedColors();
         NormalizedRGBA colorsR = robot.RcolorSensor.getNormalizedColors();
         telemetry.addData("Left R: ",  colorsL.red);
@@ -539,11 +544,16 @@ public abstract class AutonomousNew extends LinearOpMode {
         int currentPosition = initialPosition;
         int maxPos = initialPosition + maxSteps;
 
-        double initAngle = robot.getPitch();
+        double initPitch = robot.getPitch();
+
+        double actualPitch = initPitch;
+        double output;
+
+        initPIDCorrection(telemetry, PIDHeadingCorrect);
 
         boolean LStop = false, RStop = false;
         int stopCount = 0;
-        while(opModeIsActive() && abs(currentPosition - initialPosition) < maxPos && (!LStop && !RStop)) {
+        while (opModeIsActive() && abs(currentPosition - initialPosition) < maxPos && (!LStop && !RStop)) {
             currentPosition = (int) avgMotorPos();
             colorsL = robot.LcolorSensor.getNormalizedColors();
             colorsR = robot.RcolorSensor.getNormalizedColors();
@@ -559,14 +569,15 @@ public abstract class AutonomousNew extends LinearOpMode {
                 stopCount++;
             }
 
-            if (stopCount == 1 && abs(robot.getPitch() - initAngle) > 5) {
-                LSpeed = 0; RSpeed = 0;
-                LStop = false; RStop = false;
+            if (stopCount == 1 && abs(robot.getPitch() - initPitch) > 5) {
                 robot.setMotors(0, 0, 0, 0);
                 break;
             }
 
-            robot.setMotors(dir*LSpeed, dir*LSpeed, dir*RSpeed, dir*RSpeed);
+            actualPitch = robot.getPitch();
+            output = PIDHeadingCorrect.getOutput(actualPitch, targetPitch);
+
+            robot.setMotors(dir*LSpeed - output, dir*LSpeed - output, dir*RSpeed + output, dir*RSpeed + output);
         }
 
         int initPos = (int) avgMotorPos();
@@ -576,9 +587,9 @@ public abstract class AutonomousNew extends LinearOpMode {
         // If robot overshoots, return to line in second pass
         if (parkOnLine && abs(currentPos - initPos) > 100) {
             double posDiff = ((abs(currentPos - initPos)) / CompetitionBot.DRIVETAIN_PPR) + 1;
-            detectLineAndStop(!isForward, false, .1, posDiff, currentAngle, telemetry);
+            detectLineAndStop(!isForward, false, .1, posDiff, targetPitch, telemetry);
         } else {
-            turnUntil(.5, currentAngle);
+            turnUntil(.5, targetPitch);
         }
     }
 
@@ -781,9 +792,10 @@ public abstract class AutonomousNew extends LinearOpMode {
         double rampRange = .15*range;
 
         if (abs(currentVal - initVal) < abs(range)) {
-            if (abs(currentVal - initVal) <= rampRange) {
-                return ((currentVal - initVal) / rampRange) * (speed - minSpeed) * (linearRamp ? 1 : (speed - minSpeed)) + minSpeed;
-            } else if (abs(targetVal - currentVal) <= brakeRange) {
+//            if (abs(currentVal - initVal) <= rampRange) {
+//                return ((currentVal - initVal) / rampRange) * (speed - minSpeed) * (linearRamp ? 1 : (speed - minSpeed)) + minSpeed;
+//            }
+            if (abs(targetVal - currentVal) <= brakeRange) {
                 if (abs(targetVal - currentVal) <= rampRange) {
                     return ((targetVal - currentVal) / rampRange) * (speed - minSpeed) * (linearRamp ? 1 : (speed - minSpeed)) + minSpeed;
                 } else {

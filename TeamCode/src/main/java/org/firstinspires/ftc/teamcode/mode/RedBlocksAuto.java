@@ -12,6 +12,8 @@ public class RedBlocksAuto extends AutonomousNew {
         telemetry.addLine("Vuforia Initialized!");
         telemetry.update();
 
+//        detectSkyStoneWhileInit(true, telemetry);
+
         waitForStart();
         redBlocksAuto(telemetry);
 
