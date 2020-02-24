@@ -8,13 +8,6 @@ public class RedBlocksAuto extends AutonomousNew {
     public void runOpMode() throws InterruptedException {
         robot = new CompetitionBot(hardwareMap, telemetry);
 
-        initVuforia();
-        telemetry.addLine("Vuforia Initialized!");
-        telemetry.update();
-
-//        detectSkyStoneWhileInit(true, telemetry);
-
-        waitForStart();
         redBlocksAuto(telemetry);
 
     }

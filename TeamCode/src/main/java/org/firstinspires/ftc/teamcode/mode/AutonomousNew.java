@@ -1,15 +1,9 @@
 package org.firstinspires.ftc.teamcode.mode;
 
-import android.provider.Settings;
-import android.sax.TextElementListener;
-
-import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
@@ -20,58 +14,11 @@ import static java.lang.Math.abs;
 
 // VUFORIA IMPORTS
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
+import org.firstinspires.ftc.teamcode.robot.VuforiaDetector;
 
 
 public abstract class AutonomousNew extends LinearOpMode {
     protected CompetitionBot robot;
-
-    private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
-    private static final boolean PHONE_IS_PORTRAIT = false;
-
-    private static final String VUFORIA_KEY =
-            "AcRyVZf/////AAABmREbKz1DvE7yhFdOr9qQLSoq6MI/3Yoi9NEy+Z3poiBeamQswbGIX8ZqwRY5ElAoJe/4zqmdgZE73HPdbwsSDNk+9I17X4m8LGxRQaGOYsypI2HUvoFR+o141WvrzIYX2hhkANH7r+z5K0bY58wV6DUq3WCqN1fXWehixX956vv0wfXX2+YkVOo06U9llZwgmgE7gWKsgfcxmChr6PqXdiUtGsT4YztGG6Yr/c4Wlc6NDMIBgfmZWocJxl33oLpzO2DMkYWmgR3WOqsSBcjOEL2lvs5/D1UAVvuGe8uY6uMRjvZINIJznXnQbOJQrElTTT9G9mhjLR2ArCquvZbv/iCOh3k1DQMxsSkJXuyNAMle";
-
-    private static final float mmPerInch = 25.4f;
-    private static final float mmTargetHeight = (6) * mmPerInch;
-
-    // Constant for Stone Target
-    private static final float stoneZ = 2.00f * mmPerInch;
-
-    // Constants for perimeter targets
-    private static final float halfField = 72 * mmPerInch;
-    private static final float quadField = 36 * mmPerInch;
-
-    // Class Members
-    private OpenGLMatrix lastLocation = null;
-    private VuforiaLocalizer vuforia = null;
-    private boolean targetVisible = false;
-    private float phoneXRotate = 0;
-    private float phoneYRotate = 0;
-    private float phoneZRotate = 0;
-
-    List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
-
-    private int currentPattern = -1;
-
-    private double[] patternDistances = {.5, 1.25, 2.5};
 
     private double gyroCorrectConst = .02;
 
@@ -89,28 +36,29 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void detectAndGrabSkyStone(Telemetry telemetry) throws InterruptedException {
+        VuforiaDetector vuforiaDetector = new VuforiaDetector(hardwareMap);
+        waitForStart();
+
+        int skyStoneVal = vuforiaDetector.runDetection(telemetry);
+
+        telemetry.addData("skyStoneVal: ", skyStoneVal);
+        telemetry.update();
+
         double currentAngle = robot.getPitch();
 
         robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_DOWN);
         robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_DOWN);
 
-        if (!targetVisible) {
-            detectSkyStone(true, telemetry);
+        if (skyStoneVal == 0) {
+            left(.4, 2.5, true);
+            turnUntil(.5, currentAngle);
+        } else if (skyStoneVal == 2) {
+            right(.4, 2.5, true);
+            turnUntil(.5, currentAngle);
         }
-
-        telemetry.addData("Pattern: ", currentPattern);
-        telemetry.update();
 
         moveUntilLaser(true, .3, 30, 5, true, false);
         turnUntil(.5, currentAngle);
-
-        if (currentPattern == 0) {
-            right(.4, 2.5, true);
-            turnUntil(.5, currentAngle);
-        } else if (currentPattern == 2) {
-            left(.4, 2.5, true);
-            turnUntil(.5, currentAngle);
-        }
 
         robot.IntakeMotor.setPower(1);
         forward(.3, 3, true, false, telemetry);
@@ -316,185 +264,6 @@ public abstract class AutonomousNew extends LinearOpMode {
         robot.setMotors(0, 0, 0, 0);
 
         robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
-    public void initVuforia() {
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-
-        // VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection = CAMERA_CHOICE;
-
-        //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
-        // Load the data sets for the trackable objects. These particular data
-        // sets are stored in the 'assets' part of our application.
-        VuforiaTrackables targetsSkyStone = this.vuforia.loadTrackablesFromAsset("Skystone");
-
-        VuforiaTrackable stoneTarget = targetsSkyStone.get(0);
-        stoneTarget.setName("Stone Target");
-
-        // For convenience, gather together all the trackable objects in one easily-iterable collection */
-        allTrackables.addAll(targetsSkyStone);
-
-
-        stoneTarget.setLocation(OpenGLMatrix
-                .translation(0, 0, stoneZ)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
-
-        // We need to rotate the camera around it's long axis to bring the correct camera forward.
-        if (CAMERA_CHOICE == BACK) {
-            phoneYRotate = -90;
-        } else {
-            phoneYRotate = 90;
-        }
-
-        // Rotate the phone vertical about the X axis if it's in portrait mode
-        if (PHONE_IS_PORTRAIT) {
-            phoneXRotate = 90;
-        }
-
-        // Next, translate the camera lens to where it is on the robot.
-        // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
-        final float CAMERA_FORWARD_DISPLACEMENT = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot center
-        final float CAMERA_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
-        final float CAMERA_LEFT_DISPLACEMENT = 0;     // eg: Camera is ON the robot's center line
-
-        OpenGLMatrix robotFromCamera = OpenGLMatrix
-                .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES, phoneYRotate, phoneZRotate, phoneXRotate));
-
-        /**  Let all the trackable listeners know where the phone is.  */
-        for (VuforiaTrackable trackable : allTrackables) {
-            ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
-        }
-
-        targetsSkyStone.activate();
-
-        robot.LEDPower.setPower(1);
-    }
-
-    public void detectSkyStoneWhileInit(boolean isBlue, Telemetry telemetry) throws InterruptedException {
-        double currentTime = System.currentTimeMillis();
-        double initTime = currentTime;
-
-        // check all the trackable targets to see which one (if any) is visible during INIT, timeout after 5s
-        while (!targetVisible && currentTime - initTime < 5000) {
-            currentTime = System.currentTimeMillis();
-
-            for (VuforiaTrackable trackable : allTrackables) {
-                if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() && trackable.getName() == "Stone Target") {
-                    telemetry.addLine("SkyStone found!");
-                    telemetry.update();
-
-                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
-                    if (robotLocationTransform != null) {
-                        lastLocation = robotLocationTransform;
-                    }
-
-                    VectorF translation = lastLocation.getTranslation();
-
-                    telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                            translation.get(1) / mmPerInch, translation.get(2) / mmPerInch, translation.get(0) / mmPerInch);
-
-                    robot.LEDPower.setPower(0);
-
-                    if (translation.get(1) / mmPerInch <= -3.0) {
-                        currentPattern = isBlue ? 2 : 0;
-                    } else if (translation.get(1) / mmPerInch >= 3.0) {
-                        currentPattern = isBlue ? 0 : 2;
-                    } else {
-                        currentPattern = 1;
-                    }
-
-                    targetVisible = true;
-
-                    telemetry.addData("Pattern: ", currentPattern);
-                    telemetry.update();
-                }
-            }
-        }
-        if (!targetVisible) {
-            telemetry.addLine("Not found!");
-            telemetry.update();
-        }
-    }
-
-    public void detectSkyStone(boolean isBlue, Telemetry telemetry) throws InterruptedException {
-        initPIDCorrection(telemetry, PIDHeadingCorrect);
-
-        double actualPitch = robot.getPitch();
-        double targetPitch = actualPitch;
-        double output;
-
-        double maxDist = 5*CompetitionBot.DRIVETAIN_PPR;
-        double currentPos = (int) ((robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition()) / 2.0);
-        double initPos = currentPos;
-        double speed;
-
-        double currentTime = System.currentTimeMillis();
-        double initTime = currentTime;
-
-        double laserDist = robot.frontDistance.getDistance(DistanceUnit.CM);
-
-        // check all the trackable targets to see which one (if any) is visible, while the measured distance > 5 cm and timeout after 8s
-        while (opModeIsActive() && laserDist > 30 && !targetVisible && abs(currentPos - initPos) < maxDist && currentTime - initTime < 8000) {
-            currentPos = (int) ((robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition()) / 2.0);
-            currentTime = System.currentTimeMillis();
-
-            actualPitch = robot.getPitch();
-            output = PIDHeadingCorrect.getOutput(actualPitch, targetPitch);
-
-            laserDist = robot.frontDistance.getDistance(DistanceUnit.CM);
-
-            speed = (laserDist < 60 && laserDist > 50) ? .125 : .2; // Reduce speed in the detecting range of the camera
-
-            robot.setMotors(clamp(speed - output), clamp(speed - output),
-                            clamp(speed + output), clamp(speed + output));
-
-            for (VuforiaTrackable trackable : allTrackables) {
-                if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() && trackable.getName() == "Stone Target") {
-                    telemetry.addLine("SkyStone found!");
-                    telemetry.update();
-
-                    robot.setMotors(0, 0, 0, 0);
-
-                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
-                    if (robotLocationTransform != null) {
-                        lastLocation = robotLocationTransform;
-                    }
-
-                    VectorF translation = lastLocation.getTranslation();
-
-                    telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                            translation.get(1) / mmPerInch, translation.get(2) / mmPerInch, translation.get(0) / mmPerInch);
-
-                    robot.LEDPower.setPower(0);
-
-                    if (translation.get(1) / mmPerInch <= -3.0) {
-                        currentPattern = isBlue ? 2 : 0;
-                    } else if (translation.get(1) / mmPerInch >= 3.0) {
-                        currentPattern = isBlue ? 0 : 2;
-                    } else {
-                        currentPattern = 1;
-                    }
-
-                    targetVisible = true;
-
-                    telemetry.addData("Pattern: ", currentPattern);
-                    telemetry.update();
-                }
-            }
-        }
-        if (!targetVisible) {
-            robot.setMotors(0, 0, 0, 0);
-            telemetry.addLine("Not found!");
-            telemetry.update();
-            sleep(500);
-        }
     }
 
     public void detectLineAndGyro(boolean isForward, int maxDist, ColorSensor colorSensor, Telemetry telemetry) throws InterruptedException {

@@ -8,10 +8,6 @@ public class RedWallAuto extends AutonomousNew {
     public void runOpMode() throws InterruptedException {
         robot = new CompetitionBot(hardwareMap, telemetry);
 
-//        initVuforia();
-//        telemetry.addLine("Vuforia Initialized!");
-//        telemetry.update();
-
         waitForStart();
         redWallBlockAuto(telemetry);
 

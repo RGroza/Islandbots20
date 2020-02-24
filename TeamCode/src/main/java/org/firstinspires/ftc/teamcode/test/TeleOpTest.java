@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 import org.firstinspires.ftc.teamcode.robot.GamepadButton;
-import org.firstinspires.ftc.teamcode.robot.TestBotInit;
 
 @TeleOp(name="TeleOpTest", group="Test")
 public class TeleOpTest extends LinearOpMode{

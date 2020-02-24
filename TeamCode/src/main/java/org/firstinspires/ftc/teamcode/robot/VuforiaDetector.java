@@ -1,25 +1,17 @@
-package org.firstinspires.ftc.teamcode.test;
+package org.firstinspires.ftc.teamcode.robot;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.os.Environment;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.internal.android.dx.util.Warning;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-
-@Autonomous(name="BmpSkystoneDetector", group="Test")
-public class BitmapSkyStoneDetector extends LinearOpMode {
-    private VuforiaLocalizer vuforia = null;
+public class VuforiaDetector {
+    private VuforiaLocalizer vuforia;
 
     private static final int STONE_WIDTH = 100, STONE_HEIGHT = 50, STONE_SPACING = 250;
 
@@ -39,9 +31,8 @@ public class BitmapSkyStoneDetector extends LinearOpMode {
         }
     }
 
-    @Override
-    public void runOpMode() throws InterruptedException {
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId","id", hardwareMap.appContext.getPackageName());
+    public VuforiaDetector(HardwareMap hwMap) {
+        int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId","id", hwMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         params.vuforiaLicenseKey = "AcRyVZf/////AAABmREbKz1DvE7yhFdOr9qQLSoq6MI/3Yoi9NEy+Z3poiBeamQswbGIX8ZqwRY5ElAoJe/4zqmdgZE73HPdbwsSDNk+9I17X4m8LGxRQaGOYsypI2HUvoFR+o141WvrzIYX2hhkANH7r+z5K0bY58wV6DUq3WCqN1fXWehixX956vv0wfXX2+YkVOo06U9llZwgmgE7gWKsgfcxmChr6PqXdiUtGsT4YztGG6Yr/c4Wlc6NDMIBgfmZWocJxl33oLpzO2DMkYWmgR3WOqsSBcjOEL2lvs5/D1UAVvuGe8uY6uMRjvZINIJznXnQbOJQrElTTT9G9mhjLR2ArCquvZbv/iCOh3k1DQMxsSkJXuyNAMle";
@@ -57,43 +48,43 @@ public class BitmapSkyStoneDetector extends LinearOpMode {
 
         vuforia.enableConvertFrameToBitmap();
         vuforia.setFrameQueueCapacity(1);
+    }
 
-        waitForStart();
+    public int runDetection(Telemetry telemetry) {
+        Bitmap bmp = getBitmap();
 
-        while (opModeIsActive()) {
-            Bitmap rgbBitmap = getBitmap();
+        telemetry.addData("BMP W: ", bmp.getWidth());
+        telemetry.addData("BMP H: ", bmp.getHeight());
 
-            int imgWidth = rgbBitmap.getWidth();
-            int imgHeight = rgbBitmap.getHeight();
-            telemetry.addData("BMP W: ", imgWidth);
-            telemetry.addData("BMP H: ", imgHeight);
+        int xCenter = (bmp.getWidth() - STONE_WIDTH) / 2;
+        int yCenter = (bmp.getHeight() - STONE_HEIGHT) / 2;
 
-            int xCenter = (imgWidth - STONE_WIDTH) / 2;
-            int yCenter = (imgHeight - STONE_HEIGHT) / 2;
+        Bitmap stoneLeft = Bitmap.createBitmap(bmp, xCenter - STONE_SPACING, yCenter, STONE_WIDTH, STONE_HEIGHT);
+        Bitmap stoneCenter = Bitmap.createBitmap(bmp, xCenter, yCenter, STONE_WIDTH, STONE_HEIGHT);
+        Bitmap stoneRight = Bitmap.createBitmap(bmp, xCenter + STONE_SPACING, yCenter, STONE_WIDTH, STONE_HEIGHT);
 
-            Bitmap stoneLeft = Bitmap.createBitmap(rgbBitmap, xCenter - STONE_SPACING, yCenter, STONE_WIDTH, STONE_HEIGHT);
-            Bitmap stoneCenter = Bitmap.createBitmap(rgbBitmap, xCenter, yCenter, STONE_WIDTH, STONE_HEIGHT);
-            Bitmap stoneRight = Bitmap.createBitmap(rgbBitmap, xCenter + STONE_SPACING, yCenter, STONE_WIDTH, STONE_HEIGHT);
+        double ratioL = getColorVal(stoneLeft, ACTIVE_BLACK) / getColorVal(stoneLeft, ACTIVE_YELLOW);
+        double ratioC = getColorVal(stoneCenter, ACTIVE_BLACK) / getColorVal(stoneCenter, ACTIVE_YELLOW);
+        double ratioR = getColorVal(stoneRight, ACTIVE_BLACK) / getColorVal(stoneRight, ACTIVE_YELLOW);
 
-            double ratioL = getColorVal(stoneLeft, ACTIVE_BLACK) / getColorVal(stoneLeft, ACTIVE_YELLOW);
-            double ratioC = getColorVal(stoneCenter, ACTIVE_BLACK) / getColorVal(stoneCenter, ACTIVE_YELLOW);
-            double ratioR = getColorVal(stoneRight, ACTIVE_BLACK) / getColorVal(stoneRight, ACTIVE_YELLOW);
+        telemetry.addData("Left: ", ratioL);
+        telemetry.addData("Center: ", ratioC);
+        telemetry.addData("Right: ", ratioR);
 
-            telemetry.addData("Left: ", ratioL);
-            telemetry.addData("Center: ", ratioC);
-            telemetry.addData("Right: ", ratioR);
-
-            if (ratioL > ratioC && ratioL > ratioR) {
-                telemetry.addLine("Skystone Left");
-            } else if (ratioC > ratioL && ratioC > ratioR) {
-                telemetry.addLine("Skystone Center");
-            } else {
-                telemetry.addLine("Skystone Right");
-            }
+        if (ratioL > ratioC && ratioL > ratioR) {
+            telemetry.addLine("Skystone Left");
             telemetry.update();
-
-            sleep(1000);
+            return 0;
+        } else if (ratioC > ratioL && ratioC > ratioR) {
+            telemetry.addLine("Skystone Center");
+            telemetry.update();
+            return 1;
+        } else if (ratioR > ratioC && ratioR > ratioL) {
+            telemetry.addLine("Skystone Right");
+            telemetry.update();
+            return 2;
         }
+        return -1;
     }
 
     public Bitmap getBitmap() {
@@ -112,14 +103,16 @@ public class BitmapSkyStoneDetector extends LinearOpMode {
 
 /*
     public void saveBitmap(Bitmap bmp, String name) {
-        String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() +
-                "/images";
+        String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/images";
         telemetry.addData("file path: ", file_path);
         telemetry.update();
+
         File dir = new File(file_path);
         if(!dir.exists())
             dir.mkdirs();
+
         File[] files = dir.listFiles();
+
         int currentIdx = 0;
         for (int i = 0; i < files.length; i++) {
             String fileName = files[i].getName();
@@ -128,6 +121,7 @@ public class BitmapSkyStoneDetector extends LinearOpMode {
                 if(fileNum > currentIdx) currentIdx = fileNum;
             }
         }
+
         File file = new File(dir, name + (currentIdx+1) + ".png");
 
         FileOutputStream fOut = null;
