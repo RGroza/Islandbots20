@@ -36,7 +36,7 @@ public class VuforiaDetector {
         VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         params.vuforiaLicenseKey = "AcRyVZf/////AAABmREbKz1DvE7yhFdOr9qQLSoq6MI/3Yoi9NEy+Z3poiBeamQswbGIX8ZqwRY5ElAoJe/4zqmdgZE73HPdbwsSDNk+9I17X4m8LGxRQaGOYsypI2HUvoFR+o141WvrzIYX2hhkANH7r+z5K0bY58wV6DUq3WCqN1fXWehixX956vv0wfXX2+YkVOo06U9llZwgmgE7gWKsgfcxmChr6PqXdiUtGsT4YztGG6Yr/c4Wlc6NDMIBgfmZWocJxl33oLpzO2DMkYWmgR3WOqsSBcjOEL2lvs5/D1UAVvuGe8uY6uMRjvZINIJznXnQbOJQrElTTT9G9mhjLR2ArCquvZbv/iCOh3k1DQMxsSkJXuyNAMle";
-        params.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        params.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
 
         vuforia = ClassFactory.getInstance().createVuforia(params);
 
@@ -56,12 +56,18 @@ public class VuforiaDetector {
         telemetry.addData("BMP W: ", bmp.getWidth());
         telemetry.addData("BMP H: ", bmp.getHeight());
 
-        int xCenter = (bmp.getWidth() - STONE_WIDTH) / 2;
+//        int xCenter = (bmp.getWidth() - STONE_WIDTH) / 2;
         int yCenter = (bmp.getHeight() - STONE_HEIGHT) / 2;
 
-        Bitmap stoneLeft = Bitmap.createBitmap(bmp, xCenter - STONE_SPACING, yCenter, STONE_WIDTH, STONE_HEIGHT);
-        Bitmap stoneCenter = Bitmap.createBitmap(bmp, xCenter, yCenter, STONE_WIDTH, STONE_HEIGHT);
-        Bitmap stoneRight = Bitmap.createBitmap(bmp, xCenter + STONE_SPACING, yCenter, STONE_WIDTH, STONE_HEIGHT);
+        int leftMostX = (STONE_WIDTH / 2) + 150;
+
+//        Bitmap stoneLeft = Bitmap.createBitmap(bmp, xCenter - STONE_SPACING, yCenter, STONE_WIDTH, STONE_HEIGHT);
+//        Bitmap stoneCenter = Bitmap.createBitmap(bmp, xCenter, yCenter, STONE_WIDTH, STONE_HEIGHT);
+//        Bitmap stoneRight = Bitmap.createBitmap(bmp, xCenter + STONE_SPACING, yCenter, STONE_WIDTH, STONE_HEIGHT);
+
+        Bitmap stoneLeft = Bitmap.createBitmap(bmp, leftMostX, yCenter, STONE_WIDTH, STONE_HEIGHT);
+        Bitmap stoneCenter = Bitmap.createBitmap(bmp, leftMostX + STONE_SPACING, yCenter, STONE_WIDTH, STONE_HEIGHT);
+        Bitmap stoneRight = Bitmap.createBitmap(bmp, leftMostX + 2*STONE_SPACING, yCenter, STONE_WIDTH, STONE_HEIGHT);
 
         double ratioL = getColorVal(stoneLeft, ACTIVE_BLACK) / getColorVal(stoneLeft, ACTIVE_YELLOW);
         double ratioC = getColorVal(stoneCenter, ACTIVE_BLACK) / getColorVal(stoneCenter, ACTIVE_YELLOW);

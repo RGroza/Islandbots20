@@ -35,7 +35,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         PID.setSetpoint(0);
     }
 
-    public void detectAndGrabSkyStone(Telemetry telemetry) throws InterruptedException {
+    public int detectAndGrabSkyStone(Telemetry telemetry) throws InterruptedException {
         VuforiaDetector vuforiaDetector = new VuforiaDetector(hardwareMap);
         waitForStart();
 
@@ -50,10 +50,10 @@ public abstract class AutonomousNew extends LinearOpMode {
         robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_DOWN);
 
         if (skyStoneVal == 0) {
-            left(.4, 2.5, true);
+            left(.4, 1.25, true);
             turnUntil(.5, currentAngle);
         } else if (skyStoneVal == 2) {
-            right(.4, 2.5, true);
+            right(.4, 1.25, true);
             turnUntil(.5, currentAngle);
         }
 
@@ -63,16 +63,18 @@ public abstract class AutonomousNew extends LinearOpMode {
         robot.IntakeMotor.setPower(1);
         forward(.3, 3, true, false, telemetry);
         sleep(500);
-        backward(.4, 3, true, false, telemetry);
+        backward(.35, 3, true, false, telemetry);
         robot.IntakeMotor.setPower(0);
 
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
         robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_UP);
         robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_UP);
+
+        return skyStoneVal;
     }
 
     public void blueBlocksAuto(Telemetry telemetry) throws InterruptedException {
-        detectAndGrabSkyStone(telemetry);
+        int skyStoneVal = detectAndGrabSkyStone(telemetry);
 
         double currentAngle = robot.getPitch();
 
@@ -80,7 +82,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
 //        detectLineAndStop(false, false, .3, 10, currentAngle - 90, telemetry);
 //        backward(.5, 5.5, true, false, telemetry);
-        backward(.5, 11.5, true, false, telemetry);
+        backward(.5, 10.5 + skyStoneVal*.5, true, false, telemetry);
         sleep(250);
 
         turnUntil(.5, currentAngle - 180);
@@ -90,7 +92,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void redBlocksAuto(Telemetry telemetry) throws InterruptedException {
-        detectAndGrabSkyStone(telemetry);
+        int skyStoneVal = detectAndGrabSkyStone(telemetry);
 
         double currentAngle = robot.getPitch();
 
@@ -98,7 +100,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
 //        detectLineAndStop(false, false, .3, 10, currentAngle + 90, telemetry);
 //        backward(.5, 5.5, true, false, telemetry);
-        backward(.5, 11.5, true, false, telemetry);
+        backward(.5, 10.5 - skyStoneVal*.5, true, false, telemetry);
         sleep(250);
 
         turnUntil(.5, currentAngle + 180);
@@ -194,7 +196,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 //        forward(.5, .5, true, false, telemetry);
         sleep(250);
         turnUntil(.5, currentAngle + 90);
-        backward(.5, 1, false, false, telemetry);
+        backward(.5, 1.25, false, false, telemetry);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
@@ -202,7 +204,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         if (park) {
             robot.TapeMeasure.setPower(1);
             forward(.5, .5, true, false, telemetry);
-            turnBy(.5, 20);
+            turnBy(.5, 10);
             sleep(1250);
             robot.TapeMeasure.setPower(0);
         }
@@ -231,7 +233,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 //        forward(.5, .5, true, false, telemetry);
         sleep(250);
         turnUntil(.5, currentAngle - 90);
-        backward(.5, 1, false, false, telemetry);
+        backward(.5, 1.25, false, false, telemetry);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
@@ -239,7 +241,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         if (park) {
             robot.TapeMeasure.setPower(1);
             forward(.5, .5, true, false, telemetry);
-            turnBy(.5, -20);
+            turnBy(.5, -10);
             sleep(1250);
             robot.TapeMeasure.setPower(0);
         }
@@ -256,7 +258,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         robot.SlideMotor.setPower(0);
 
         robot.armRotateServo.setPosition(CompetitionBot.ARM_OUT);
-        sleep(300);
+        sleep(500);
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_OPEN);
         sleep(500);
         robot.armRotateServo.setPosition(CompetitionBot.ARM_IN);
