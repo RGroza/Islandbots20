@@ -494,10 +494,10 @@ public abstract class AutonomousNew extends LinearOpMode {
                 robot.RFmotor.setPower(adjustedSpeed);
                 robot.RBmotor.setPower(adjustedSpeed);
             } else {
-                robot.LFmotor.setPower(-adjustedSpeed);
-                robot.LBmotor.setPower(-adjustedSpeed);
-                robot.RFmotor.setPower(minSpeed);
-                robot.RBmotor.setPower(minSpeed);
+                robot.LFmotor.setPower(adjustedSpeed);
+                robot.LBmotor.setPower(adjustedSpeed);
+                robot.RFmotor.setPower(-minSpeed);
+                robot.RBmotor.setPower(-minSpeed);
             }
 
             telemetry.addData("gyro: ", robot.getPitch());
@@ -526,16 +526,23 @@ public abstract class AutonomousNew extends LinearOpMode {
 
             if (abs(output) < .05) break;
 
-            if (diff > 0) {
-                robot.LFmotor.setPower(-minSpeed);
-                robot.LBmotor.setPower(-minSpeed);
-                robot.RFmotor.setPower(output);
-                robot.RBmotor.setPower(output);
+            if (abs(diff) > 5) {
+                if (diff > 0) {
+                    robot.LFmotor.setPower(-minSpeed);
+                    robot.LBmotor.setPower(-minSpeed);
+                    robot.RFmotor.setPower(output);
+                    robot.RBmotor.setPower(output);
+                } else {
+                    robot.LFmotor.setPower(-output);
+                    robot.LBmotor.setPower(-output);
+                    robot.RFmotor.setPower(-minSpeed);
+                    robot.RBmotor.setPower(-minSpeed);
+                }
             } else {
                 robot.LFmotor.setPower(-output);
                 robot.LBmotor.setPower(-output);
-                robot.RFmotor.setPower(minSpeed);
-                robot.RBmotor.setPower(minSpeed);
+                robot.RFmotor.setPower(output);
+                robot.RBmotor.setPower(output);
             }
 
             telemetry.addData("gyro: ", robot.getPitch());
