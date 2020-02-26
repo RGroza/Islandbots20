@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.robot.VuforiaDetector;
 @Autonomous(name="DetectionTest", group="Test")
 public class DetectionTest extends LinearOpMode {
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         VuforiaDetector vuforiaDetector = new VuforiaDetector(hardwareMap);
         waitForStart();
 

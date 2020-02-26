@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 @Autonomous(name="SonarTest", group="Test")
 public class SonarTest extends LinearOpMode {
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         CompetitionBot robot = new CompetitionBot(hardwareMap, telemetry);
 
         waitForStart();

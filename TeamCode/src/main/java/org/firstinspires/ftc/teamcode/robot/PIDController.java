@@ -139,7 +139,7 @@ public class PIDController {
 
         // Ramp the setpoint used for calculations if user has opted to do so
         if (setpointRange!=0) {
-            setpoint=constrain(setpoint,actual-setpointRange,actual+setpointRange);
+            setpoint=constrain(setpoint, actual-setpointRange, actual+setpointRange);
         }
 
         // Do the simple parts of the calculations
@@ -172,14 +172,14 @@ public class PIDController {
         // 3. prevent windup by not increasing errorSum if output is output=maxOutput
         Ioutput=I*errorSum;
         if (maxIOutput!=0) {
-            Ioutput=constrain(Ioutput,-maxIOutput,maxIOutput);
+            Ioutput=constrain(Ioutput, -maxIOutput, maxIOutput);
         }
 
         // And, finally, we can just add the terms up
         output=Foutput + Poutput + Ioutput + Doutput;
 
         // Figure out what we're doing with the error.
-        if (minOutput!=maxOutput && !bounded(output, minOutput,maxOutput)) {
+        if (minOutput!=maxOutput && !bounded(output, minOutput, maxOutput)) {
             errorSum=error;
             // reset the error sum to a sane level
             // Setting to current error ensures a smooth transition when the P term
@@ -190,7 +190,7 @@ public class PIDController {
             errorSum=error;
         }
         else if (maxIOutput!=0) {
-            errorSum=constrain(errorSum+error,-maxError,maxError);
+            errorSum=constrain(errorSum+error, -maxError, maxError);
             // In addition to output limiting directly, we also want to prevent I term
             // buildup, so restrict the error directly
         }
@@ -200,10 +200,10 @@ public class PIDController {
 
         // Restrict output to our specified output and ramp limits
         if (outputRampRate!=0) {
-            output=constrain(output, lastOutput-outputRampRate,lastOutput+outputRampRate);
+            output=constrain(output, lastOutput-outputRampRate, lastOutput+outputRampRate);
         }
         if (minOutput!=maxOutput) {
-            output=constrain(output, minOutput,maxOutput);
+            output=constrain(output, minOutput, maxOutput);
         }
         if (outputFilter!=0) {
             output=lastOutput*outputFilter+output*(1-outputFilter);
@@ -219,11 +219,11 @@ public class PIDController {
     }
 
     public double getOutput() {
-        return getOutput(lastActual,setpoint);
+        return getOutput(lastActual, setpoint);
     }
 
     public double getOutput(double actual) {
-        return getOutput(actual,setpoint);
+        return getOutput(actual, setpoint);
     }
 
     public void reset() {

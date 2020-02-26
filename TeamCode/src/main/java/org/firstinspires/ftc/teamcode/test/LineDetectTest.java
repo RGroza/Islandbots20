@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 @Autonomous(name="LineDetectTest", group="Test")
 public class LineDetectTest extends AutonomousNew {
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         robot = new CompetitionBot(hardwareMap, telemetry);
 
         waitForStart();

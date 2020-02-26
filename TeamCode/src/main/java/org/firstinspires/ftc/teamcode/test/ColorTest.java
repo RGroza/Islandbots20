@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 @Autonomous(name="ColorTest", group="Test")
 public class ColorTest extends LinearOpMode {
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         CompetitionBot robot = new CompetitionBot(hardwareMap, telemetry);
 //        robot.LcolorSensor.enableLed(true);
 //        robot.RcolorSensor.enableLed(true);

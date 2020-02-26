@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.robot.GamepadButton;
 @TeleOp(name="TeleOpTest", group="Test")
 public class TeleOpTest extends LinearOpMode{
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         CompetitionBot robot = new CompetitionBot(hardwareMap, telemetry);
 
         GamepadButton slowToggleButton = new GamepadButton(300, false);

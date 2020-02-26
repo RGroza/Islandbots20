@@ -8,16 +8,27 @@ import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 @Autonomous(name="TurningTest", group="Test")
 public class TurningTest extends AutonomousNew {
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         robot = new CompetitionBot(hardwareMap, telemetry);
 
         waitForStart();
-        turnUntil(.5, 90);
+        turnByPID(.75, 90);
         sleep(500);
-        turnUntil(.5, -90);
+        turnByPID(.75, -180);
         sleep(500);
-        turnUntil(.5, 45);
+        turnByPID(.75, 45);
         sleep(500);
-        turnUntil(.5, 0);
+        turnByPID(.5, 90);
+        sleep(500);
+        turnByPID(.5, -180);
+        sleep(500);
+        turnByPID(.5, 45);
+        sleep(500);
+        turnByPID(.25, 90);
+        sleep(500);
+        turnByPID(.25, -180);
+        sleep(500);
+        turnByPID(.25, 45);
+        sleep(500);
     }
 }

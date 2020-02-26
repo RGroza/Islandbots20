@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 @Autonomous(name="DepositTest", group="Test")
 public class DepositTest extends AutonomousNew {
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         robot = new CompetitionBot(hardwareMap, telemetry);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
@@ -17,6 +17,6 @@ public class DepositTest extends AutonomousNew {
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
 
         waitForStart();
-        depositBlock(telemetry);
+        depositBlock();
     }
 }

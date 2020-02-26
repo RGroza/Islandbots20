@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.robot.PIDController;
 public class PIDTest extends LinearOpMode {
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         CompetitionBot robot = new CompetitionBot(hardwareMap, telemetry);
 
         GamepadButton forwardToggle = new GamepadButton(300, false);
