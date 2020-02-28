@@ -12,15 +12,13 @@ public class RampingTest extends AutonomousNew {
         double currentAngle = robot.getPitch();
 
         waitForStart();
-        forward(.5, 7.5, true, false, telemetry);
+        forward(.5, 7.5, currentAngle, true, false, telemetry);
         sleep(1000);
-        backward(.5, 7.5, true, false, telemetry);
+        backward(.5, 7.5, currentAngle, true, false, telemetry);
         sleep(1000);
-        forward(.75, 7.5, true, false, telemetry);
-        turnUntil(.5, currentAngle);
+        forward(.75, 7.5, currentAngle, true, false, telemetry);
         sleep(1000);
-        backward(.75, 7.5, true, false, telemetry);
-        turnUntil(.5, currentAngle);
+        backward(.75, 7.5, currentAngle, true, false, telemetry);
         sleep(1000);
     }
 }

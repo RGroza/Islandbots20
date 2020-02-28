@@ -9,10 +9,12 @@ public class PIDRampingTest extends AutonomousNew {
     public void runOpMode() {
         robot = new CompetitionBot(hardwareMap, telemetry);
 
+        double currentAngle = robot.getPitch();
+
         waitForStart();
-        forward(.5, 7.5, true, true, telemetry);
+        forward(.5, 7.5, currentAngle, true, true, telemetry);
         sleep(1000);
-        backward(.5, 7.5, true, true, telemetry);
+        backward(.5, 7.5, currentAngle, true, true, telemetry);
         sleep(1000);
     }
 }
