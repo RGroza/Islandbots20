@@ -9,6 +9,6 @@ public class BlueFoundAuto extends AutonomousNew {
         robot = new CompetitionBot(hardwareMap, telemetry);
 
         waitForStart();
-        blueFoundAuto(true, telemetry);
+        blueFoundAuto(true, false, telemetry);
     }
 }

@@ -9,6 +9,6 @@ public class RedFoundAuto extends AutonomousNew {
         robot = new CompetitionBot(hardwareMap, telemetry);
 
         waitForStart();
-        redFoundAuto(true, telemetry);
+        redFoundAuto(true, false, telemetry);
     }
 }
