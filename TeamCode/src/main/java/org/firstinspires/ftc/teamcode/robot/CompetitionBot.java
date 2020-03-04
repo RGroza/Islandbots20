@@ -46,7 +46,7 @@ public class CompetitionBot {
     public static final double CAPSTONE_OPEN = .6;
     public static final double CAPSTONE_CLOSED = .2;
 
-    public static final double L_BEAM_UP = .59;
+    public static final double L_BEAM_UP = .65;
     public static final double L_BEAM_DOWN = .17;
     public static final double R_BEAM_UP = .28;
     public static final double R_BEAM_DOWN = .7;
@@ -221,7 +221,7 @@ public class CompetitionBot {
         LFmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RBmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RFmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        SlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        SlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     private double SingleClamp(double power) {

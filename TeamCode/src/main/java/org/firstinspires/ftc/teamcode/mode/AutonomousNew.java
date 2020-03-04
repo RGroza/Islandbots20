@@ -54,10 +54,10 @@ public abstract class AutonomousNew extends LinearOpMode {
         robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_DOWN);
 
         if (skyStoneVal == 0) {
-            left(.5, 1.25, currentAngle, true);
+            left(.5, 1.2, currentAngle, true);
             turnUntilPID(.5, currentAngle);
         } else if (skyStoneVal == 2) {
-            right(.5, 1.25, currentAngle, true);
+            right(.5, 1.2, currentAngle, true);
             turnUntilPID(.5, currentAngle);
         }
 
@@ -65,8 +65,8 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         robot.IntakeMotor.setPower(1);
         forward(.4, 3.5, currentAngle, true, false, telemetry);
-        sleep(500);
-        backward(.5, 3.5, currentAngle, true, false, telemetry);
+        sleep(250);
+        backward(.5, 3.75, currentAngle, true, false, telemetry);
         robot.IntakeMotor.setPower(0);
 
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
@@ -85,12 +85,12 @@ public abstract class AutonomousNew extends LinearOpMode {
 
 //        detectLineAndStop(false, false, .3, 10, currentAngle - 90, telemetry);
 //        backward(.5, 5.5, true, false, telemetry);
-        backward(.7, 10.5 + skyStoneVal, currentAngle - 90, true, false, telemetry);
-        sleep(250);
+        backward(.7, 9.5 + skyStoneVal, currentAngle - 90, true, false, telemetry);
+//        sleep(250);
 
         turnUntilPID(.5, currentAngle - 180);
 
-        grabBlueFoundation(true, false, true, telemetry);
+        grabBlueFoundation(true, true, false, telemetry);
 
     }
 
@@ -103,22 +103,135 @@ public abstract class AutonomousNew extends LinearOpMode {
 
 //        detectLineAndStop(false, false, .3, 10, currentAngle + 90, telemetry);
 //        backward(.5, 5.5, true, false, telemetry);
-        backward(.7, 12.5 - skyStoneVal, currentAngle + 90, true, false, telemetry);
-        sleep(250);
+        backward(.7, 11.5 - skyStoneVal, currentAngle + 90, true, false, telemetry);
+//        sleep(250);
 
         turnUntilPID(.5, currentAngle + 180);
 
-        grabRedFoundation(true, false, true, telemetry);
+        grabRedFoundation(true, true, false, telemetry);
 
     }
 
-    public void blueWallBlockAuto(Telemetry telemetry) {
+    public void blue2BlockAuto(Telemetry telemetry) {
+        int skyStoneVal = detectAndGrabSkyStone(telemetry);
+
         double currentAngle = robot.getPitch();
 
-        blueFoundAuto(false, false, telemetry);
-        right(.4, 2, currentAngle + 90, true);
+        turnUntilPID(.5, currentAngle - 90);
 
-        currentAngle = robot.getPitch();
+//        detectLinePosition(false, .7, 10, currentAngle - 90, telemetry);
+        backward(.7, 8.5 + skyStoneVal, currentAngle - 90, true, false, telemetry);
+        turnUntilPID(.5, currentAngle - 90);
+        backwardUntilLaser(false, .3, 8, 7.5, currentAngle - 90, true, false);
+        turnUntilPID(.5, currentAngle - 90);
+
+        right(.5, 2.25, currentAngle - 90, true);
+
+        depositBlock();
+        sleep(250);
+
+        left(.5, 2.25, currentAngle - 90, true);
+
+        if (skyStoneVal != 2) {
+            forward(.7, 12.5 + skyStoneVal, currentAngle - 90, true, false, telemetry);
+            robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_DOWN);
+            robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_DOWN);
+            turnUntilPID(.5, currentAngle);
+
+            robot.IntakeMotor.setPower(1);
+            forward(.4, 3.5, currentAngle, true, false, telemetry);
+            sleep(250);
+            backward(.5, 3.75, currentAngle, true, false, telemetry);
+            robot.IntakeMotor.setPower(0);
+        } else {
+            forward(.7, 11, currentAngle - 90, true, false, telemetry);
+            robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_DOWN);
+            robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_DOWN);
+            turnUntilPID(.5, currentAngle - 45);
+
+            robot.IntakeMotor.setPower(1);
+            forward(.4, 3, currentAngle, true, false, telemetry);
+            wideTurnUntilPID(.5, currentAngle);
+            backward(.5, 4, currentAngle, true, false, telemetry);
+            robot.IntakeMotor.setPower(0);
+        }
+        robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
+        robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_UP);
+        robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_UP);
+
+        turnUntilPID(.5, currentAngle - 90);
+
+        backward(.7, 12, currentAngle - 90, true, false, telemetry);
+        turnUntilPID(.5, currentAngle - 90);
+        backwardUntilLaser(false, .3, 8, 7.5, currentAngle - 90, true, false);
+
+        depositBlock();
+
+        forward(.5, 5, currentAngle - 90, true, false, telemetry);
+    }
+
+    public void red2BlockAuto(Telemetry telemetry) {
+        int skyStoneVal = detectAndGrabSkyStone(telemetry);
+
+        double currentAngle = robot.getPitch();
+
+        turnUntilPID(.5, currentAngle + 90);
+
+//        detectLinePosition(false, .7, 10, currentAngle + 90, telemetry);
+        backward(.7, 8.5 - skyStoneVal, currentAngle + 90, true, false, telemetry);
+        turnUntilPID(.5, currentAngle + 90);
+        backwardUntilLaser(false, .3, 8, 7.5, currentAngle + 90, true, false);
+        turnUntilPID(.5, currentAngle + 90);
+
+        right(.5, 2.25, currentAngle + 90, true);
+
+        depositBlock();
+        sleep(250);
+
+        left(.5, 2.25, currentAngle + 90, true);
+
+        if (skyStoneVal != 0) {
+            forward(.7, 12.5 + skyStoneVal, currentAngle + 90, true, false, telemetry);
+            robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_DOWN);
+            robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_DOWN);
+            turnUntilPID(.5, currentAngle);
+
+            robot.IntakeMotor.setPower(1);
+            forward(.4, 3.5, currentAngle, true, false, telemetry);
+            sleep(250);
+            backward(.5, 3.75, currentAngle, true, false, telemetry);
+            robot.IntakeMotor.setPower(0);
+        } else {
+            forward(.7, 11, currentAngle + 90, true, false, telemetry);
+            robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_DOWN);
+            robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_DOWN);
+            turnUntilPID(.5, currentAngle + 45);
+
+            robot.IntakeMotor.setPower(1);
+            forward(.4, 3, currentAngle, true, false, telemetry);
+            wideTurnUntilPID(.5, currentAngle);
+            backward(.5, 4, currentAngle, true, false, telemetry);
+            robot.IntakeMotor.setPower(0);
+        }
+        robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
+        robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_UP);
+        robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_UP);
+
+        turnUntilPID(.5, currentAngle + 90);
+
+        backward(.7, 12, currentAngle + 90, true, false, telemetry);
+        turnUntilPID(.5, currentAngle + 90);
+        backwardUntilLaser(false, .3, 8, 7.5, currentAngle + 90, true, false);
+
+        depositBlock();
+
+        forward(.5, 5, currentAngle + 90, true, false, telemetry);
+    }
+
+    public void blueWallBlockAuto(Telemetry telemetry) {
+        blueFoundAuto(false, false, telemetry);
+
+        double currentAngle = robot.getPitch();
 
         forward(.6, 14, currentAngle, true, false, telemetry);
 
@@ -142,12 +255,9 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void redWallBlockAuto(Telemetry telemetry) {
-        double currentAngle = robot.getPitch();
-
         redFoundAuto(false, false, telemetry);
-        left(.4, 2, currentAngle - 90, true);
 
-        currentAngle = robot.getPitch();
+        double currentAngle = robot.getPitch();
 
         forward(.6, 14, currentAngle,true, false, telemetry);
 
@@ -186,18 +296,23 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         double currentAngle = robot.getPitch();
 
-        moveUntilLaser(false, .3, 10, 7.5, currentAngle, true, false); // using backDistance
+        moveUntilLaser(false, .3, 15, 7.5, currentAngle, true, false); // using backDistance
         turnUntilPID(.5, currentAngle);
 
         backward(.3, .25, currentAngle, true, false, telemetry);
+        turnUntilPID(.5, currentAngle);
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
         sleep(500);
 
+        wideTurnUntilPID(.7, currentAngle + 5);
+
         if (depositBlock) {
+            robot.setMotors(.2, .2, .2, .2);
             depositBlock();
+            robot.setMotors(0, 0, 0, 0);
         } else {
-            forward(.5, 1, currentAngle, true, false, telemetry);
+            forward(.5, 1, currentAngle + 5, true, false, telemetry);
         }
 
         wideTurnUntilPID(.5, currentAngle + 90);
@@ -207,7 +322,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 //            left(.5, 1, currentAngle + 90, true);
 //            turnUntilPID(.5, currentAngle + 90);
 //        }
-        backward(.6, 1.75, currentAngle + 90, true, false, telemetry);
+        backward(.6, 2, currentAngle + 90, true, false, telemetry);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
@@ -215,7 +330,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         if (tapePark) {
             robot.TapeMeasure.setPower(1);
             forward(.5, .5, currentAngle + 90, true, false, telemetry);
-            turnByPID(.5, 15);
+            turnByPID(.5, 5);
             sleep(1250);
             robot.TapeMeasure.setPower(0);
         } else {
@@ -223,7 +338,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 //            if (!depositBlock) left(.5, 2, currentAngle + 90, true);
             turnUntilPID(.5, currentAngle + 90);
             if (robotPark) {
-                detectLineAndStop(true, true, .4, 10, currentAngle + 90, telemetry);
+                forward(.5, 5, currentAngle + 90, true, false, telemetry);
             } else {
                 forward(.5, 10, currentAngle + 90, true, true, telemetry);
             }
@@ -238,18 +353,23 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         turnUntilPID(.5, currentAngle);
 
-        moveUntilLaser(false, .3, 10, 7.5, currentAngle, true, false); // using backDistance
+        moveUntilLaser(false, .3, 15, 7.5, currentAngle, true, false); // using backDistance
         turnUntilPID(.5, currentAngle);
 
         backward(.3, .25, currentAngle, true, false, telemetry);
+        turnUntilPID(.5, currentAngle);
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
         sleep(500);
 
+        wideTurnUntilPID(.7, currentAngle - 5);
+
         if (depositBlock) {
+            robot.setMotors(.2, .2, .2, .2);
             depositBlock();
+            robot.setMotors(0, 0, 0, 0);
         } else {
-            forward(.5, 1, currentAngle, true, false, telemetry);
+            forward(.5, 1, currentAngle - 5, true, false, telemetry);
         }
 
         wideTurnUntilPID(.5, currentAngle - 90);
@@ -259,7 +379,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 //            right(.5, 1, currentAngle - 90, true);
 //            turnUntilPID(.5, currentAngle - 90);
 //        }
-        backward(.6, 1.75, currentAngle - 90, true, false, telemetry);
+        backward(.6, 2, currentAngle - 90, true, false, telemetry);
 
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
@@ -267,7 +387,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         if (tapePark) {
             robot.TapeMeasure.setPower(1);
             forward(.5, .5, currentAngle - 90, true, false, telemetry);
-            turnByPID(.5, -15);
+            turnByPID(.5, -5);
             sleep(1250);
             robot.TapeMeasure.setPower(0);
         } else {
@@ -275,7 +395,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 //            if (!depositBlock) left(.5, 2, currentAngle - 90, true);
             turnUntilPID(.5, currentAngle - 90);
             if (robotPark) {
-                detectLineAndStop(true, true, .4, 10, currentAngle - 90, telemetry);
+                forward(.5, 5, currentAngle - 90, true, false, telemetry);
             } else {
                 forward(.5, 10, currentAngle - 90, true, true, telemetry);
             }
@@ -283,14 +403,12 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void depositBlock() {
-        robot.setMotors(.2, .2, .2, .2);
-
-        robot.SlideMotor.setPower(.75);
+        robot.SlideMotor.setPower(1);
         sleep(250);
 
         robot.SlideMotor.setTargetPosition(robot.SlideMotor.getCurrentPosition() + 10);
         robot.SlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.SlideMotor.setPower(0);
+        robot.SlideMotor.setPower(1);
 
         robot.armRotateServo.setPosition(CompetitionBot.ARM_OUT);
         sleep(500);
@@ -298,27 +416,8 @@ public abstract class AutonomousNew extends LinearOpMode {
         sleep(500);
         robot.armRotateServo.setPosition(CompetitionBot.ARM_IN);
 
-        robot.setMotors(0, 0, 0, 0);
-
         robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
-    public void detectLineAndGyro(boolean isForward, int maxDist, ColorSensor colorSensor) {
-        final int BLUE_THRESHOLD = 200;
-        final int RED_THRESHOLD = 200;
-
-        int initialPos = (int) avgMotorPos();
-        int currentPos = initialPos;
-
-        int headingCorrection = robot.getPitch() > Math.abs(robot.getPitch() - 180) ? 0 : 180;
-
-        while (opModeIsActive() && (colorSensor.blue() < BLUE_THRESHOLD || colorSensor.red() < RED_THRESHOLD)
-                && Math.abs(currentPos - initialPos) > maxDist && opModeIsActive()) {
-            double power = isForward ? .3 : -.3;
-            robot.setMotors(power, power, power, power);
-        }
-
-        turnUntilPID(.3, headingCorrection);
+        robot.SlideMotor.setPower(0);
     }
 
     public void detectLineAndStop(boolean isForward, boolean parkOnLine, double speed, double maxDist, double targetPitch, Telemetry telemetry) {
@@ -352,7 +451,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         double initPitch = robot.getPitch();
 
-        double actualPitch = initPitch;
+        double actualPitch;
         double output;
 
         initPIDCorrection();
@@ -399,7 +498,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
     }
 
-    public void detectLineAndContinue(boolean isForward, double speed, int maxDist, Telemetry telemetry) {
+    public double detectLinePosition(boolean isForward, double speed, double maxDist, double targetPitch, Telemetry telemetry) {
         NormalizedRGBA colorsL = robot.LcolorSensor.getNormalizedColors();
         NormalizedRGBA colorsR = robot.RcolorSensor.getNormalizedColors();
         telemetry.addData("Left R: ",  colorsL.red);
@@ -413,8 +512,6 @@ public abstract class AutonomousNew extends LinearOpMode {
         telemetry.update();
         final double R_COLOR_THRESHOLD = .02;
         final double  L_COLOR_THRESHOLD = .02;
-        double RSpeed = speed;
-        double LSpeed = speed;
 
         int maxSteps = (int) (maxDist*CompetitionBot.DRIVETAIN_PPR);
 
@@ -428,23 +525,27 @@ public abstract class AutonomousNew extends LinearOpMode {
         int currentPosition = initialPosition;
         int maxPos = initialPosition + maxSteps;
 
-        boolean LStop = false, RStop = false;
-        while(opModeIsActive() && abs(currentPosition - initialPosition) < maxPos && (!LStop && !RStop)) {
+        double actualPitch;
+        double output;
+
+        initPIDCorrection();
+
+        while(opModeIsActive() && abs(currentPosition - initialPosition) < maxPos) {
             currentPosition = (int) avgMotorPos();
             colorsL = robot.LcolorSensor.getNormalizedColors();
             colorsR = robot.RcolorSensor.getNormalizedColors();
 
-            if (colorsL.blue > L_COLOR_THRESHOLD || colorsL.red > L_COLOR_THRESHOLD) {
-                LSpeed = 0;
-                LStop = true;
-            }
-            if (colorsR.blue > R_COLOR_THRESHOLD || colorsR.red > R_COLOR_THRESHOLD) {
-                RSpeed = 0;
-                RStop = true;
+            if (colorsL.blue > L_COLOR_THRESHOLD || colorsL.red > L_COLOR_THRESHOLD ||
+                colorsR.blue > R_COLOR_THRESHOLD || colorsR.red > R_COLOR_THRESHOLD) {
+                break;
             }
 
-            robot.setMotors(dir*LSpeed, dir*LSpeed, dir*RSpeed, dir*RSpeed);
+            actualPitch = robot.getPitch();
+            output = PIDHeadingCorrect.getOutput(actualPitch, targetPitch);
+
+            robot.setMotors(dir*speed - output, dir*speed - output, dir*speed + output, dir*speed + output);
         }
+        return avgMotorPos();
     }
 
     public void turnBy(double speed, double deltaAngle) {
