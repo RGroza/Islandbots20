@@ -57,11 +57,11 @@ public abstract class AutonomousNew extends LinearOpMode {
             left(.5, 1.2, currentAngle, true);
             turnUntilPID(.5, currentAngle);
         } else if (skyStoneVal == 2) {
-            right(.5, 1.2, currentAngle, true);
+            right(.5, 1, currentAngle, true);
             turnUntilPID(.5, currentAngle);
         }
 
-        moveUntilLaser(true, .4, 40, 5, currentAngle, true, false);
+        moveUntilLaser(true, .5, 23, 5, currentAngle, true, false);
 
         robot.IntakeMotor.setPower(1);
         forward(.4, 3.5, currentAngle, true, false, telemetry);
@@ -123,14 +123,13 @@ public abstract class AutonomousNew extends LinearOpMode {
         backward(.7, 8.5 + skyStoneVal, currentAngle - 90, true, false, telemetry);
         turnUntilPID(.5, currentAngle - 90);
         backwardUntilLaser(false, .3, 8, 7.5, currentAngle - 90, true, false);
-        turnUntilPID(.5, currentAngle - 90);
 
-        right(.5, 2.25, currentAngle - 90, true);
+        right(.6, 3, currentAngle - 90, true);
 
         depositBlock();
         sleep(250);
 
-        left(.5, 2.25, currentAngle - 90, true);
+        left(.6, 3, currentAngle - 90, true);
 
         if (skyStoneVal != 2) {
             forward(.7, 12.5 + skyStoneVal, currentAngle - 90, true, false, telemetry);
@@ -144,14 +143,14 @@ public abstract class AutonomousNew extends LinearOpMode {
             backward(.5, 3.75, currentAngle, true, false, telemetry);
             robot.IntakeMotor.setPower(0);
         } else {
-            forward(.7, 11, currentAngle - 90, true, false, telemetry);
+            forward(.7, 12.5, currentAngle - 90, true, false, telemetry);
             robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_DOWN);
             robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_DOWN);
             turnUntilPID(.5, currentAngle - 45);
 
             robot.IntakeMotor.setPower(1);
             forward(.4, 3, currentAngle, true, false, telemetry);
-            wideTurnUntilPID(.5, currentAngle);
+            turnByPID(.5, -10);
             backward(.5, 4, currentAngle, true, false, telemetry);
             robot.IntakeMotor.setPower(0);
         }
@@ -165,7 +164,12 @@ public abstract class AutonomousNew extends LinearOpMode {
         turnUntilPID(.5, currentAngle - 90);
         backwardUntilLaser(false, .3, 8, 7.5, currentAngle - 90, true, false);
 
+        right(.6, 1.5, currentAngle - 90, true);
+
         depositBlock();
+        sleep(250);
+
+        left(.6, 1.5, currentAngle - 90, true);
 
         forward(.5, 5, currentAngle - 90, true, false, telemetry);
     }
@@ -181,17 +185,16 @@ public abstract class AutonomousNew extends LinearOpMode {
         backward(.7, 8.5 - skyStoneVal, currentAngle + 90, true, false, telemetry);
         turnUntilPID(.5, currentAngle + 90);
         backwardUntilLaser(false, .3, 8, 7.5, currentAngle + 90, true, false);
-        turnUntilPID(.5, currentAngle + 90);
 
-        right(.5, 2.25, currentAngle + 90, true);
+        left(.6, .5, currentAngle + 90, true);
 
         depositBlock();
         sleep(250);
 
-        left(.5, 2.25, currentAngle + 90, true);
+        right(.6, .5, currentAngle + 90, true);
 
         if (skyStoneVal != 0) {
-            forward(.7, 12.5 + skyStoneVal, currentAngle + 90, true, false, telemetry);
+            forward(.7, 14.5 - skyStoneVal, currentAngle + 90, true, false, telemetry);
             robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_DOWN);
             robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_DOWN);
             turnUntilPID(.5, currentAngle);
@@ -202,14 +205,14 @@ public abstract class AutonomousNew extends LinearOpMode {
             backward(.5, 3.75, currentAngle, true, false, telemetry);
             robot.IntakeMotor.setPower(0);
         } else {
-            forward(.7, 11, currentAngle + 90, true, false, telemetry);
+            forward(.7, 12.5, currentAngle + 90, true, false, telemetry);
             robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_DOWN);
             robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_DOWN);
             turnUntilPID(.5, currentAngle + 45);
 
             robot.IntakeMotor.setPower(1);
             forward(.4, 3, currentAngle, true, false, telemetry);
-            wideTurnUntilPID(.5, currentAngle);
+            turnByPID(.5, 10);
             backward(.5, 4, currentAngle, true, false, telemetry);
             robot.IntakeMotor.setPower(0);
         }
@@ -223,7 +226,12 @@ public abstract class AutonomousNew extends LinearOpMode {
         turnUntilPID(.5, currentAngle + 90);
         backwardUntilLaser(false, .3, 8, 7.5, currentAngle + 90, true, false);
 
+        right(.6, 1, currentAngle + 90, true);
+
         depositBlock();
+        sleep(250);
+
+        left(.6, 1, currentAngle + 90, true);
 
         forward(.5, 5, currentAngle + 90, true, false, telemetry);
     }
@@ -281,12 +289,12 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void blueFoundAuto(boolean robotPark, boolean tapePark, Telemetry telemetry) {
-        right(.4, 2, robot.getPitch(), true);
+        right(.4, 3, robot.getPitch(), true);
         grabBlueFoundation(false, robotPark, tapePark, telemetry);
     }
 
     public void redFoundAuto(boolean robotPark, boolean tapePark, Telemetry telemetry) {
-        left(.4, 2, robot.getPitch(), true);
+        left(.4, 3, robot.getPitch(), true);
         grabRedFoundation(false, robotPark, tapePark, telemetry);
     }
 
@@ -312,7 +320,7 @@ public abstract class AutonomousNew extends LinearOpMode {
             depositBlock();
             robot.setMotors(0, 0, 0, 0);
         } else {
-            forward(.5, 1, currentAngle + 5, true, false, telemetry);
+            forward(.5, .5, currentAngle + 5, true, false, telemetry);
         }
 
         wideTurnUntilPID(.5, currentAngle + 90);
@@ -369,7 +377,7 @@ public abstract class AutonomousNew extends LinearOpMode {
             depositBlock();
             robot.setMotors(0, 0, 0, 0);
         } else {
-            forward(.5, 1, currentAngle - 5, true, false, telemetry);
+            forward(.5, .5, currentAngle - 5, true, false, telemetry);
         }
 
         wideTurnUntilPID(.5, currentAngle - 90);
@@ -548,36 +556,6 @@ public abstract class AutonomousNew extends LinearOpMode {
         return avgMotorPos();
     }
 
-    public void turnBy(double speed, double deltaAngle) {
-        double currentAngle = robot.getPitch();
-        double targetAngle = (currentAngle + deltaAngle) % 360;
-        double diff = angleDiff(currentAngle, targetAngle);
-        double direction;
-        double adjustedSpeed;
-        double minSpeed = .15;
-
-        while (opModeIsActive() && abs(diff) > .5) {
-            currentAngle = robot.getPitch();
-            diff = angleDiff(currentAngle, targetAngle);
-            direction = diff > 0 ? 1 : -1;
-
-            // adjust speed in increments
-            adjustedSpeed = abs(diff) < 30 ? (abs(diff) < 10 ? .2 : .3) : speed;
-
-            robot.LFmotor.setPower(-direction * adjustedSpeed);
-            robot.LBmotor.setPower(-direction * adjustedSpeed);
-            robot.RFmotor.setPower(direction * adjustedSpeed);
-            robot.RBmotor.setPower(direction * adjustedSpeed);
-
-            telemetry.addData("gyro: ", robot.getPitch());
-            telemetry.addData("diff: ", diff);
-            telemetry.addData("adjustedSpeed: ", adjustedSpeed);
-            telemetry.update();
-
-        }
-        robot.setMotors(0,0,0,0);
-    }
-
     public void turnByPID(double maxSpeed, double deltaAngle) {
         double currentAngle = robot.getPitch();
         double targetAngle = (currentAngle + deltaAngle) % 360;
@@ -606,41 +584,6 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         }
         stopMotors(250);
-    }
-
-    public void wideTurnBy(double speed, double deltaAngle) {
-        double currentAngle = robot.getPitch();
-        double targetAngle = (currentAngle + deltaAngle) % 360;
-        double diff = angleDiff(currentAngle, targetAngle);
-        double adjustedSpeed;
-        double minSpeed = .15;
-
-        while (opModeIsActive() && abs(diff) > .75) {
-            currentAngle = robot.getPitch();
-            diff = angleDiff(currentAngle, targetAngle);
-
-            // adjust speed in increments
-            adjustedSpeed = abs(diff) < 30 ? (abs(diff) < 10 ? .2 : .3) : speed;
-
-            if (diff > 0) {
-                robot.LFmotor.setPower(-minSpeed);
-                robot.LBmotor.setPower(-minSpeed);
-                robot.RFmotor.setPower(adjustedSpeed);
-                robot.RBmotor.setPower(adjustedSpeed);
-            } else {
-                robot.LFmotor.setPower(adjustedSpeed);
-                robot.LBmotor.setPower(adjustedSpeed);
-                robot.RFmotor.setPower(-minSpeed);
-                robot.RBmotor.setPower(-minSpeed);
-            }
-
-            telemetry.addData("gyro: ", robot.getPitch());
-            telemetry.addData("diff: ", diff);
-            telemetry.addData("adjustedSpeed: ", adjustedSpeed);
-            telemetry.update();
-
-        }
-        robot.setMotors(0,0,0,0);
     }
 
     public void wideTurnByPID(double maxSpeed, double deltaAngle) {
@@ -688,25 +631,11 @@ public abstract class AutonomousNew extends LinearOpMode {
         stopMotors(250);
     }
 
-    public void turnUntil(double speed, double absAngle) {
-        // enables us to use absolute angles to describe orientation of our robot
-        double currentAngle = robot.getPitch();
-        double diff = angleDiff(currentAngle, absAngle);
-        turnBy(speed, diff);
-    }
-
     public void turnUntilPID(double speed, double absAngle) {
         // enables us to use absolute angles to describe orientation of our robot
         double currentAngle = robot.getPitch();
         double diff = angleDiff(currentAngle, absAngle);
         turnByPID(speed, diff);
-    }
-
-    public void wideTurnUntil(double speed, double absAngle) {
-        // enables us to use absolute angles to describe orientation of our robot
-        double currentAngle = robot.getPitch();
-        double diff = angleDiff(currentAngle, absAngle);
-        wideTurnBy(speed, diff);
     }
 
     public void wideTurnUntilPID(double speed, double absAngle) {
@@ -805,6 +734,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         int stepCount = (int) (revCount*CompetitionBot.DRIVETAIN_PPR);
         int avgPos = (int) avgMotorPos();
         int initPos = avgPos;
+        int referencePos = avgPos;
         int targetPos = avgPos + stepCount;
 
         double output;
@@ -816,9 +746,37 @@ public abstract class AutonomousNew extends LinearOpMode {
             initPIDRamping(speed);
         }
 
+        double initTime = System.currentTimeMillis();
+        double initCollisionTime = 0;
+        double currentTime;
+        double currentVel = 0;
+
+        boolean collisionDetected = false;
+
         double rampedSpeed;
         while (opModeIsActive() && avgPos < targetPos) {
             avgPos = (int) avgMotorPos();
+
+            currentTime = System.currentTimeMillis();
+            telemetry.addData("time: ", currentTime - initTime);
+
+            // Calculating encoder velocity and checking for collision
+            if (currentTime - initTime > 100) {
+                currentVel = abs(avgPos - referencePos) / .1;
+                initTime = currentTime;
+                referencePos = avgPos;
+            }
+            telemetry.addData("currentVel: ", currentVel);
+            if (!collisionDetected && currentVel < 50) {
+                initCollisionTime = currentTime;
+                collisionDetected = true;
+            }
+            if (collisionDetected && currentVel > 100) {
+                collisionDetected = false;
+            }
+            if (collisionDetected && currentTime - initCollisionTime > 1000) {
+                break;
+            }
 
             if (PIDRamp) {
                 rampedSpeed = rampPID(avgPos, initPos, targetPos, speed, telemetry);
@@ -850,8 +808,9 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         int maxSteps = (int) (maxRevs*CompetitionBot.DRIVETAIN_PPR);
 
-        int initPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
-        int currentPos = initPos;
+        int avgPos = (int) avgMotorPos();
+        int initPos = avgPos;
+        int referencePos = avgPos;
 
         double output;
 
@@ -862,9 +821,38 @@ public abstract class AutonomousNew extends LinearOpMode {
             initPIDRamping(speed);
         }
 
+        double initTime = System.currentTimeMillis();
+        double initCollisionTime = 0;
+        double currentTime;
+        double currentVel = 0;
+
+        boolean collisionDetected = false;
+
         double rampedSpeed;
-        while (opModeIsActive() && (currentVal - targetVal) > .5 && abs(currentPos - initPos) < maxSteps) {
-            currentPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
+        while (opModeIsActive() && (currentVal - targetVal) > .5 && abs(avgPos - initPos) < maxSteps) {
+            avgPos = (int) avgMotorPos();
+
+            currentTime = System.currentTimeMillis();
+            telemetry.addData("time: ", currentTime - initTime);
+
+            // Calculating encoder velocity and checking for collision
+            if (currentTime - initTime > 100) {
+                currentVel = abs(avgPos - referencePos) / .1;
+                initTime = currentTime;
+                referencePos = avgPos;
+            }
+            telemetry.addData("currentVel: ", currentVel);
+            if (!collisionDetected && currentVel < 50) {
+                initCollisionTime = currentTime;
+                collisionDetected = true;
+            }
+            if (collisionDetected && currentVel > 100) {
+                collisionDetected = false;
+            }
+            if (collisionDetected && currentTime - initCollisionTime > 1000) {
+                break;
+            }
+
             currentVal = frontSensor ? robot.frontDistance.getDistance(DistanceUnit.CM)
                                      : robot.backDistance.getDistance(DistanceUnit.CM);
 
@@ -895,8 +883,9 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         int maxSteps = (int) (maxRevs*CompetitionBot.DRIVETAIN_PPR);
 
-        int initPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
-        int currentPos = initPos;
+        int avgPos = (int) avgMotorPos();
+        int initPos = avgPos;
+        int referencePos = avgPos;
 
         double output;
 
@@ -907,9 +896,38 @@ public abstract class AutonomousNew extends LinearOpMode {
             initPIDRamping(speed);
         }
 
+        double initTime = System.currentTimeMillis();
+        double initCollisionTime = 0;
+        double currentTime;
+        double currentVel = 0;
+
+        boolean collisionDetected = false;
+
         double rampedSpeed;
-        while (opModeIsActive() && (currentVal - targetVal) > .5 && abs(currentPos - initPos) < maxSteps) {
-            currentPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
+        while (opModeIsActive() && (currentVal - targetVal) > .5 && abs(avgPos - initPos) < maxSteps) {
+            avgPos = (int) avgMotorPos();
+
+            currentTime = System.currentTimeMillis();
+            telemetry.addData("time: ", currentTime - initTime);
+
+            // Calculating encoder velocity and checking for collision
+            if (currentTime - initTime > 100) {
+                currentVel = abs(avgPos - referencePos) / .1;
+                initTime = currentTime;
+                referencePos = avgPos;
+            }
+            telemetry.addData("currentVel: ", currentVel);
+            if (!collisionDetected && currentVel < 50) {
+                initCollisionTime = currentTime;
+                collisionDetected = true;
+            }
+            if (collisionDetected && currentVel > 100) {
+                collisionDetected = false;
+            }
+            if (collisionDetected && currentTime - initCollisionTime > 1000) {
+                break;
+            }
+
             // Condition used to eliminate noise
             currentVal = robot.sonarDistance.getVoltage() > .05 ? robot.sonarDistance.getVoltage() : currentVal;
 
@@ -937,6 +955,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         int stepCount = (int) (revCount*CompetitionBot.DRIVETAIN_PPR);
         int avgPos = (int) avgMotorPos();
         int initPos = avgPos;
+        int referencePos = avgPos;
         int targetPos = avgPos - stepCount;
 
         double output;
@@ -948,9 +967,37 @@ public abstract class AutonomousNew extends LinearOpMode {
             initPIDRamping(speed);
         }
 
+        double initTime = System.currentTimeMillis();
+        double initCollisionTime = 0;
+        double currentTime;
+        double currentVel = 0;
+
+        boolean collisionDetected = false;
+
         double rampedSpeed;
         while (opModeIsActive() && avgPos > targetPos) {
             avgPos = (int) avgMotorPos();
+
+            currentTime = System.currentTimeMillis();
+            telemetry.addData("time: ", currentTime - initTime);
+
+            // Calculating encoder velocity and checking for collision
+            if (currentTime - initTime > 100) {
+                currentVel = abs(avgPos - referencePos) / .1;
+                initTime = currentTime;
+                referencePos = avgPos;
+            }
+            telemetry.addData("currentVel: ", currentVel);
+            if (!collisionDetected && currentVel < 50) {
+                initCollisionTime = currentTime;
+                collisionDetected = true;
+            }
+            if (collisionDetected && currentVel > 100) {
+                collisionDetected = false;
+            }
+            if (collisionDetected && currentTime - initCollisionTime > 1000) {
+                break;
+            }
 
             if (PIDRamp) {
                 rampedSpeed = rampPID(avgPos, initPos, targetPos, speed, telemetry);
@@ -982,8 +1029,9 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         int maxSteps = (int) (maxRevs*CompetitionBot.DRIVETAIN_PPR);
 
-        int initPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
-        int currentPos = initPos;
+        int avgPos = (int) avgMotorPos();
+        int initPos = avgPos;
+        int referencePos = avgPos;
 
         double output;
 
@@ -994,9 +1042,38 @@ public abstract class AutonomousNew extends LinearOpMode {
             initPIDRamping(speed);
         }
 
+        double initTime = System.currentTimeMillis();
+        double initCollisionTime = 0;
+        double currentTime;
+        double currentVel = 0;
+
+        boolean collisionDetected = false;
+
         double rampedSpeed;
-        while (opModeIsActive() && (currentVal - targetVal) > .5 && abs(currentPos - initPos) < maxSteps) {
-            currentPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
+        while (opModeIsActive() && (currentVal - targetVal) > .5 && abs(avgPos - initPos) < maxSteps) {
+            avgPos = (int) avgMotorPos();
+
+            currentTime = System.currentTimeMillis();
+            telemetry.addData("time: ", currentTime - initTime);
+
+            // Calculating encoder velocity and checking for collision
+            if (currentTime - initTime > 100) {
+                currentVel = abs(avgPos - referencePos) / .1;
+                initTime = currentTime;
+                referencePos = avgPos;
+            }
+            telemetry.addData("currentVel: ", currentVel);
+            if (!collisionDetected && currentVel < 50) {
+                initCollisionTime = currentTime;
+                collisionDetected = true;
+            }
+            if (collisionDetected && currentVel > 100) {
+                collisionDetected = false;
+            }
+            if (collisionDetected && currentTime - initCollisionTime > 1000) {
+                break;
+            }
+
             currentVal = frontSensor ? robot.frontDistance.getDistance(DistanceUnit.CM)
                                      : robot.backDistance.getDistance(DistanceUnit.CM);
 
@@ -1027,8 +1104,9 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         int maxSteps = (int) (maxRevs*CompetitionBot.DRIVETAIN_PPR);
 
-        int initPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
-        int currentPos = initPos;
+        int avgPos = (int) avgMotorPos();
+        int initPos = avgPos;
+        int referencePos = avgPos;
 
         double output;
 
@@ -1039,9 +1117,38 @@ public abstract class AutonomousNew extends LinearOpMode {
             initPIDRamping(speed);
         }
 
+        double initTime = System.currentTimeMillis();
+        double initCollisionTime = 0;
+        double currentTime;
+        double currentVel = 0;
+
+        boolean collisionDetected = false;
+
         double rampedSpeed;
-        while (opModeIsActive() && (currentVal - targetVal) > .5 && abs(currentPos - initPos) < maxSteps) {
-            currentPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
+        while (opModeIsActive() && (currentVal - targetVal) > .5 && abs(avgPos - initPos) < maxSteps) {
+            avgPos = (int) avgMotorPos();
+
+            currentTime = System.currentTimeMillis();
+            telemetry.addData("time: ", currentTime - initTime);
+
+            // Calculating encoder velocity and checking for collision
+            if (currentTime - initTime > 100) {
+                currentVel = abs(avgPos - referencePos) / .1;
+                initTime = currentTime;
+                referencePos = avgPos;
+            }
+            telemetry.addData("currentVel: ", currentVel);
+            if (!collisionDetected && currentVel < 50) {
+                initCollisionTime = currentTime;
+                collisionDetected = true;
+            }
+            if (collisionDetected && currentVel > 100) {
+                collisionDetected = false;
+            }
+            if (collisionDetected && currentTime - initCollisionTime > 1000) {
+                break;
+            }
+
             // Condition used to eliminate noise
             currentVal = robot.sonarDistance.getVoltage() > .075 ? robot.sonarDistance.getVoltage() : currentVal;
 
@@ -1068,6 +1175,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     public void left(double speed, double revCount, double targetPitch, boolean PIDCorrect) {
         int stepCount = (int) (revCount*CompetitionBot.DRIVETAIN_PPR);
         int avgPos = (int) ((robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition()) / 2.0);
+        int referencePos = avgPos;
         int targetPos = avgPos + stepCount;
 
         double output;
@@ -1076,7 +1184,37 @@ public abstract class AutonomousNew extends LinearOpMode {
             initPIDCorrection();
         }
 
+        double initTime = System.currentTimeMillis();
+        double initCollisionTime = 0;
+        double currentTime;
+        double currentVel = 0;
+
+        boolean collisionDetected = false;
+
         while (opModeIsActive() && avgPos < targetPos) {
+            avgPos = (int) avgMotorPos();
+
+            currentTime = System.currentTimeMillis();
+            telemetry.addData("time: ", currentTime - initTime);
+
+            // Calculating encoder velocity and checking for collision
+            if (currentTime - initTime > 100) {
+                currentVel = abs(avgPos - referencePos) / .1;
+                initTime = currentTime;
+                referencePos = avgPos;
+            }
+            telemetry.addData("currentVel: ", currentVel);
+            if (!collisionDetected && currentVel < 50) {
+                initCollisionTime = currentTime;
+                collisionDetected = true;
+            }
+            if (collisionDetected && currentVel > 100) {
+                collisionDetected = false;
+            }
+            if (collisionDetected && currentTime - initCollisionTime > 1000) {
+                break;
+            }
+
             avgPos = (int) ((robot.RFmotor.getCurrentPosition() + robot.LBmotor.getCurrentPosition()) / 2.0);
 
             if (PIDCorrect) {
@@ -1096,6 +1234,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     public void right(double speed, double revCount, double targetPitch, boolean PIDCorrect) {
         int stepCount = (int) (revCount*CompetitionBot.DRIVETAIN_PPR);
         int avgPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
+        int referencePos = avgPos;
         int targetPos = avgPos + stepCount;
 
         double output;
@@ -1104,7 +1243,37 @@ public abstract class AutonomousNew extends LinearOpMode {
             initPIDCorrection();
         }
 
+        double initTime = System.currentTimeMillis();
+        double initCollisionTime = 0;
+        double currentTime;
+        double currentVel = 0;
+
+        boolean collisionDetected = false;
+
         while (opModeIsActive() && avgPos < targetPos) {
+            avgPos = (int) avgMotorPos();
+
+            currentTime = System.currentTimeMillis();
+            telemetry.addData("time: ", currentTime - initTime);
+
+            // Calculating encoder velocity and checking for collision
+            if (currentTime - initTime > 100) {
+                currentVel = abs(avgPos - referencePos) / .1;
+                initTime = currentTime;
+                referencePos = avgPos;
+            }
+            telemetry.addData("currentVel: ", currentVel);
+            if (!collisionDetected && currentVel < 50) {
+                initCollisionTime = currentTime;
+                collisionDetected = true;
+            }
+            if (collisionDetected && currentVel > 100) {
+                collisionDetected = false;
+            }
+            if (collisionDetected && currentTime - initCollisionTime > 1000) {
+                break;
+            }
+
             avgPos = (int) ((robot.LFmotor.getCurrentPosition() + robot.RBmotor.getCurrentPosition()) / 2.0);
 
             if (PIDCorrect) {
