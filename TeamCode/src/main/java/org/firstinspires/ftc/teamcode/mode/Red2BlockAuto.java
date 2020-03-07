@@ -8,6 +8,6 @@ public class Red2BlockAuto extends AutonomousNew {
     public void runOpMode() throws InterruptedException {
         robot = new CompetitionBot(hardwareMap, telemetry);
 
-        red2BlockAuto(telemetry);
+        red2BlockAuto(false, telemetry);
     }
 }

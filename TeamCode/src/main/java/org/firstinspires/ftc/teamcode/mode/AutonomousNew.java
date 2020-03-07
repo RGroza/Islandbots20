@@ -54,19 +54,17 @@ public abstract class AutonomousNew extends LinearOpMode {
         robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_DOWN);
 
         if (skyStoneVal == 0) {
-            left(.5, 1.2, currentAngle, true);
+            left(.5, 1, currentAngle, true);
             turnUntilPID(.5, currentAngle);
         } else if (skyStoneVal == 2) {
             right(.5, 1, currentAngle, true);
             turnUntilPID(.5, currentAngle);
         }
 
-        moveUntilLaser(true, .5, 23, 5, currentAngle, true, false);
-
         robot.IntakeMotor.setPower(1);
-        forward(.4, 3.5, currentAngle, true, false, telemetry);
+        forward(.4, 7.5, currentAngle, true, false, telemetry);
         sleep(250);
-        backward(.5, 3.75, currentAngle, true, false, telemetry);
+        backward(.5, 3.65, currentAngle, true, false, telemetry);
         robot.IntakeMotor.setPower(0);
 
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
@@ -77,49 +75,42 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void blueBlocksAuto(Telemetry telemetry) {
-        int skyStoneVal = detectAndGrabSkyStone(telemetry);
-
         double currentAngle = robot.getPitch();
+
+        int skyStoneVal = detectAndGrabSkyStone(telemetry);
 
         turnUntilPID(.5, currentAngle - 90);
 
-//        detectLineAndStop(false, false, .3, 10, currentAngle - 90, telemetry);
-//        backward(.5, 5.5, true, false, telemetry);
-        backward(.7, 9.5 + skyStoneVal, currentAngle - 90, true, false, telemetry);
-//        sleep(250);
+        backward(.7, 10 + skyStoneVal, currentAngle - 90, true, false, telemetry);
 
         turnUntilPID(.5, currentAngle - 180);
 
-        grabBlueFoundation(true, true, false, telemetry);
+        grabBlueFoundation(true, false, true, telemetry);
 
     }
 
     public void redBlocksAuto(Telemetry telemetry) {
-        int skyStoneVal = detectAndGrabSkyStone(telemetry);
-
         double currentAngle = robot.getPitch();
+
+        int skyStoneVal = detectAndGrabSkyStone(telemetry);
 
         turnUntilPID(.5, currentAngle + 90);
 
-//        detectLineAndStop(false, false, .3, 10, currentAngle + 90, telemetry);
-//        backward(.5, 5.5, true, false, telemetry);
-        backward(.7, 11.5 - skyStoneVal, currentAngle + 90, true, false, telemetry);
-//        sleep(250);
+        backward(.7, 11 - skyStoneVal, currentAngle + 90, true, false, telemetry);
 
         turnUntilPID(.5, currentAngle + 180);
 
-        grabRedFoundation(true, true, false, telemetry);
+        grabRedFoundation(true, false, true, telemetry);
 
     }
 
-    public void blue2BlockAuto(Telemetry telemetry) {
-        int skyStoneVal = detectAndGrabSkyStone(telemetry);
-
+    public void blue2BlockAuto(boolean wallPark, Telemetry telemetry) {
         double currentAngle = robot.getPitch();
+
+        int skyStoneVal = detectAndGrabSkyStone(telemetry);
 
         turnUntilPID(.5, currentAngle - 90);
 
-//        detectLinePosition(false, .7, 10, currentAngle - 90, telemetry);
         backward(.7, 8.5 + skyStoneVal, currentAngle - 90, true, false, telemetry);
         turnUntilPID(.5, currentAngle - 90);
         backwardUntilLaser(false, .3, 8, 7.5, currentAngle - 90, true, false);
@@ -149,9 +140,9 @@ public abstract class AutonomousNew extends LinearOpMode {
             turnUntilPID(.5, currentAngle - 45);
 
             robot.IntakeMotor.setPower(1);
-            forward(.4, 3, currentAngle, true, false, telemetry);
+            forward(.4, 2.5, currentAngle, true, false, telemetry);
             turnByPID(.5, -10);
-            backward(.5, 4, currentAngle, true, false, telemetry);
+            backward(.5, 2.5, currentAngle, true, false, telemetry);
             robot.IntakeMotor.setPower(0);
         }
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
@@ -164,34 +155,37 @@ public abstract class AutonomousNew extends LinearOpMode {
         turnUntilPID(.5, currentAngle - 90);
         backwardUntilLaser(false, .3, 8, 7.5, currentAngle - 90, true, false);
 
-        right(.6, 1.5, currentAngle - 90, true);
+        right(.6, 1, currentAngle - 90, true);
 
         depositBlock();
         sleep(250);
 
-        left(.6, 1.5, currentAngle - 90, true);
+        if (wallPark) {
+            right(.6, 3, currentAngle - 90, true);
+        } else {
+            left(.6, 1, currentAngle - 90, true);
+        }
 
         forward(.5, 5, currentAngle - 90, true, false, telemetry);
     }
 
-    public void red2BlockAuto(Telemetry telemetry) {
-        int skyStoneVal = detectAndGrabSkyStone(telemetry);
-
+    public void red2BlockAuto(boolean wallPark, Telemetry telemetry) {
         double currentAngle = robot.getPitch();
+
+        int skyStoneVal = detectAndGrabSkyStone(telemetry);
 
         turnUntilPID(.5, currentAngle + 90);
 
-//        detectLinePosition(false, .7, 10, currentAngle + 90, telemetry);
         backward(.7, 8.5 - skyStoneVal, currentAngle + 90, true, false, telemetry);
         turnUntilPID(.5, currentAngle + 90);
         backwardUntilLaser(false, .3, 8, 7.5, currentAngle + 90, true, false);
 
-        left(.6, .5, currentAngle + 90, true);
+        left(.6, 1, currentAngle + 90, true);
 
         depositBlock();
         sleep(250);
 
-        right(.6, .5, currentAngle + 90, true);
+        right(.6, 1, currentAngle + 90, true);
 
         if (skyStoneVal != 0) {
             forward(.7, 14.5 - skyStoneVal, currentAngle + 90, true, false, telemetry);
@@ -211,9 +205,9 @@ public abstract class AutonomousNew extends LinearOpMode {
             turnUntilPID(.5, currentAngle + 45);
 
             robot.IntakeMotor.setPower(1);
-            forward(.4, 3, currentAngle, true, false, telemetry);
+            forward(.4, 2.5, currentAngle, true, false, telemetry);
             turnByPID(.5, 10);
-            backward(.5, 4, currentAngle, true, false, telemetry);
+            backward(.5, 2.5, currentAngle, true, false, telemetry);
             robot.IntakeMotor.setPower(0);
         }
         robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
@@ -226,20 +220,24 @@ public abstract class AutonomousNew extends LinearOpMode {
         turnUntilPID(.5, currentAngle + 90);
         backwardUntilLaser(false, .3, 8, 7.5, currentAngle + 90, true, false);
 
-        right(.6, 1, currentAngle + 90, true);
+        right(.6, .5, currentAngle + 90, true);
 
         depositBlock();
         sleep(250);
 
-        left(.6, 1, currentAngle + 90, true);
+        if (wallPark) {
+            left(.6, 4, currentAngle + 90, true);
+        } else {
+            left(.6, .5, currentAngle + 90, true);
+        }
 
         forward(.5, 5, currentAngle + 90, true, false, telemetry);
     }
 
     public void blueWallBlockAuto(Telemetry telemetry) {
-        blueFoundAuto(false, false, telemetry);
-
         double currentAngle = robot.getPitch();
+
+        blueFoundAuto(false, false, telemetry);
 
         forward(.6, 14, currentAngle, true, false, telemetry);
 
@@ -263,9 +261,9 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
     public void redWallBlockAuto(Telemetry telemetry) {
-        redFoundAuto(false, false, telemetry);
-
         double currentAngle = robot.getPitch();
+
+        redFoundAuto(false, false, telemetry);
 
         forward(.6, 14, currentAngle,true, false, telemetry);
 
@@ -298,7 +296,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         grabRedFoundation(false, robotPark, tapePark, telemetry);
     }
 
-    public void grabBlueFoundation(boolean depositBlock, boolean robotPark, boolean tapePark, Telemetry telemetry) {
+    public void grabBlueFoundation(boolean depositBlock, boolean wallPark, boolean tapePark, Telemetry telemetry) {
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
 
@@ -338,14 +336,13 @@ public abstract class AutonomousNew extends LinearOpMode {
         if (tapePark) {
             robot.TapeMeasure.setPower(1);
             forward(.5, .5, currentAngle + 90, true, false, telemetry);
-            turnByPID(.5, 5);
+            turnByPID(.5, 10);
             sleep(1250);
             robot.TapeMeasure.setPower(0);
         } else {
             right(.6, 2.75, currentAngle + 90, true);
-//            if (!depositBlock) left(.5, 2, currentAngle + 90, true);
             turnUntilPID(.5, currentAngle + 90);
-            if (robotPark) {
+            if (wallPark) {
                 forward(.5, 5, currentAngle + 90, true, false, telemetry);
             } else {
                 forward(.5, 10, currentAngle + 90, true, true, telemetry);
@@ -353,7 +350,7 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
     }
 
-    public void grabRedFoundation(boolean depositBlock, boolean robotPark, boolean tapePark, Telemetry telemetry) {
+    public void grabRedFoundation(boolean depositBlock, boolean wallPark, boolean tapePark, Telemetry telemetry) {
         robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
         robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
 
@@ -395,14 +392,13 @@ public abstract class AutonomousNew extends LinearOpMode {
         if (tapePark) {
             robot.TapeMeasure.setPower(1);
             forward(.5, .5, currentAngle - 90, true, false, telemetry);
-            turnByPID(.5, -5);
+            turnByPID(.5, -10);
             sleep(1250);
             robot.TapeMeasure.setPower(0);
         } else {
             left(.6, 2.75, currentAngle - 90, true);
-//            if (!depositBlock) left(.5, 2, currentAngle - 90, true);
             turnUntilPID(.5, currentAngle - 90);
-            if (robotPark) {
+            if (wallPark) {
                 forward(.5, 5, currentAngle - 90, true, false, telemetry);
             } else {
                 forward(.5, 10, currentAngle - 90, true, true, telemetry);
