@@ -157,8 +157,6 @@ public class CompetitionBot {
 
         vMagnitude *= vMagnitude; // Non-linear magnitude input
 
-        rotation = Math.abs(rotation) < .05 ? 0 : rotation;
-
         double LB = vMagnitude * Math.cos(vAngle) + (.7 * rotation);
         double RB = vMagnitude * Math.sin(vAngle) - (.7 * rotation);
         double LF = vMagnitude * Math.sin(vAngle) + (.7 * rotation);

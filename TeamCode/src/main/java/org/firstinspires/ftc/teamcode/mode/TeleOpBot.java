@@ -31,6 +31,10 @@ public class TeleOpBot extends LinearOpMode {
         GamepadButton foundationDownButton = new GamepadButton(300, false);
         GamepadButton foundationInterButton = new GamepadButton(300, false);
         GamepadButton foundationUpButton = new GamepadButton(300, false);
+        GamepadButton fullForwardButton = new GamepadButton(300, false);
+        GamepadButton fullBackwardButton = new GamepadButton(300, false);
+        GamepadButton fullLeftButton = new GamepadButton(300, false);
+        GamepadButton fullRightButton = new GamepadButton(300, false);
 
         // Gamepad 2
         GamepadButton slideUpButton = new GamepadButton(300, false);
@@ -50,6 +54,8 @@ public class TeleOpBot extends LinearOpMode {
         long initTime = 0;
         boolean waitForArm = false;
 
+        double[] powerList = {0, 0, 0, 0};
+
         waitForStart();
         while(opModeIsActive()) {
             // CONTROLS
@@ -66,6 +72,11 @@ public class TeleOpBot extends LinearOpMode {
             boolean foundationUpBool = gamepad1.y;
 
             boolean fastHoldBool = gamepad1.right_bumper;
+
+            boolean fullForwardBool = gamepad1.dpad_up;
+            boolean fullBackwardBool = gamepad1.dpad_down;
+            boolean fullLeftBool = gamepad1.dpad_left;
+            boolean fullRightBool = gamepad1.dpad_right;
 
             // Gamepad 2
             double slide_y = gamepad2.left_stick_y;
@@ -94,6 +105,10 @@ public class TeleOpBot extends LinearOpMode {
             foundationInterButton.checkStatus(foundationInterBool);
             foundationUpButton.checkStatus(foundationUpBool);
             fastHoldButton.checkStatus(fastHoldBool);
+            fullForwardButton.checkStatus(fullForwardBool);
+            fullBackwardButton.checkStatus(fullBackwardBool);
+            fullLeftButton.checkStatus(fullLeftBool);
+            fullRightButton.checkStatus(fullRightBool);
 
             // Gamepad 2
             slideHomeButton.checkStatus(slideHome);
@@ -226,7 +241,18 @@ public class TeleOpBot extends LinearOpMode {
             }
 
             // MOVEMENT
-            double[] powerList = robot.mecanumMove(x, y, rotation, slowToggleButton.pressed, fastHoldButton.buttonStatus, telemetry);
+            if (fullForwardButton.buttonStatus) {
+                robot.setMotors(1, 1, 1, 1);
+            } else if (fullBackwardButton.buttonStatus) {
+                robot.setMotors(-1, -1, -1, -1);
+            } else if (fullLeftButton.buttonStatus) {
+                robot.setMotors(-1, 1, 1, -1);
+            } else if (fullRightButton.buttonStatus) {
+                robot.setMotors(1, -1, -1, 1);
+            } else {
+                rotation = Math.abs(rotation) < .1 ? 0 : rotation; // "Dead-zone" for joystick
+                powerList = robot.mecanumMove(x, y, rotation, slowToggleButton.pressed, fastHoldButton.buttonStatus, telemetry);
+            }
 
             telemetry.addData("LF Pos: ", robot.LFmotor.getCurrentPosition());
             telemetry.addData("LF Pow: ", Math.round(powerList[0] * 100.0) / 100.0);
