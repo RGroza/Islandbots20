@@ -29,6 +29,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.RoadRunner.util.DashboardUtil;
 import org.firstinspires.ftc.teamcode.RoadRunner.util.LynxModuleUtil;
 
@@ -82,7 +83,7 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     private Pose2d lastPoseOnTurn;
 
-    public SampleMecanumDrive(HardwareMap hardwareMap) {
+    public SampleMecanumDrive(HardwareMap hardwareMap, Telemetry telemetry) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
         dashboard = FtcDashboard.getInstance();
@@ -144,6 +145,9 @@ public class SampleMecanumDrive extends MecanumDrive {
 
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
+
+        telemetry.addLine("Successfully Initialized!");
+        telemetry.update();
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
