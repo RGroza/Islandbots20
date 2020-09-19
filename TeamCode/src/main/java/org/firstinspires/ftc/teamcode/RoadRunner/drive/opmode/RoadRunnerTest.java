@@ -13,7 +13,7 @@ public class RoadRunnerTest extends LinearOpMode {
     public static double DISTANCE = 10; // in
 
     public void runOpMode() throws InterruptedException {
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap, telemetry);
 
         // Build trajectory to strafe right
         Trajectory trajectory = drive.trajectoryBuilder(new Pose2d())
@@ -23,6 +23,9 @@ public class RoadRunnerTest extends LinearOpMode {
         waitForStart();
 
         if (isStopRequested()) return;
+
+        telemetry.addLine("Moving!");
+        telemetry.update();
 
         // Initiate trajectory
         drive.followTrajectory(trajectory);
