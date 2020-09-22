@@ -7,18 +7,17 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
+import org.firstinspires.ftc.teamcode.mode.AutonomousCommands;
 
 @Autonomous(name="RoadRunnerTest", group="Autonomous")
 public class RoadRunnerTest extends LinearOpMode {
-    public static double DISTANCE = 10; // in
+    public double DISTANCE = 10; // in
 
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap, telemetry);
-
-        // Build trajectory to strafe right
-        Trajectory trajectory = drive.trajectoryBuilder(new Pose2d())
-                .strafeRight(DISTANCE)
-                .build();
+//        CompetitionBot robot = new CompetitionBot(hardwareMap, telemetry);
+//        AutonomousCommands auto = new AutonomousCommands(robot);
 
         waitForStart();
 
@@ -28,33 +27,34 @@ public class RoadRunnerTest extends LinearOpMode {
         telemetry.update();
 
         // Initiate trajectory
-        drive.followTrajectory(trajectory);
+        drive.followTrajectory(drive.trajectoryBuilder(new Pose2d()).strafeRight(DISTANCE).build());
 
         sleep(2000);
 
         // Build trajectory to strafe left
-        trajectory = drive.trajectoryBuilder(new Pose2d())
-                .strafeLeft(DISTANCE)
-                .build();
+        drive.followTrajectory(drive.trajectoryBuilder(new Pose2d()).strafeLeft(DISTANCE).build());
 
-        drive.followTrajectory(trajectory);
+        sleep(2000);
+        drive.turn(Math.toRadians(90));
+        sleep(2000);
+        drive.turn(Math.toRadians(-90));
 
         sleep(2000);
 
         // Build trajectory to follow spline vector (30, 30)
-        trajectory = drive.trajectoryBuilder(new Pose2d())
-                .splineTo(new Vector2d(30, 30), 0)
+        Trajectory traj = drive.trajectoryBuilder(new Pose2d())
+                .strafeTo(new Vector2d(30, 50))
                 .build();
 
-        drive.followTrajectory(trajectory);
+        drive.followTrajectory(traj);
 
         sleep(2000);
 
         // Build trajectory to follow spline vector (0, 0)
-        trajectory = drive.trajectoryBuilder(new Pose2d())
-                .splineTo(new Vector2d(0, 0), 0)
+        traj = drive.trajectoryBuilder(traj.end(), true)
+                .strafeTo(new Vector2d(0, 0))
                 .build();
 
-        drive.followTrajectory(trajectory);
+        drive.followTrajectory(traj);
     }
 }
