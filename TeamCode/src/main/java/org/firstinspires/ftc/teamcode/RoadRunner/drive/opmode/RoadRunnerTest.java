@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.mode.AutonomousCommands;
 
 @Autonomous(name="RoadRunnerTest", group="Autonomous")
 public class RoadRunnerTest extends LinearOpMode {
-    public double DISTANCE = 10; // in
 
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap, telemetry);
@@ -27,28 +26,36 @@ public class RoadRunnerTest extends LinearOpMode {
         telemetry.update();
 
         // Initiate trajectory
-        drive.followTrajectory(drive.trajectoryBuilder(new Pose2d()).strafeRight(DISTANCE).build());
+        drive.followTrajectory(drive.trajectoryBuilder(new Pose2d()).strafeRight(30).build());
 
-        sleep(2000);
+        sleep(500);
 
         // Build trajectory to strafe left
-        drive.followTrajectory(drive.trajectoryBuilder(new Pose2d()).strafeLeft(DISTANCE).build());
+        drive.followTrajectory(drive.trajectoryBuilder(new Pose2d()).strafeLeft(30).build());
 
-        sleep(2000);
-        drive.turn(Math.toRadians(90));
-        sleep(2000);
-        drive.turn(Math.toRadians(-90));
+// TODO: Debug non-functioning turning
+//        sleep(2000);
+//        drive.turn(Math.toRadians(90));
+//        sleep(2000);
+//        drive.turn(Math.toRadians(-90));
 
-        sleep(2000);
+        sleep(500);
 
-        // Build trajectory to follow spline vector (30, 30)
         Trajectory traj = drive.trajectoryBuilder(new Pose2d())
                 .strafeTo(new Vector2d(30, 50))
                 .build();
 
         drive.followTrajectory(traj);
 
-        sleep(2000);
+        sleep(500);
+
+        traj = drive.trajectoryBuilder(traj.end())
+                .strafeTo(new Vector2d(0, 50))
+                .build();
+
+        drive.followTrajectory(traj);
+
+        sleep(500);
 
         // Build trajectory to follow spline vector (0, 0)
         traj = drive.trajectoryBuilder(traj.end(), true)
