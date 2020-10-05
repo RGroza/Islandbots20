@@ -33,21 +33,25 @@ public class PixelTest extends LinearOpMode {
     WebcamName webcamName = null;
 
     @Override public void runOpMode() {
-        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        waitForStart();
 
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = webcamName;
+        while (opModeIsActive()) {
+            webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+            int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-        vuforia.enableConvertFrameToBitmap();
-        vuforia.setFrameQueueCapacity(1);
+            VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+            parameters.vuforiaLicenseKey = VUFORIA_KEY;
+            parameters.cameraName = webcamName;
 
-        telemetry.addData("ID: ", cameraMonitorViewId);
-        telemetry.addData("hwMap: ", hardwareMap);
-        telemetry.addData("vuforia: ", vuforia);
+            vuforia = ClassFactory.getInstance().createVuforia(parameters);
+            vuforia.enableConvertFrameToBitmap();
+            vuforia.setFrameQueueCapacity(1);
 
-        telemetry.update();
+            telemetry.addData("ID: ", cameraMonitorViewId);
+            telemetry.addData("hwMap: ", hardwareMap);
+            telemetry.addData("vuforia: ", vuforia);
+
+            telemetry.update();
+        }
     }
 }
