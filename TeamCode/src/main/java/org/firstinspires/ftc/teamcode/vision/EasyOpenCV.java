@@ -41,7 +41,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 
 @Autonomous(name="EasyOpenCV", group="Test")
-public class EasyOpenCVExample extends LinearOpMode
+public class EasyOpenCV extends LinearOpMode
 {
     OpenCvWebcam webcam;
     SkystoneDeterminationPipeline pipeline;
