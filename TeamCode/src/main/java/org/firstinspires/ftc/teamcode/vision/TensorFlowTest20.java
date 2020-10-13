@@ -27,15 +27,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.test;
+package org.firstinspires.ftc.teamcode.vision;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import java.util.List;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
@@ -49,8 +48,8 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "CameraTest", group = "Test")
-public class CameraTest extends LinearOpMode {
+@Autonomous(name = "TensorFlowTest20", group = "Test")
+public class TensorFlowTest20 extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";
     private static final String LABEL_SECOND_ELEMENT = "Skystone";
@@ -115,6 +114,7 @@ public class CameraTest extends LinearOpMode {
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
+
                         // step through the list of recognitions and display boundary info.
                         int i = 0;
                         for (Recognition recognition : updatedRecognitions) {
@@ -124,6 +124,7 @@ public class CameraTest extends LinearOpMode {
                             telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                                     recognition.getRight(), recognition.getBottom());
                         }
+                        telemetry.addData("block pattern: ", getBlockPattern(updatedRecognitions, true));
                         telemetry.update();
                     }
                 }
@@ -145,7 +146,7 @@ public class CameraTest extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        parameters.cameraDirection = CameraDirection.BACK;
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
@@ -163,5 +164,40 @@ public class CameraTest extends LinearOpMode {
         tfodParameters.minimumConfidence = 0.8;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+    }
+
+    public int getBlockPattern(List<Recognition> updatedRecogList, boolean isBlue) {
+        if (updatedRecogList.size() < 1) {
+            return -1;
+        }
+
+        Recognition leftmostBlock = updatedRecogList.get(0);
+        Recognition nextRecog;
+
+        float upper_A_thresh = 100;
+        float upper_B_thresh = 700;
+        float upper_C_thresh = 1200;
+
+        if (updatedRecogList.size() > 1) {
+            for (int r = 1; r < updatedRecogList.size(); r++) {
+                nextRecog = updatedRecogList.get(r);
+                if (nextRecog.getLeft() < leftmostBlock.getLeft()) {
+                    leftmostBlock = nextRecog;
+                }
+            }
+        }
+
+        int returnVal = -1;
+        if (leftmostBlock.getLeft() <= upper_A_thresh) {
+            returnVal = (isBlue) ? 0 : 2;
+            return returnVal;
+        } else if (leftmostBlock.getLeft() <= upper_B_thresh) {
+            returnVal = 1;
+            return returnVal;
+        } else if (leftmostBlock.getLeft() <= upper_C_thresh) {
+            returnVal = (isBlue) ? 2 : 0;
+            return returnVal;
+        }
+        return returnVal;
     }
 }
