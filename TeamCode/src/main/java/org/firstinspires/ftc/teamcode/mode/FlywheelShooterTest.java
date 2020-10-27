@@ -24,16 +24,19 @@ public class FlywheelShooterTest extends LinearOpMode {
         GamepadButton slowToggleButton = new GamepadButton(300, false);
         GamepadButton fastHoldButton = new GamepadButton(300, false);
         GamepadButton reverseToggleButton = new GamepadButton(300, false);
-        GamepadButton RingFeedButton = new GamepadButton(300, false);
-        GamepadButton WobbleArmToggleButon = new GamepadButton(300, false);
-        GamepadButton fullForwardButton = new GamepadButton(300, false);
-        GamepadButton fullBackwardButton = new GamepadButton(300, false);
-        GamepadButton fullLeftButton = new GamepadButton(300, false);
-        GamepadButton fullRightButton = new GamepadButton(300, false);
         GamepadButton intakeButton = new GamepadButton(300, false);
         GamepadButton reverseIntakeButton = new GamepadButton(300, false);
+        GamepadButton flywheelButton = new GamepadButton(300, false);
+        GamepadButton RingFeedButton = new GamepadButton(300, false);
+        GamepadButton WobbleArmToggleButon = new GamepadButton(300, false);
+        GamepadButton increaseFlywheelButton = new GamepadButton(300, false);
+        GamepadButton decreaseFlywheelButton = new GamepadButton(300, false);
+        GamepadButton increaseIntakeButton = new GamepadButton(300, false);
+        GamepadButton decreaseIntakeButton = new GamepadButton(300, false);
 
         double[] powerList = {0, 0, 0, 0};
+        double intakePower = .75;
+        double flywheelPower = .5;
 
         waitForStart();
         while(opModeIsActive()) {
@@ -44,30 +47,56 @@ public class FlywheelShooterTest extends LinearOpMode {
             double rotation = gamepad1.right_stick_x;
 
             boolean slowToggleBool = gamepad1.right_stick_button;
+            boolean fastHoldBool = gamepad1.right_bumper;
             boolean reverseToggleBool = gamepad1.left_stick_button;
 
+            boolean intakeBool = gamepad1.x;
+            boolean reverseIntakeBool = gamepad1.b;
+            boolean flywheelBool = gamepad1.y;
+
             boolean RingFeedBool = gamepad1.a;
-            boolean WobbleArmToggleBool = gamepad1.b;
+            boolean WobbleArmToggleBool = gamepad1.left_bumper;
 
-            boolean fastHoldBool = gamepad1.right_bumper;
-
-            boolean fullForwardBool = gamepad1.dpad_up;
-            boolean fullBackwardBool = gamepad1.dpad_down;
-            boolean fullLeftBool = gamepad1.dpad_left;
-            boolean fullRightBool = gamepad1.dpad_right;
+            boolean increaseFlywheelBool = gamepad1.dpad_up;
+            boolean decreaseFlywheelBool = gamepad1.dpad_down;
+            boolean increaseIntakeBool = gamepad1.dpad_right;
+            boolean decreaseIntakeBool = gamepad1.dpad_left;
 
             // BUTTON DEBOUNCE
             // Gamepad 1
             slowToggleButton.checkStatus(slowToggleBool);
+            fastHoldButton.checkStatus(fastHoldBool);
             reverseToggleButton.checkStatus(reverseToggleBool);
             RingFeedButton.checkStatus(RingFeedBool);
             WobbleArmToggleButon.checkStatus(WobbleArmToggleBool);
-            fastHoldButton.checkStatus(fastHoldBool);
-            fullForwardButton.checkStatus(fullForwardBool);
-            fullBackwardButton.checkStatus(fullBackwardBool);
-            fullLeftButton.checkStatus(fullLeftBool);
-            fullRightButton.checkStatus(fullRightBool);
+            increaseFlywheelButton.checkStatus(increaseFlywheelBool);
+            decreaseFlywheelButton.checkStatus(decreaseFlywheelBool);
+            increaseIntakeButton.checkStatus(increaseIntakeBool);
+            decreaseIntakeButton.checkStatus(decreaseIntakeBool);
+            intakeButton.checkStatus(intakeBool);
+            reverseIntakeButton.checkStatus(reverseIntakeBool);
+            flywheelButton.checkStatus(flywheelBool);
 
+
+            // Adjust Intake Power
+            if (intakePower > 0 && intakePower < 1) {
+                if (increaseIntakeButton.justPressed) {
+                    intakePower += .05;
+                }
+                if (decreaseIntakeButton.justPressed) {
+                    intakePower -= .05;
+                }
+            }
+
+            // Adjust Flywheel Power
+            if (flywheelPower > 0 && flywheelPower < 1) {
+                if (increaseFlywheelButton.justPressed) {
+                    flywheelPower += .05;
+                }
+                if (decreaseFlywheelButton.justPressed) {
+                    flywheelPower -= .05;
+                }
+            }
 
             if (reverseToggleButton.pressed) {
                 x = gamepad1.left_stick_x;
@@ -84,20 +113,20 @@ public class FlywheelShooterTest extends LinearOpMode {
                 }
             }
 
-            // MOVEMENT
-            if (fullForwardButton.buttonStatus) {
-                robot.setMotors(1, 1, 1, 1);
-            } else if (fullBackwardButton.buttonStatus) {
-                robot.setMotors(-1, -1, -1, -1);
-            } else if (fullLeftButton.buttonStatus) {
-                robot.setMotors(-1, 1, 1, -1);
-            } else if (fullRightButton.buttonStatus) {
-                robot.setMotors(1, -1, -1, 1);
+            if (flywheelButton.pressed) {
+                robot.IntakeMotor.setPower(flywheelPower);
             } else {
-                rotation = Math.abs(rotation) < .1 ? 0 : rotation; // "Dead-zone" for joystick
-                powerList = robot.mecanumMove(x, y, rotation, slowToggleButton.pressed, fastHoldButton.buttonStatus, telemetry);
+                robot.IntakeMotor.setPower(0);
             }
 
+
+            // MOVEMENT
+            rotation = Math.abs(rotation) < .1 ? 0 : rotation; // "Dead-zone" for joystick
+            powerList = robot.mecanumMove(x, y, rotation, slowToggleButton.pressed, fastHoldButton.buttonStatus, telemetry);
+
+
+            telemetry.addData("flywheelPower: ", flywheelPower);
+            telemetry.addData("intakePower: ", intakePower);
             telemetry.addData("LF Pos: ", robot.LFmotor.getCurrentPosition());
             telemetry.addData("LF Pow: ", Math.round(powerList[0] * 100.0) / 100.0);
             telemetry.addData("LB Pos: ", robot.LBmotor.getCurrentPosition());
@@ -111,8 +140,6 @@ public class FlywheelShooterTest extends LinearOpMode {
             telemetry.addData("X: ", slowToggleButton.pressed);
             Orientation angOrientation = robot.gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             telemetry.addData("Orientation", angOrientation.firstAngle);
-            telemetry.addData("Slide Pos: ", robot.SlideMotor.getCurrentPosition());
-            telemetry.addData("Sonar: ", robot.sonarDistance.getVoltage());
             telemetry.update();
 
         }
