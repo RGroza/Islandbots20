@@ -47,6 +47,9 @@ public class EasyOpenCV extends LinearOpMode
     SkystoneDeterminationPipeline pipeline;
     WebcamName webcamName = null;
 
+    static final int STREAM_WIDTH = 640;
+    static final int STREAM_HEIGHT = 480;
+
     @Override
     public void runOpMode()
     {
@@ -67,7 +70,7 @@ public class EasyOpenCV extends LinearOpMode
             @Override
             public void onOpened()
             {
-                webcam.startStreaming(640,480, OpenCvCameraRotation.SIDEWAYS_LEFT);
+                webcam.startStreaming(STREAM_WIDTH, STREAM_HEIGHT, OpenCvCameraRotation.SIDEWAYS_LEFT);
             }
         });
 
@@ -105,10 +108,10 @@ public class EasyOpenCV extends LinearOpMode
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(280,210);
-
-        static final int REGION_WIDTH = 80;
-        static final int REGION_HEIGHT = 60;
+        static final int REGION_WIDTH = 225;
+        static final int REGION_HEIGHT = 300;
+//        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(STREAM_HEIGHT - REGION_HEIGHT / 2, STREAM_WIDTH - REGION_WIDTH / 2);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(160, 260);
 
         final int FOUR_RING_THRESHOLD = 150;
         final int ONE_RING_THRESHOLD = 135;
@@ -138,7 +141,9 @@ public class EasyOpenCV extends LinearOpMode
         void inputToCb(Mat input)
         {
             Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
+            Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2HSV);
             Core.extractChannel(YCrCb, Cb, 1);
+            Core.extractChannel(HSV, Cb, 1);
         }
 
         @Override
