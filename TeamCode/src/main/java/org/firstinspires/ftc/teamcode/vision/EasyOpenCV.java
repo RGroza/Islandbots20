@@ -47,8 +47,8 @@ public class EasyOpenCV extends LinearOpMode
     SkystoneDeterminationPipeline pipeline;
     WebcamName webcamName = null;
 
-    static final int STREAM_WIDTH = 1280;
-    static final int STREAM_HEIGHT = 720;
+    static final int STREAM_WIDTH = 640;
+    static final int STREAM_HEIGHT = 360;
 
     @Override
     public void runOpMode()
@@ -70,7 +70,7 @@ public class EasyOpenCV extends LinearOpMode
             @Override
             public void onOpened()
             {
-                webcam.startStreaming(STREAM_WIDTH, STREAM_HEIGHT, OpenCvCameraRotation.SIDEWAYS_LEFT);
+                webcam.startStreaming(STREAM_WIDTH, STREAM_HEIGHT, OpenCvCameraRotation.UPRIGHT);
             }
         });
 
@@ -108,13 +108,12 @@ public class EasyOpenCV extends LinearOpMode
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final int REGION_WIDTH = 280;
-        static final int REGION_HEIGHT = 320;
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((STREAM_WIDTH - REGION_WIDTH) / 2, (STREAM_HEIGHT - REGION_HEIGHT) / 2);
-//        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(500, 200);
+        static final int REGION_WIDTH = 190;
+        static final int REGION_HEIGHT = 170;
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((STREAM_WIDTH - REGION_WIDTH) / 2, ((STREAM_HEIGHT - REGION_HEIGHT) / 2) + 20);
 
-        final int FOUR_RING_THRESHOLD = 150;
-        final int ONE_RING_THRESHOLD = 135;
+        final int FOUR_RING_THRESHOLD = 137;
+        final int ONE_RING_THRESHOLD = 130;
 
         Point region1_pointA = new Point(
                 REGION1_TOPLEFT_ANCHOR_POINT.x,
@@ -132,7 +131,7 @@ public class EasyOpenCV extends LinearOpMode
         int avg1;
 
         // Volatile since accessed by OpMode thread w/o synchronization
-        private volatile RingPosition position = RingPosition.FOUR;
+        private volatile RingPosition position = RingPosition.NONE;
 
         /*
          * This function takes the RGB frame, converts to YCrCb,
@@ -165,14 +164,14 @@ public class EasyOpenCV extends LinearOpMode
                     region1_pointA, // First point which defines the rectangle
                     region1_pointB, // Second point which defines the rectangle
                     BLUE, // The color the rectangle is drawn in
-                    2); // Thickness of the rectangle lines
+                    1); // Thickness of the rectangle lines
 
-            position = RingPosition.FOUR; // Record our analysis
-            if(avg1 > FOUR_RING_THRESHOLD){
+            position = RingPosition.NONE; // Record our analysis
+            if (avg1 >= FOUR_RING_THRESHOLD) {
                 position = RingPosition.FOUR;
-            }else if (avg1 > ONE_RING_THRESHOLD){
+            } else if (avg1 >= ONE_RING_THRESHOLD) {
                 position = RingPosition.ONE;
-            }else{
+            } else {
                 position = RingPosition.NONE;
             }
 
@@ -181,7 +180,7 @@ public class EasyOpenCV extends LinearOpMode
                     region1_pointA, // First point which defines the rectangle
                     region1_pointB, // Second point which defines the rectangle
                     GREEN, // The color the rectangle is drawn in
-                    -1); // Negative thickness means solid fill
+                    1); // Negative thickness means solid fill
 
             return input;
         }
