@@ -21,10 +21,10 @@
 
 package org.firstinspires.ftc.teamcode.vision;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -34,37 +34,26 @@ import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvWebcam;
 import org.openftc.easyopencv.OpenCvPipeline;
+import org.openftc.easyopencv.OpenCvWebcam;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
+public class RingsOpenCV {
+    private OpenCvWebcam webcam;
+    private SkystoneDeterminationPipeline pipeline;
+    private WebcamName webcamName = null;
 
-@Autonomous(name="EasyOpenCV", group="Test")
-public class EasyOpenCV extends LinearOpMode
-{
-    OpenCvWebcam webcam;
-    SkystoneDeterminationPipeline pipeline;
-    WebcamName webcamName = null;
+    private static final int STREAM_WIDTH = 640;
+    private static final int STREAM_HEIGHT = 360;
 
-    static final int STREAM_WIDTH = 640;
-    static final int STREAM_HEIGHT = 360;
-
-    @Override
-    public void runOpMode()
-    {
-
-        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+    public RingsOpenCV(HardwareMap hwMap, Telemetry telemetry) {
+        webcamName = hwMap.get(WebcamName.class, "Webcam 1");
+        int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
         pipeline = new SkystoneDeterminationPipeline();
         webcam.setPipeline(pipeline);
 
-        // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
-        // out when the RC activity is in portrait. We do our actual image processing assuming
-        // landscape orientation, though.
 //        webcam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
-
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override
@@ -74,17 +63,14 @@ public class EasyOpenCV extends LinearOpMode
             }
         });
 
-        waitForStart();
+        telemetry.addLine("Webcam Init Successful");
+        telemetry.update();
+    }
 
-        while (opModeIsActive())
-        {
-            telemetry.addData("Analysis", pipeline.getAnalysis());
-            telemetry.addData("Position", pipeline.position);
-            telemetry.update();
-
-            // Don't burn CPU cycles busy-looping in this sample
-            sleep(50);
-        }
+    public void analyzeRings(Telemetry telemetry) {
+        telemetry.addData("Analysis", pipeline.getAnalysis());
+        telemetry.addData("Position", pipeline.position);
+        telemetry.update();
     }
 
     public static class SkystoneDeterminationPipeline extends OpenCvPipeline
