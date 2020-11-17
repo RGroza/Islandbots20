@@ -10,8 +10,11 @@ public class RingsVisionTest extends LinearOpMode {
         RingsOpenCV vision = new RingsOpenCV(hardwareMap, telemetry);
 
         waitForStart();
-        vision.analyzeRings(telemetry);
-        sleep(50);
+
+        while (opModeIsActive()) {
+            vision.analyzeRings(telemetry);
+            sleep(50);
+        }
     }
 
 }
