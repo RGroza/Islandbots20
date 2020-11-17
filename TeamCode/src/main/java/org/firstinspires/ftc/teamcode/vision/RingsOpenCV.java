@@ -73,6 +73,14 @@ public class RingsOpenCV {
         telemetry.update();
     }
 
+    public int getAnalysis() {
+        return pipeline.getAnalysis();
+    }
+
+    public String getPosition() {
+        return pipeline.position.toString();
+    }
+
     public static class SkystoneDeterminationPipeline extends OpenCvPipeline
     {
         /*
