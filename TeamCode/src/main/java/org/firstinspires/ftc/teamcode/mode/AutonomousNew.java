@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 import org.firstinspires.ftc.teamcode.robot.PIDController;
+import org.firstinspires.ftc.teamcode.vision.RingsOpenCV;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import static java.lang.Math.abs;
@@ -23,6 +24,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     private PIDController PIDHeadingCorrect = new PIDController(.01, .075, .15);
     private PIDController PIDRampSpeed = new PIDController(.1, 0, .5);
     private PIDController PIDTurn = new PIDController(.025, .001, .075);
+    RingsOpenCV vision =  new RingsOpenCV(hardwareMap, telemetry);
 
     public void initPIDCorrection() {
         PIDHeadingCorrect.setOutputLimits(-.05, .05);
@@ -556,6 +558,72 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.SlideMotor.setPower(0);
+    }
+
+    //2020-2021 Code
+
+    public void blueMainAuto(Telemetry telemetry) {
+        String numRings = vision.getPosition();
+
+        double angle = robot.getPitch();
+
+        forward(0.5, 10, angle, true, true, telemetry);
+        detectLineAndStop(true, false, 0.3, 1, angle, telemetry);
+        backward(0.5, 1, angle, true, false, telemetry);
+
+        //Shoot powershot targets
+
+        if(numRings.equals("NONE")) {
+            left(0.5, 5, angle, true);
+            detectLineAndStop(true, false, 0.3, 1, angle, telemetry);
+
+            //Drop wobble goal (turning in method)
+        }
+        else if(numRings.equals("ONE")) {
+            left(0.5, 3, angle, true);
+
+            //Add color parameter to detect line so we can detect blue line here
+            forward(0.5, 5, angle, true, true, telemetry);;
+            detectLineAndStop(true, false, 0.3, 1, angle, telemetry);
+
+            //Drop wobble goal (turning in method)
+
+            backward(0.5, 4, angle, true, true, telemetry);;
+            detectLineAndStop(false, false, 0.3, 1, angle, telemetry);
+
+            //Move back and intake
+
+            forward(0.5, 4, angle, true, true, telemetry);;
+            detectLineAndStop(true, false, 0.3, 1, angle, telemetry);
+            backward(0.5, 1, angle, true, false, telemetry);
+
+            //Shoot into top goal
+
+            detectLineAndStop(true, true, 0.3, 1, angle, telemetry);
+        }
+        else {
+            left(0.5, 5, angle, true);
+
+            //Add color parameter to detect line so we can detect blue line here
+            forward(0.5, 5, angle, true, true, telemetry);;
+            detectLineAndStop(true, false, 0.3, 1, angle, telemetry);
+
+            //Drop wobble goal (turning in method)
+
+            backward(0.5, 4, angle, true, true, telemetry);;
+            detectLineAndStop(false, false, 0.3, 1, angle, telemetry);
+            right(0.5, 2, angle,true);
+
+            //Move back and intake 3 rings
+
+            forward(0.5, 4, angle, true, true, telemetry);;
+            detectLineAndStop(true, false, 0.3, 1, angle, telemetry);
+            backward(0.5, 1, angle, true, false, telemetry);
+
+            //Shoot 3x into top goal
+
+            detectLineAndStop(true, true, 0.3, 1, angle, telemetry);
+        }
     }
 
     public void detectLineAndStop(boolean isForward, boolean parkOnLine, double speed, double maxDist, double targetPitch, Telemetry telemetry) {
