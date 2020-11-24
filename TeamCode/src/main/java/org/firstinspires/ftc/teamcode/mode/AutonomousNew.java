@@ -43,9 +43,9 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         double angle = robot.getPitch();
 
-        forward(0.5, 10, angle, true, true, telemetry);
+        forward(0.25, 4, angle, true, true, telemetry);
         detectLineAndStop(true, false, 0.3, 1, angle, telemetry);
-        backward(0.5, 1, angle, true, false, telemetry);
+        backward(0.25, 1, angle, true, false, telemetry);
 
         //Shoot powershot targets
 
