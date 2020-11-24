@@ -21,7 +21,6 @@ public abstract class AutonomousNew extends LinearOpMode {
     private PIDController PIDHeadingCorrect = new PIDController(.01, .075, .15);
     private PIDController PIDRampSpeed = new PIDController(.1, 0, .5);
     private PIDController PIDTurn = new PIDController(.025, .001, .075);
-    RingsOpenCV vision =  new RingsOpenCV(hardwareMap, telemetry);
 
     public void initPIDCorrection() {
         PIDHeadingCorrect.setOutputLimits(-.05, .05);
@@ -39,7 +38,7 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
 
-    public void blueMainAuto(Telemetry telemetry) {
+    public void blueMainAuto(RingsOpenCV vision, Telemetry telemetry) {
         String numRings = vision.getPosition();
 
         double angle = robot.getPitch();
