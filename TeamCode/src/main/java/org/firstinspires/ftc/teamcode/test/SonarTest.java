@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.AnalogInput;
 
 import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 
@@ -14,7 +13,7 @@ public class SonarTest extends LinearOpMode {
 
         waitForStart();
         while(opModeIsActive()) {
-            telemetry.addData("Voltage: ", robot.sonarDistance.getVoltage());
+//            telemetry.addData("Voltage: ", robot.sonarDistance.getVoltage());
             telemetry.update();
         }
     }

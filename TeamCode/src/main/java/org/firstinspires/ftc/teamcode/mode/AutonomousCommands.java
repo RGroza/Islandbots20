@@ -5,10 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 import org.firstinspires.ftc.teamcode.robot.PIDController;
-import org.firstinspires.ftc.teamcode.robot.VuforiaDetector;
 
 import static java.lang.Math.abs;
 
@@ -322,22 +320,7 @@ public class AutonomousCommands extends LinearOpMode {
         robot.RBmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void moveUntilLaser(boolean frontSensor, double speed, double distance, double maxRevs, double targetPitch, boolean PIDCorrect, boolean PIDRamp) {
-        if (frontSensor) {
-            if (robot.frontDistance.getDistance(DistanceUnit.CM) - distance > 0) {
-                forwardUntilLaser(frontSensor, speed, distance, maxRevs, targetPitch, PIDCorrect, PIDRamp);
-            } else {
-                backwardUntilLaser(frontSensor, speed, distance, maxRevs, targetPitch, PIDCorrect, PIDRamp);
-            }
-        } else {
-            if (robot.backDistance.getDistance(DistanceUnit.CM) - distance > 0) {
-                backwardUntilLaser(frontSensor, speed, distance, maxRevs, targetPitch, PIDCorrect, PIDRamp);
-            } else {
-                forwardUntilLaser(frontSensor, speed, distance, maxRevs, targetPitch, PIDCorrect, PIDRamp);
-            }
-        }
-    }
-
+/*
     public void moveUntilSonar(double speed, double voltage, double maxRevs, double targetPitch, boolean PIDCorrect, boolean PIDRamp) {
         if (voltage - robot.sonarDistance.getVoltage() > 0) {
             backwardUntilSonar(speed, voltage, maxRevs, targetPitch, PIDCorrect, PIDRamp);
@@ -345,6 +328,7 @@ public class AutonomousCommands extends LinearOpMode {
             forwardUntilSonar(speed, voltage, maxRevs, targetPitch, PIDCorrect, PIDRamp);
         }
     }
+*/
 
     public void forward(double speed, double revCount, double targetPitch, boolean PIDCorrect, boolean PIDRamp, Telemetry telemetry) {
         int stepCount = (int) (revCount*CompetitionBot.DRIVETAIN_PPR);
@@ -416,6 +400,7 @@ public class AutonomousCommands extends LinearOpMode {
         robot.setMotors(0,0,0,0);
     }
 
+/*
     public void forwardUntilLaser(boolean frontSensor, double speed, double distance, double maxRevs, double targetPitch, boolean PIDCorrect, boolean PIDRamp) {
         double currentVal = frontSensor ? robot.frontDistance.getDistance(DistanceUnit.CM)
                 : robot.backDistance.getDistance(DistanceUnit.CM);
@@ -492,6 +477,22 @@ public class AutonomousCommands extends LinearOpMode {
         robot.setMotors(0,0,0,0);
     }
 
+    public void moveUntilLaser(boolean frontSensor, double speed, double distance, double maxRevs, double targetPitch, boolean PIDCorrect, boolean PIDRamp) {
+        if (frontSensor) {
+            if (robot.frontDistance.getDistance(DistanceUnit.CM) - distance > 0) {
+                forwardUntilLaser(frontSensor, speed, distance, maxRevs, targetPitch, PIDCorrect, PIDRamp);
+            } else {
+                backwardUntilLaser(frontSensor, speed, distance, maxRevs, targetPitch, PIDCorrect, PIDRamp);
+            }
+        } else {
+            if (robot.backDistance.getDistance(DistanceUnit.CM) - distance > 0) {
+                backwardUntilLaser(frontSensor, speed, distance, maxRevs, targetPitch, PIDCorrect, PIDRamp);
+            } else {
+                forwardUntilLaser(frontSensor, speed, distance, maxRevs, targetPitch, PIDCorrect, PIDRamp);
+            }
+        }
+    }
+
     public void forwardUntilSonar(double speed, double voltage, double maxRevs, double targetPitch, boolean PIDCorrect, boolean PIDRamp) {
         double currentVal = robot.sonarDistance.getVoltage();
         double targetVal = voltage;
@@ -566,6 +567,7 @@ public class AutonomousCommands extends LinearOpMode {
         }
         robot.setMotors(0,0,0,0);
     }
+*/
 
     public void backward(double speed, double revCount, double targetPitch, boolean PIDCorrect, boolean PIDRamp, Telemetry telemetry) {
         int stepCount = (int) (revCount*CompetitionBot.DRIVETAIN_PPR);
@@ -637,6 +639,7 @@ public class AutonomousCommands extends LinearOpMode {
         robot.setMotors(0,0,0,0);
     }
 
+/*
     public void backwardUntilLaser(boolean frontSensor, double speed, double distance, double maxRevs, double targetPitch, boolean PIDCorrect, boolean PIDRamp) {
         double currentVal = frontSensor ? robot.frontDistance.getDistance(DistanceUnit.CM)
                 : robot.backDistance.getDistance(DistanceUnit.CM);
@@ -787,6 +790,7 @@ public class AutonomousCommands extends LinearOpMode {
         }
         robot.setMotors(0,0,0,0);
     }
+*/
 
     public void left(double speed, double revCount, double targetPitch, boolean PIDCorrect) {
         int stepCount = (int) (revCount*CompetitionBot.DRIVETAIN_PPR);

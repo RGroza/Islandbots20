@@ -15,6 +15,10 @@ import org.firstinspires.ftc.teamcode.robot.GamepadButton;
 @TeleOp(name="TeleOpBot", group="Competition")
 public class FlywheelShooterTest extends LinearOpMode {
 
+    public boolean waitAndContinue(long initTime, long duration) {
+        return (System.currentTimeMillis() - initTime > duration);
+    }
+
     @Override
     public void runOpMode() throws InterruptedException {
         CompetitionBot robot = new CompetitionBot(hardwareMap, telemetry);
@@ -24,15 +28,20 @@ public class FlywheelShooterTest extends LinearOpMode {
         GamepadButton slowToggleButton = new GamepadButton(300, false);
         GamepadButton fastHoldButton = new GamepadButton(300, false);
         GamepadButton reverseToggleButton = new GamepadButton(300, false);
+
         GamepadButton intakeButton = new GamepadButton(300, false);
         GamepadButton reverseIntakeButton = new GamepadButton(300, false);
         GamepadButton flywheelButton = new GamepadButton(300, false);
-        GamepadButton RingFeedButton = new GamepadButton(300, false);
-        GamepadButton WobbleArmToggleButon = new GamepadButton(300, false);
+        GamepadButton ringFeedButton = new GamepadButton(300, false);
+        GamepadButton grabberButton = new GamepadButton(300, false);
+        GamepadButton armRotateButton = new GamepadButton(300, false);
         GamepadButton increaseFlywheelButton = new GamepadButton(300, false);
         GamepadButton decreaseFlywheelButton = new GamepadButton(300, false);
         GamepadButton increaseIntakeButton = new GamepadButton(300, false);
         GamepadButton decreaseIntakeButton = new GamepadButton(300, false);
+        GamepadButton slideHomeButton = new GamepadButton(300, false);
+        GamepadButton slideUpButton = new GamepadButton(300, false);
+        GamepadButton slideDownButton = new GamepadButton(300, false);
 
         double[] powerList = {0, 0, 0, 0};
         double intakePower = .75;
@@ -50,25 +59,36 @@ public class FlywheelShooterTest extends LinearOpMode {
             boolean fastHoldBool = gamepad1.right_bumper;
             boolean reverseToggleBool = gamepad1.left_stick_button;
 
+            // Gamepad 2
             boolean intakeBool = gamepad1.x;
             boolean reverseIntakeBool = gamepad1.b;
             boolean flywheelBool = gamepad1.y;
 
-            boolean RingFeedBool = gamepad1.a;
-            boolean WobbleArmToggleBool = gamepad1.left_bumper;
+            boolean ringFeedBool = gamepad1.a;
+            boolean grabberBool = gamepad1.left_bumper;
+            boolean armRotateBool = gamepad1.right_bumper;
 
             boolean increaseFlywheelBool = gamepad1.dpad_up;
             boolean decreaseFlywheelBool = gamepad1.dpad_down;
             boolean increaseIntakeBool = gamepad1.dpad_right;
             boolean decreaseIntakeBool = gamepad1.dpad_left;
 
+            double slide_y = gamepad2.left_stick_y;
+            boolean slideHome = gamepad2.a;
+
+            boolean slideUpBool = gamepad2.dpad_up;
+            boolean slideDownBool = gamepad2.dpad_down;
+
             // BUTTON DEBOUNCE
             // Gamepad 1
             slowToggleButton.checkStatus(slowToggleBool);
             fastHoldButton.checkStatus(fastHoldBool);
             reverseToggleButton.checkStatus(reverseToggleBool);
-            RingFeedButton.checkStatus(RingFeedBool);
-            WobbleArmToggleButon.checkStatus(WobbleArmToggleBool);
+
+            // Gamepad 2
+            ringFeedButton.checkStatus(ringFeedBool);
+            grabberButton.checkStatus(grabberBool);
+            armRotateButton.checkStatus(armRotateBool);
             increaseFlywheelButton.checkStatus(increaseFlywheelBool);
             decreaseFlywheelButton.checkStatus(decreaseFlywheelBool);
             increaseIntakeButton.checkStatus(increaseIntakeBool);
@@ -76,7 +96,14 @@ public class FlywheelShooterTest extends LinearOpMode {
             intakeButton.checkStatus(intakeBool);
             reverseIntakeButton.checkStatus(reverseIntakeBool);
             flywheelButton.checkStatus(flywheelBool);
+            slideHomeButton.checkStatus(slideHome);
+            slideUpButton.checkStatus(slideUpBool);
+            slideDownButton.checkStatus(slideDownBool);
 
+            boolean slideActive = false;
+
+            long initTime = 0;
+            boolean waitForArm = false;
 
             // Adjust Intake Power
             if (intakePower > 0 && intakePower < 1) {
@@ -119,6 +146,66 @@ public class FlywheelShooterTest extends LinearOpMode {
                 robot.IntakeMotor.setPower(0);
             }
 
+            if (grabberButton.pressed) {
+                robot.grabberServo.setPosition(robot.GRABBER_OPEN);
+            } else {
+                robot.grabberServo.setPosition(robot.GRABBER_CLOSED);
+            }
+
+            if (armRotateButton.pressed) {
+                robot.grabberServo.setPosition(robot.ARM_OUT);
+            } else {
+                robot.grabberServo.setPosition(robot.ARM_IN);
+            }
+
+            // Linear slide
+            if (slide_y > .05) {
+                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robot.SlideMotor.setPower(slide_y * slide_y);
+                slideActive = true;
+            } else if (slide_y < -.05) {
+                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robot.SlideMotor.setPower(-(slide_y * slide_y));
+                slideActive = true;
+            } else if (slideUpButton.buttonStatus) {
+                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robot.SlideMotor.setPower(-.75);
+                slideActive = true;
+            } else if (slideDownButton.buttonStatus) {
+                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robot.SlideMotor.setPower(.75);
+                slideActive = true;
+            } else {
+                // no active control
+                if (slideActive) {
+                    // slide was active in previous loop - so we just released controls
+                    robot.SlideMotor.setTargetPosition(robot.SlideMotor.getCurrentPosition() + 10);
+                    robot.SlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.SlideMotor.setPower(.5);
+                    slideActive = false;
+                }
+            }
+
+            if (slideHomeButton.pressed) {
+                if (robot.armRotateServo.getPosition() == CompetitionBot.ARM_OUT) {
+                    robot.armRotateServo.setPosition(CompetitionBot.ARM_IN);
+                    armRotateButton.pressedSwitchStatus();
+
+                    initTime = System.currentTimeMillis();
+                    waitForArm = false;
+                    if (robot.SlideMotor.getCurrentPosition() > -1500) waitForArm = true;
+                }
+                if (!waitForArm || waitAndContinue(initTime, 500)) {
+                    robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    if (robot.SlideMotor.getCurrentPosition() < -100) {
+                        robot.SlideMotor.setPower(.75);
+                    }
+                    else {
+                        robot.SlideMotor.setPower(0);
+                        slideHomeButton.pressedSwitchStatus();
+                    }
+                }
+            }
 
             // MOVEMENT
             rotation = Math.abs(rotation) < .1 ? 0 : rotation; // "Dead-zone" for joystick

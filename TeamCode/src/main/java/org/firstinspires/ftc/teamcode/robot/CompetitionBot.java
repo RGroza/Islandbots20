@@ -1,13 +1,8 @@
 package org.firstinspires.ftc.teamcode.robot;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -21,13 +16,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 public class CompetitionBot {
     // sensors
     public BNO055IMU gyro;
-    public AnalogInput sonarDistance;
-    public DistanceSensor frontDistance, backDistance;
+//    public AnalogInput sonarDistance;
+//    public DistanceSensor frontDistance, backDistance;
     public NormalizedColorSensor LcolorSensor, RcolorSensor;
 
     // motors
-    public DcMotor RFmotor, RBmotor, LFmotor, LBmotor, SlideMotor, IntakeMotor, TapeMeasure, LEDPower;
-    public Servo grabberServo, armRotateServo, capStoneServo, Lfoundation, Rfoundation, LbeamServo, RbeamServo;
+    public DcMotor RFmotor, RBmotor, LFmotor, LBmotor, SlideMotor, IntakeMotor, FlyWheelMotor, LEDPower;
+    public Servo grabberServo, armRotateServo, ringFeedServo;
 
     // Servo constants
     public static final double GRABBER_OPEN = .7;
@@ -35,21 +30,6 @@ public class CompetitionBot {
 
     public static final double ARM_OUT = .61;
     public static final double ARM_IN = .25;
-
-    public static final double L_FOUND_UP = .27;
-    public static final double L_FOUND_INTER = .62;
-    public static final double L_FOUND_DOWN = .74;
-    public static final double R_FOUND_UP = .4;
-    public static final double R_FOUND_INTER = .75;
-    public static final double R_FOUND_DOWN = .28;
-
-    public static final double CAPSTONE_OPEN = .6;
-    public static final double CAPSTONE_CLOSED = .2;
-
-    public static final double L_BEAM_UP = .65;
-    public static final double L_BEAM_DOWN = .17;
-    public static final double R_BEAM_UP = .7;
-    public static final double R_BEAM_DOWN = .28;
 
     public static final double MAX_SPEED = .7;
 
@@ -71,7 +51,7 @@ public class CompetitionBot {
         SlideMotor = hwMap.dcMotor.get("SlideMotor");
         IntakeMotor = hwMap.dcMotor.get("IntakeMotor");
         LEDPower = hwMap.dcMotor.get("LEDPower");
-        TapeMeasure = hwMap.dcMotor.get("TapeMeasure");
+        FlyWheelMotor = hwMap.dcMotor.get("TapeMeasure");
 
         // gyro hwMap
         gyro = hwMap.get(BNO055IMU.class, "gyro");
@@ -81,11 +61,11 @@ public class CompetitionBot {
         RcolorSensor = hwMap.get(NormalizedColorSensor.class, "RcolorSensor");
 
         // analog sensors
-        sonarDistance = hwMap.analogInput.get("sonarDistance");
+//        sonarDistance = hwMap.analogInput.get("sonarDistance");
 
         // distance sensors
-        frontDistance = hwMap.get(DistanceSensor.class, "frontDistance");
-        backDistance = hwMap.get(DistanceSensor.class, "backDistance");
+//        frontDistance = hwMap.get(DistanceSensor.class, "frontDistance");
+//        backDistance = hwMap.get(DistanceSensor.class, "backDistance");
 
         // motor encoders init
         resetEncoders();
@@ -97,20 +77,11 @@ public class CompetitionBot {
         // servos
         grabberServo = hwMap.servo.get("grabberServo");
         armRotateServo = hwMap.servo.get("armRotateServo");
-        capStoneServo = hwMap.servo.get("capStoneServo");
-        Lfoundation = hwMap.servo.get("Lfoundation");
-        Rfoundation = hwMap.servo.get("Rfoundation");
-        LbeamServo = hwMap.servo.get("LbeamServo");
-        RbeamServo = hwMap.servo.get("RbeamServo");
-        // TODO: move servos to initial positions
-
-        Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
-        Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
         grabberServo.setPosition(CompetitionBot.GRABBER_OPEN);
-        LbeamServo.setPosition(CompetitionBot.L_BEAM_UP);
-        RbeamServo.setPosition(CompetitionBot.R_BEAM_UP);
 
+        // gyro
         gyro.initialize(parameters);
+
         telemetry.addData("Successfully Initialized", null);
         telemetry.update();
     }

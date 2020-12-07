@@ -1,15 +1,15 @@
 package org.firstinspires.ftc.teamcode.mode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
-import org.firstinspires.ftc.teamcode.robot.GamepadButton;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
+import org.firstinspires.ftc.teamcode.robot.GamepadButton;
 
 
 @TeleOp(name="TeleOpBot", group="Competition")
@@ -189,11 +189,11 @@ public class TeleOpBot extends LinearOpMode {
                 robot.armRotateServo.setPosition(CompetitionBot.ARM_IN);
             }
 
-            if (capStoneButton.pressed) {
-                robot.capStoneServo.setPosition(CompetitionBot.CAPSTONE_OPEN);
-            } else {
-                robot.capStoneServo.setPosition(CompetitionBot.CAPSTONE_CLOSED);
-            }
+//            if (capStoneButton.pressed) {
+//                robot.capStoneServo.setPosition(CompetitionBot.CAPSTONE_OPEN);
+//            } else {
+//                robot.capStoneServo.setPosition(CompetitionBot.CAPSTONE_CLOSED);
+//            }
 
             if (reverseIntakeButton.buttonStatus) {
                 robot.IntakeMotor.setPower(-1);
@@ -205,40 +205,40 @@ public class TeleOpBot extends LinearOpMode {
                 }
             }
 
-            if (foundationDownButton.justPressed) {
-                robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
-                robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
-                foundationUpButton.pressed = false;
-                foundationInterButton.pressed = false;
-            }
-            if (foundationInterButton.justPressed) {
-                robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_INTER);
-                robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_INTER);
-                foundationDownButton.pressed = false;
-                foundationUpButton.pressed = false;
-            }
-            if (foundationUpButton.justPressed) {
-                robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
-                robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
-                foundationDownButton.pressed = false;
-                foundationInterButton.pressed = false;
-            }
-
-            if (tapeMeasureOutButton.buttonStatus) {
-                robot.TapeMeasure.setPower(1);
-            } else if (tapeMeasureInButton.buttonStatus) {
-                robot.TapeMeasure.setPower(-1);
-            } else {
-                robot.TapeMeasure.setPower(0);
-            }
-
-            if (beamsButton.pressed) {
-                robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_DOWN);
-                robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_DOWN);
-            } else {
-                robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_UP);
-                robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_UP);
-            }
+//            if (foundationDownButton.justPressed) {
+//                robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
+//                robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
+//                foundationUpButton.pressed = false;
+//                foundationInterButton.pressed = false;
+//            }
+//            if (foundationInterButton.justPressed) {
+//                robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_INTER);
+//                robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_INTER);
+//                foundationDownButton.pressed = false;
+//                foundationUpButton.pressed = false;
+//            }
+//            if (foundationUpButton.justPressed) {
+//                robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
+//                robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
+//                foundationDownButton.pressed = false;
+//                foundationInterButton.pressed = false;
+//            }
+//
+//            if (tapeMeasureOutButton.buttonStatus) {
+//                robot.TapeMeasure.setPower(1);
+//            } else if (tapeMeasureInButton.buttonStatus) {
+//                robot.TapeMeasure.setPower(-1);
+//            } else {
+//                robot.TapeMeasure.setPower(0);
+//            }
+//
+//            if (beamsButton.pressed) {
+//                robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_DOWN);
+//                robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_DOWN);
+//            } else {
+//                robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_UP);
+//                robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_UP);
+//            }
 
             // MOVEMENT
             if (fullForwardButton.buttonStatus) {
@@ -268,7 +268,7 @@ public class TeleOpBot extends LinearOpMode {
             Orientation angOrientation = robot.gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             telemetry.addData("Orientation", angOrientation.firstAngle);
             telemetry.addData("Slide Pos: ", robot.SlideMotor.getCurrentPosition());
-            telemetry.addData("Sonar: ", robot.sonarDistance.getVoltage());
+//            telemetry.addData("Sonar: ", robot.sonarDistance.getVoltage());
             telemetry.update();
 
         }
