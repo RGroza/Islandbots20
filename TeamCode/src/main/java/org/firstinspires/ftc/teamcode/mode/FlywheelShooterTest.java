@@ -141,7 +141,13 @@ public class FlywheelShooterTest extends LinearOpMode {
             }
 
             if (flywheelButton.pressed) {
-                robot.IntakeMotor.setPower(flywheelPower);
+                robot.FlywheelMotor.setPower(flywheelPower);
+            } else {
+                robot.FlywheelMotor.setPower(0);
+            }
+
+            if (intakeButton.pressed) {
+                robot.IntakeMotor.setPower(intakePower);
             } else {
                 robot.IntakeMotor.setPower(0);
             }
@@ -156,6 +162,12 @@ public class FlywheelShooterTest extends LinearOpMode {
                 robot.grabberServo.setPosition(robot.ARM_OUT);
             } else {
                 robot.grabberServo.setPosition(robot.ARM_IN);
+            }
+
+            if (ringFeedButton.pressed) {
+                robot.ringFeedServo.setPosition(robot.FEED_OPEN);
+            } else {
+                robot.ringFeedServo.setPosition(robot.FEED_CLOSED);
             }
 
             // Linear slide

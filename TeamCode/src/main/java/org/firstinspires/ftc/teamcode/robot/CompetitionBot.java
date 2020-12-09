@@ -21,15 +21,18 @@ public class CompetitionBot {
     public NormalizedColorSensor LcolorSensor, RcolorSensor;
 
     // motors
-    public DcMotor RFmotor, RBmotor, LFmotor, LBmotor, SlideMotor, IntakeMotor, FlyWheelMotor, LEDPower;
+    public DcMotor RFmotor, RBmotor, LFmotor, LBmotor, SlideMotor, IntakeMotor, FlywheelMotor; //, LEDPower;
     public Servo grabberServo, armRotateServo, ringFeedServo;
 
     // Servo constants
     public static final double GRABBER_OPEN = .7;
     public static final double GRABBER_CLOSED = .3;
 
-    public static final double ARM_OUT = .61;
-    public static final double ARM_IN = .25;
+    public static final double FEED_OPEN = .7;
+    public static final double FEED_CLOSED = .3;
+
+    public static final double ARM_OUT = .7;
+    public static final double ARM_IN = .3;
 
     public static final double MAX_SPEED = .7;
 
@@ -50,14 +53,14 @@ public class CompetitionBot {
         LBmotor = hwMap.dcMotor.get("LBmotor");
         SlideMotor = hwMap.dcMotor.get("SlideMotor");
         IntakeMotor = hwMap.dcMotor.get("IntakeMotor");
-        LEDPower = hwMap.dcMotor.get("LEDPower");
-        FlyWheelMotor = hwMap.dcMotor.get("TapeMeasure");
+//        LEDPower = hwMap.dcMotor.get("LEDPower");
+        FlywheelMotor = hwMap.dcMotor.get("FlywheelMotor");
 
         // gyro hwMap
         gyro = hwMap.get(BNO055IMU.class, "gyro");
 
         // color sensors
-        LcolorSensor = hwMap.get(NormalizedColorSensor.class, "LcolorSensor");
+//        LcolorSensor = hwMap.get(NormalizedColorSensor.class, "LcolorSensor");
         RcolorSensor = hwMap.get(NormalizedColorSensor.class, "RcolorSensor");
 
         // analog sensors
@@ -75,9 +78,12 @@ public class CompetitionBot {
         RBmotor.setDirection(DcMotor.Direction.REVERSE);
 
         // servos
-        grabberServo = hwMap.servo.get("grabberServo");
-        armRotateServo = hwMap.servo.get("armRotateServo");
-        grabberServo.setPosition(CompetitionBot.GRABBER_OPEN);
+//        grabberServo = hwMap.servo.get("grabberServo");
+//        armRotateServo = hwMap.servo.get("armRotateServo");
+        ringFeedServo = hwMap.servo.get("ringFeedServo");
+//        grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
+//        armRotateServo.setPosition(CompetitionBot.ARM_IN);
+        ringFeedServo.setPosition(CompetitionBot.FEED_CLOSED);
 
         // gyro
         gyro.initialize(parameters);

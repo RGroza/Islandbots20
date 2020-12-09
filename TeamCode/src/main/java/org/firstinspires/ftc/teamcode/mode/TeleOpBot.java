@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 import org.firstinspires.ftc.teamcode.robot.GamepadButton;
 
 
-@TeleOp(name="TeleOpBot", group="Competition")
+//@TeleOp(name="TeleOpBot", group="Competition")
 public class TeleOpBot extends LinearOpMode {
 
     public boolean waitAndContinue(long initTime, long duration) {
