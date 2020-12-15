@@ -48,13 +48,12 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         //Shoot powershot targets
 
-        if(numRings.equals("NONE")) {
+        if (numRings.equals("NONE")) {
             left(0.5, 5, angle, true);
             detectLineAndStop(true, false, 0.3, 1, angle, telemetry);
 
             //Drop wobble goal (turning in method)
-        }
-        else if(numRings.equals("ONE")) {
+        } else if (numRings.equals("ONE")) {
             left(0.5, 3, angle, true);
 
             //Add color parameter to detect line so we can detect blue line here
@@ -75,8 +74,7 @@ public abstract class AutonomousNew extends LinearOpMode {
             //Shoot into top goal
 
             detectLineAndStop(true, true, 0.3, 1, angle, telemetry);
-        }
-        else {
+        } else {
             left(0.5, 5, angle, true);
 
             //Add color parameter to detect line so we can detect blue line here

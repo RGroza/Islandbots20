@@ -45,7 +45,7 @@ public class FlywheelShooterTest extends LinearOpMode {
 
         double[] powerList = {0, 0, 0, 0};
         double intakePower = .75;
-        double flywheelPower = .5;
+        double flywheelPower = .75;
 
         waitForStart();
         while(opModeIsActive()) {
@@ -60,24 +60,24 @@ public class FlywheelShooterTest extends LinearOpMode {
             boolean reverseToggleBool = gamepad1.left_stick_button;
 
             // Gamepad 2
-            boolean intakeBool = gamepad1.x;
-            boolean reverseIntakeBool = gamepad1.b;
-            boolean flywheelBool = gamepad1.y;
+            boolean intakeBool = gamepad2.x;
+            boolean reverseIntakeBool = gamepad2.b;
+            boolean flywheelBool = gamepad2.y;
 
-            boolean ringFeedBool = gamepad1.a;
-            boolean grabberBool = gamepad1.left_bumper;
-            boolean armRotateBool = gamepad1.right_bumper;
+            boolean ringFeedBool = gamepad2.right_bumper;
+            boolean grabberBool = gamepad2.left_stick_button;
+            boolean armRotateBool = gamepad2.left_bumper;
 
-            boolean increaseFlywheelBool = gamepad1.dpad_up;
-            boolean decreaseFlywheelBool = gamepad1.dpad_down;
-            boolean increaseIntakeBool = gamepad1.dpad_right;
-            boolean decreaseIntakeBool = gamepad1.dpad_left;
+            boolean increaseFlywheelBool = gamepad2.dpad_up;
+            boolean decreaseFlywheelBool = gamepad2.dpad_down;
+            boolean increaseIntakeBool = gamepad2.dpad_right;
+            boolean decreaseIntakeBool = gamepad2.dpad_left;
 
             double slide_y = gamepad2.left_stick_y;
             boolean slideHome = gamepad2.a;
 
-            boolean slideUpBool = gamepad2.dpad_up;
-            boolean slideDownBool = gamepad2.dpad_down;
+//            boolean slideUpBool = gamepad2.dpad_up;
+//            boolean slideDownBool = gamepad2.dpad_down;
 
             // BUTTON DEBOUNCE
             // Gamepad 1
@@ -97,8 +97,8 @@ public class FlywheelShooterTest extends LinearOpMode {
             reverseIntakeButton.checkStatus(reverseIntakeBool);
             flywheelButton.checkStatus(flywheelBool);
             slideHomeButton.checkStatus(slideHome);
-            slideUpButton.checkStatus(slideUpBool);
-            slideDownButton.checkStatus(slideDownBool);
+//            slideUpButton.checkStatus(slideUpBool);
+//            slideDownButton.checkStatus(slideDownBool);
 
             boolean slideActive = false;
 
@@ -106,21 +106,21 @@ public class FlywheelShooterTest extends LinearOpMode {
             boolean waitForArm = false;
 
             // Adjust Intake Power
-            if (intakePower > 0 && intakePower < 1) {
-                if (increaseIntakeButton.justPressed) {
+            if (intakePower > -.025 && intakePower < 1.025) {
+                if (intakePower < 1 && increaseIntakeButton.justPressed) {
                     intakePower += .05;
                 }
-                if (decreaseIntakeButton.justPressed) {
+                if (intakePower > 0 && decreaseIntakeButton.justPressed) {
                     intakePower -= .05;
                 }
             }
 
             // Adjust Flywheel Power
-            if (flywheelPower > 0 && flywheelPower < 1) {
-                if (increaseFlywheelButton.justPressed) {
+            if (flywheelPower > -.025 && flywheelPower < 1.025) {
+                if (flywheelPower < 1 && increaseFlywheelButton.justPressed) {
                     flywheelPower += .05;
                 }
-                if (decreaseFlywheelButton.justPressed) {
+                if (flywheelPower > 0 && decreaseFlywheelButton.justPressed) {
                     flywheelPower -= .05;
                 }
             }
@@ -152,6 +152,7 @@ public class FlywheelShooterTest extends LinearOpMode {
                 robot.IntakeMotor.setPower(0);
             }
 
+/*
             if (grabberButton.pressed) {
                 robot.grabberServo.setPosition(robot.GRABBER_OPEN);
             } else {
@@ -163,6 +164,7 @@ public class FlywheelShooterTest extends LinearOpMode {
             } else {
                 robot.grabberServo.setPosition(robot.ARM_IN);
             }
+*/
 
             if (ringFeedButton.pressed) {
                 robot.ringFeedServo.setPosition(robot.FEED_OPEN);
@@ -198,6 +200,7 @@ public class FlywheelShooterTest extends LinearOpMode {
                 }
             }
 
+/*
             if (slideHomeButton.pressed) {
                 if (robot.armRotateServo.getPosition() == CompetitionBot.ARM_OUT) {
                     robot.armRotateServo.setPosition(CompetitionBot.ARM_IN);
@@ -218,9 +221,10 @@ public class FlywheelShooterTest extends LinearOpMode {
                     }
                 }
             }
+*/
 
             // MOVEMENT
-            rotation = Math.abs(rotation) < .1 ? 0 : rotation; // "Dead-zone" for joystick
+            rotation = Math.abs(rotation) < .1 ? 0 : -rotation; // "Dead-zone" for joystick
             powerList = robot.mecanumMove(x, y, rotation, slowToggleButton.pressed, fastHoldButton.buttonStatus, telemetry);
 
 
