@@ -102,9 +102,9 @@ public class RingsOpenCV {
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final int REGION_WIDTH = 190;
-        static final int REGION_HEIGHT = 170;
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((STREAM_WIDTH - REGION_WIDTH) / 2, ((STREAM_HEIGHT - REGION_HEIGHT) / 2) + 20);
+        static final int REGION_WIDTH = 140;
+        static final int REGION_HEIGHT = 110;
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((STREAM_WIDTH - REGION_WIDTH) / 2, ((STREAM_HEIGHT - REGION_HEIGHT) / 2));
 
         final int FOUR_RING_THRESHOLD = 137;
         final int ONE_RING_THRESHOLD = 130;

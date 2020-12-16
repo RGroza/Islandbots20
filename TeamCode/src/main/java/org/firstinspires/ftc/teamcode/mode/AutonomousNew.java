@@ -37,66 +37,71 @@ public abstract class AutonomousNew extends LinearOpMode {
     }
 
 
-    public void blueMainAuto(RingsOpenCV vision, Telemetry telemetry) {
+    public void redMainAuto(RingsOpenCV vision, Telemetry telemetry) {
+        robot.ringFeedServo.setPosition(robot.FEED_CLOSED);
         String numRings = vision.getPosition();
 
         double angle = robot.getPitch();
 
-        forward(0.25, 4, angle, true, true, telemetry);
-        detectLineAndStop(true, false, 0.3, 1, angle, telemetry);
-        backward(0.25, 1, angle, true, false, telemetry);
+        backward(0.25, 2, angle, true, true, telemetry);
+        turnUntil(0.3, 180);
 
-        //Shoot powershot targets
+        left(0.25, 1, angle, true);
+
+        robot.FlywheelMotor.setPower(.75);
+        sleep(1500);
+        robot.ringFeedServo.setPosition(robot.FEED_OPEN);
+
+        detectLine1Sensor(true, false, .25, 3, 180, telemetry);
 
         if (numRings.equals("NONE")) {
-            left(0.5, 5, angle, true);
-            detectLineAndStop(true, false, 0.3, 1, angle, telemetry);
 
             //Drop wobble goal (turning in method)
-        } else if (numRings.equals("ONE")) {
-            left(0.5, 3, angle, true);
-
-            //Add color parameter to detect line so we can detect blue line here
-            forward(0.5, 5, angle, true, true, telemetry);;
-            detectLineAndStop(true, false, 0.3, 1, angle, telemetry);
-
-            //Drop wobble goal (turning in method)
-
-            backward(0.5, 4, angle, true, true, telemetry);;
-            detectLineAndStop(false, false, 0.3, 1, angle, telemetry);
-
-            //Move back and intake
-
-            forward(0.5, 4, angle, true, true, telemetry);;
-            detectLineAndStop(true, false, 0.3, 1, angle, telemetry);
-            backward(0.5, 1, angle, true, false, telemetry);
-
-            //Shoot into top goal
-
-            detectLineAndStop(true, true, 0.3, 1, angle, telemetry);
-        } else {
-            left(0.5, 5, angle, true);
-
-            //Add color parameter to detect line so we can detect blue line here
-            forward(0.5, 5, angle, true, true, telemetry);;
-            detectLineAndStop(true, false, 0.3, 1, angle, telemetry);
-
-            //Drop wobble goal (turning in method)
-
-            backward(0.5, 4, angle, true, true, telemetry);;
-            detectLineAndStop(false, false, 0.3, 1, angle, telemetry);
-            right(0.5, 2, angle,true);
-
-            //Move back and intake 3 rings
-
-            forward(0.5, 4, angle, true, true, telemetry);;
-            detectLineAndStop(true, false, 0.3, 1, angle, telemetry);
-            backward(0.5, 1, angle, true, false, telemetry);
-
-            //Shoot 3x into top goal
-
-            detectLineAndStop(true, true, 0.3, 1, angle, telemetry);
         }
+//        else if (numRings.equals("ONE")) {
+//            left(0.5, 3, angle, true);
+//
+//            //Add color parameter to detect line so we can detect blue line here
+//            forward(0.5, 5, angle, true, true, telemetry);;
+//            detectLine1Sensor(true, false, 0.3, 1, angle, telemetry);
+//
+//            //Drop wobble goal (turning in method)
+//
+//            backward(0.5, 4, angle, true, true, telemetry);;
+//            detectLine1Sensor(false, false, 0.3, 1, angle, telemetry);
+//
+//            //Move back and intake
+//
+//            forward(0.5, 4, angle, true, true, telemetry);;
+//            detectLine1Sensor(true, false, 0.3, 1, angle, telemetry);
+//            backward(0.5, 1, angle, true, false, telemetry);
+//
+//            //Shoot into top goal
+//
+//            detectLine1Sensor(true, true, 0.3, 1, angle, telemetry);
+//        } else {
+//            left(0.5, 5, angle, true);
+//
+//            //Add color parameter to detect line so we can detect blue line here
+//            forward(0.5, 5, angle, true, true, telemetry);;
+//            detectLine1Sensor(true, false, 0.3, 1, angle, telemetry);
+//
+//            //Drop wobble goal (turning in method)
+//
+//            backward(0.5, 4, angle, true, true, telemetry);;
+//            detectLine1Sensor(false, false, 0.3, 1, angle, telemetry);
+//            right(0.5, 2, angle,true);
+//
+//            //Move back and intake 3 rings
+//
+//            forward(0.5, 4, angle, true, true, telemetry);;
+//            detectLine1Sensor(true, false, 0.3, 1, angle, telemetry);
+//            backward(0.5, 1, angle, true, false, telemetry);
+//
+//            //Shoot 3x into top goal
+//
+//            detectLine1Sensor(true, true, 0.3, 1, angle, telemetry);
+//        }
     }
 
     public void detectLineAndStop(boolean isForward, boolean parkOnLine, double speed, double maxDist, double targetPitch, Telemetry telemetry) {
@@ -177,6 +182,64 @@ public abstract class AutonomousNew extends LinearOpMode {
         }
     }
 
+    public void detectLine1Sensor(boolean isForward, boolean parkOnLine, double speed, double maxDist, double targetPitch, Telemetry telemetry) {
+        NormalizedRGBA colorsR = robot.RcolorSensor.getNormalizedColors();
+        telemetry.addData("Right R: ",  colorsR.red);
+        telemetry.addData("Right G: ",  colorsR.green);
+        telemetry.addData("Right B: ",  colorsR.blue);
+        telemetry.addData("Right A: ",  colorsR.alpha);
+        telemetry.update();
+        final double COLOR_THRESHOLD = .02;
+
+        int maxSteps = (int) (maxDist*CompetitionBot.DRIVETAIN_PPR);
+
+        int dir = 1;
+
+        if (!isForward) {
+            dir = -1;
+        }
+
+        int initialPosition = (int) avgMotorPos();
+        int currentPosition = initialPosition;
+        int maxPos = initialPosition + maxSteps;
+
+        double initPitch = robot.getPitch();
+
+        double actualPitch;
+        double output;
+
+        initPIDCorrection();
+
+        boolean LStop = false, RStop = false;
+        int stopCount = 0;
+        while (opModeIsActive() && abs(currentPosition - initialPosition) < maxPos) {
+            currentPosition = (int) avgMotorPos();
+            colorsR = robot.RcolorSensor.getNormalizedColors();
+
+            if (colorsR.blue > COLOR_THRESHOLD || colorsR.red > COLOR_THRESHOLD) {
+                robot.setMotors(0, 0, 0, 0);
+                break;
+            }
+
+            actualPitch = robot.getPitch();
+            output = PIDHeadingCorrect.getOutput(actualPitch, targetPitch);
+
+            robot.setMotors(-output, -output, output, output);
+        }
+
+        int initPos = (int) avgMotorPos();
+        stopMotors(250);
+        int currentPos = (int) avgMotorPos();
+
+        // If robot overshoots, return to line in second pass
+        if (parkOnLine && abs(currentPos - initPos) > 100) {
+            double posDiff = ((abs(currentPos - initPos)) / CompetitionBot.DRIVETAIN_PPR) + 2;
+            detectLineAndStop(!isForward, false, .1, posDiff, targetPitch, telemetry);
+        } else {
+            if (abs(robot.getPitch() - initPitch) > .5) turnUntilPID(.5, targetPitch);
+        }
+    }
+
     public double detectLinePosition(boolean isForward, double speed, double maxDist, double targetPitch, Telemetry telemetry) {
         NormalizedRGBA colorsL = robot.LcolorSensor.getNormalizedColors();
         NormalizedRGBA colorsR = robot.RcolorSensor.getNormalizedColors();
@@ -225,6 +288,37 @@ public abstract class AutonomousNew extends LinearOpMode {
             robot.setMotors(dir*speed - output, dir*speed - output, dir*speed + output, dir*speed + output);
         }
         return avgMotorPos();
+    }
+
+    public void turnBy(double maxSpeed, double deltaAngle) {
+        double currentAngle = robot.getPitch();
+        double targetAngle = (currentAngle + deltaAngle) % 360;
+        double diff = angleDiff(currentAngle, targetAngle);
+        double speed = maxSpeed;
+
+        while (opModeIsActive() && abs(diff) > .75) {
+            currentAngle = robot.getPitch();
+            diff = angleDiff(currentAngle, targetAngle);
+
+            if (diff < 2) {
+                speed = maxSpeed / 2;
+                if (diff < 1) {
+                    speed = 0.1;
+                }
+            }
+
+            robot.LFmotor.setPower(-speed);
+            robot.LBmotor.setPower(-speed);
+            robot.RFmotor.setPower(speed);
+            robot.RBmotor.setPower(speed);
+
+            telemetry.addData("gyro: ", robot.getPitch());
+            telemetry.addData("diff: ", diff);
+            telemetry.addData("speed: ", speed);
+            telemetry.update();
+
+        }
+        stopMotors(250);
     }
 
     public void turnByPID(double maxSpeed, double deltaAngle) {
@@ -300,6 +394,13 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         }
         stopMotors(250);
+    }
+
+    public void turnUntil(double speed, double absAngle) {
+        // enables us to use absolute angles to describe orientation of our robot
+        double currentAngle = robot.getPitch();
+        double diff = angleDiff(currentAngle, absAngle);
+        turnBy(speed, diff);
     }
 
     public void turnUntilPID(double speed, double absAngle) {
