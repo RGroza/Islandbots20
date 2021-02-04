@@ -15,12 +15,22 @@ public class TurningTest extends AutonomousNew {
 
         waitForStart();
 
-        turnByPID(.5, 90);
+        turnBy(.2, 90);
         sleep(1000);
-        turnByPID(.5, -90);
+        turnBy(.2, -90);
         sleep(1000);
-        auto.turnByPID(.5, 90);
+        turnBy(.2, 180);
         sleep(1000);
-        auto.turnByPID(.5, -90);
+        turnBy(.2, -180);
+        sleep(1000);
+
+//        turnByPID(.2, 90);
+//        sleep(1000);
+//        turnByPID(.2, -90);
+//        sleep(1000);
+//        turnByPID(.2, 180);
+//        sleep(1000);
+//        turnByPID(.2, -180);
+//        sleep(1000);
     }
 }

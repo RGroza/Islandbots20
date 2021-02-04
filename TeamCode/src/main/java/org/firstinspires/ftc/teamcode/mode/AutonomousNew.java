@@ -19,7 +19,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
     private PIDController PIDHeadingCorrect = new PIDController(.01, .075, .15);
     private PIDController PIDRampSpeed = new PIDController(.1, 0, .5);
-    private PIDController PIDTurn = new PIDController(.025, .001, .075);
+    private PIDController PIDTurn = new PIDController(.005, .001, .05);
 
     public void initPIDCorrection() {
         PIDHeadingCorrect.setOutputLimits(-.05, .05);
@@ -293,16 +293,29 @@ public abstract class AutonomousNew extends LinearOpMode {
     public void turnBy(double maxSpeed, double deltaAngle) {
         double currentAngle = robot.getPitch();
         double targetAngle = (currentAngle + deltaAngle) % 360;
-        double diff = angleDiff(currentAngle, targetAngle);
+//        double diff = angleDiff(currentAngle, targetAngle);
+        double diff = targetAngle - currentAngle;
         double speed = maxSpeed;
+        if (diff < 0) {
+            speed = -maxSpeed;
+        }
 
         while (opModeIsActive() && abs(diff) > .75) {
             currentAngle = robot.getPitch();
-            diff = angleDiff(currentAngle, targetAngle);
+//            diff = angleDiff(currentAngle, targetAngle);
+            diff = targetAngle - currentAngle;
+            speed = maxSpeed;
+            if (diff < 0) {
+                speed = -maxSpeed;
+            }
 
-            if (diff < 2) {
-                speed = maxSpeed / 2;
-                if (diff < 1) {
+            if (abs(diff) < 5) {
+                if (maxSpeed >= .3) {
+                    speed = maxSpeed / 2;
+                } else {
+                    speed = .15;
+                }
+                if (abs(diff) < 1.5) {
                     speed = 0.1;
                 }
             }
@@ -330,6 +343,12 @@ public abstract class AutonomousNew extends LinearOpMode {
         initPIDTurning(maxSpeed);
 
         while (opModeIsActive() && abs(diff) > .75) {
+//            if (abs(diff) > deltaAngle / 2) {
+//                robot.LFmotor.setPower(-maxSpeed);
+//                robot.LBmotor.setPower(-maxSpeed);
+//                robot.RFmotor.setPower(maxSpeed);
+//                robot.RBmotor.setPower(maxSpeed);
+//            }
             currentAngle = robot.getPitch();
             diff = angleDiff(currentAngle, targetAngle);
 
