@@ -19,7 +19,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
     private PIDController PIDHeadingCorrect = new PIDController(.01, .075, .15);
     private PIDController PIDRampSpeed = new PIDController(.1, 0, .5);
-    private PIDController PIDTurn = new PIDController(.005, .001, .05);
+    private PIDController PIDTurn = new PIDController(.05, 0, 0);
 
     public void initPIDCorrection() {
         PIDHeadingCorrect.setOutputLimits(-.05, .05);
@@ -293,37 +293,61 @@ public abstract class AutonomousNew extends LinearOpMode {
     public void turnBy(double maxSpeed, double deltaAngle) {
         double currentAngle = robot.getPitch();
         double targetAngle = (currentAngle + deltaAngle) % 360;
-//        double diff = angleDiff(currentAngle, targetAngle);
-        double diff = targetAngle - currentAngle;
+//        double targetAngle = currentAngle + deltaAngle;
+        double diff = angleDiff(currentAngle, targetAngle);
+//        double diff = targetAngle - currentAngle;
         double speed = maxSpeed;
+        double dir = 1;
+        double rampStart = .75;
+        boolean breakOnce = false;
+
         if (diff < 0) {
-            speed = -maxSpeed;
+            dir = -1;
         }
 
-        while (opModeIsActive() && abs(diff) > .75) {
+        while (opModeIsActive() && Math.abs(diff) > .75) {
             currentAngle = robot.getPitch();
-//            diff = angleDiff(currentAngle, targetAngle);
-            diff = targetAngle - currentAngle;
-            speed = maxSpeed;
+            diff = angleDiff(currentAngle, targetAngle);
+//            diff = targetAngle - currentAngle;
+
             if (diff < 0) {
-                speed = -maxSpeed;
+                dir = -1;
+            } else {
+                dir = 1;
             }
 
-            if (abs(diff) < 5) {
-                if (maxSpeed >= .3) {
-                    speed = maxSpeed / 2;
+            speed = maxSpeed;
+//            if (abs(diff) < 10) {
+//                if (maxSpeed >= .3) {
+//                    speed = maxSpeed / 2;
+//                } else {
+//                    speed = .2;
+//                }
+//                if (abs(diff) < 1.5) {
+//                    speed = 0.15;
+//                }
+//            }
+
+            if (Math.abs(diff) < rampStart * deltaAngle) {
+                if (Math.abs(diff) < 2) {
+                    speed = .125;
                 } else {
-                    speed = .15;
-                }
-                if (abs(diff) < 1.5) {
-                    speed = 0.1;
+                    speed = 0.5 * maxSpeed * (diff / (0.5*deltaAngle));
+                    if (speed < .125) { speed = .125; }
                 }
             }
 
-            robot.LFmotor.setPower(-speed);
-            robot.LBmotor.setPower(-speed);
-            robot.RFmotor.setPower(speed);
-            robot.RBmotor.setPower(speed);
+//            if (breakOnce == false && Math.abs(diff) < 15) {
+//                stopMotors(500);
+//                breakOnce = true;
+//            }
+
+            speed *= dir;
+
+            robot.LFmotor.setPower(speed);
+            robot.LBmotor.setPower(speed);
+            robot.RFmotor.setPower(-speed);
+            robot.RBmotor.setPower(-speed);
 
             telemetry.addData("gyro: ", robot.getPitch());
             telemetry.addData("diff: ", diff);
@@ -337,7 +361,9 @@ public abstract class AutonomousNew extends LinearOpMode {
     public void turnByPID(double maxSpeed, double deltaAngle) {
         double currentAngle = robot.getPitch();
         double targetAngle = (currentAngle + deltaAngle) % 360;
+//        double targetAngle = currentAngle + deltaAngle;
         double diff = angleDiff(currentAngle, targetAngle);
+//        double diff = targetAngle - currentAngle;
         double output;
 
         initPIDTurning(maxSpeed);
@@ -351,15 +377,16 @@ public abstract class AutonomousNew extends LinearOpMode {
 //            }
             currentAngle = robot.getPitch();
             diff = angleDiff(currentAngle, targetAngle);
+//            diff = targetAngle - currentAngle;
 
             output = PIDTurn.getOutput(currentAngle, targetAngle);
 
             if (abs(output) < .075) break;
 
-            robot.LFmotor.setPower(-output);
-            robot.LBmotor.setPower(-output);
-            robot.RFmotor.setPower(output);
-            robot.RBmotor.setPower(output);
+            robot.LFmotor.setPower(output);
+            robot.LBmotor.setPower(output);
+            robot.RFmotor.setPower(-output);
+            robot.RBmotor.setPower(-output);
 
             telemetry.addData("gyro: ", robot.getPitch());
             telemetry.addData("diff: ", diff);

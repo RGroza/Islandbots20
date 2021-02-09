@@ -26,12 +26,12 @@ public class CompetitionBot {
 
     // Servo constants
     public static final double GRABBER_OPEN = .7;
-    public static final double GRABBER_CLOSED = .3;
+    public static final double GRABBER_CLOSED = .5;
 
     public static final double FEED_OPEN = .8;
     public static final double FEED_CLOSED = .6;
 
-    public static final double ARM_OUT = .7;
+    public static final double ARM_OUT = 0;
     public static final double ARM_IN = .3;
 
     public static final double MAX_SPEED = .7;
@@ -78,8 +78,8 @@ public class CompetitionBot {
         RBmotor.setDirection(DcMotor.Direction.REVERSE);
 
         // servos
-//        grabberServo = hwMap.servo.get("grabberServo");
-//        armRotateServo = hwMap.servo.get("armRotateServo");
+        grabberServo = hwMap.servo.get("grabberServo");
+        armRotateServo = hwMap.servo.get("armRotateServo");
         ringFeedServo = hwMap.servo.get("ringFeedServo");
 //        grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
 //        armRotateServo.setPosition(CompetitionBot.ARM_IN);

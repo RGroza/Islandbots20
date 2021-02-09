@@ -5,21 +5,16 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.mode.AutonomousNew;
 import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 
-@Autonomous(name="TurningTest", group="Test")
-public class TurningTest extends AutonomousNew {
+@Autonomous(name="GyroTest", group="Test")
+public class GyroTest extends AutonomousNew {
     @Override
     public void runOpMode() {
         robot = new CompetitionBot(hardwareMap, telemetry);
 
         waitForStart();
-
-        turnUntil(.3, 90);
-        sleep(1000);
-        turnUntil(.3, -90);
-        sleep(1000);
-        turnUntil(.3, 0);
-        sleep(1000);
-        turnUntil(.3, 180);
-        sleep(1000);
+        while (opModeIsActive()) {
+            telemetry.addData("angle: ", robot.getPitch());
+            telemetry.update();
+        }
     }
 }

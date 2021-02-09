@@ -152,19 +152,21 @@ public class FlywheelShooterTest extends LinearOpMode {
                 robot.IntakeMotor.setPower(0);
             }
 
-/*
             if (grabberButton.pressed) {
                 robot.grabberServo.setPosition(robot.GRABBER_OPEN);
+                telemetry.addData("grab:", robot.GRABBER_OPEN);
             } else {
                 robot.grabberServo.setPosition(robot.GRABBER_CLOSED);
+                telemetry.addData("grab:", robot.GRABBER_CLOSED);
             }
 
             if (armRotateButton.pressed) {
-                robot.grabberServo.setPosition(robot.ARM_OUT);
+                robot.armRotateServo.setPosition(robot.ARM_OUT);
+                telemetry.addData("arm:", robot.ARM_OUT);
             } else {
-                robot.grabberServo.setPosition(robot.ARM_IN);
+                robot.armRotateServo.setPosition(robot.ARM_IN);
+                telemetry.addData("arm:", robot.ARM_IN);
             }
-*/
 
             if (ringFeedButton.pressed) {
                 robot.ringFeedServo.setPosition(robot.FEED_OPEN);
