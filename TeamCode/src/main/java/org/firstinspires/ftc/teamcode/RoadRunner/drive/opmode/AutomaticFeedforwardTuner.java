@@ -11,8 +11,8 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.RoadRunner.util.LoggingUtil;
-import org.firstinspires.ftc.teamcode.RoadRunner.util.RegressionUtil;
+import org.firstinspires.ftc.teamcode.util.LoggingUtil;
+import org.firstinspires.ftc.teamcode.util.RegressionUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +34,8 @@ import static org.firstinspires.ftc.teamcode.RoadRunner.drive.DriveConstants.rpm
 @Config
 @Autonomous(group = "drive")
 public class AutomaticFeedforwardTuner extends LinearOpMode {
-    public static final double MAX_POWER = 0.7;
-    public static final double DISTANCE = 100; // in
+    public static double MAX_POWER = 0.7;
+    public static double DISTANCE = 100; // in
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -46,7 +46,7 @@ public class AutomaticFeedforwardTuner extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap, telemetry);
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         NanoClock clock = NanoClock.system();
 
