@@ -26,7 +26,7 @@ import java.util.Objects;
 @Config
 @Autonomous(group = "drive")
 public class MaxVelocityTuner extends LinearOpMode {
-    public static double RUNTIME = 1.5;
+    public static double RUNTIME = 1;
 
     private ElapsedTime timer;
     private double maxVelocity = 0.0;
@@ -54,7 +54,7 @@ public class MaxVelocityTuner extends LinearOpMode {
         telemetry.clearAll();
         telemetry.update();
 
-        drive.setDrivePower(new Pose2d(-1, 0, 0));
+        drive.setDrivePower(new Pose2d(1, 0, 0));
         timer = new ElapsedTime();
 
         while (!isStopRequested() && timer.seconds() < RUNTIME) {
