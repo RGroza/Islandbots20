@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class RingsVisionTest extends LinearOpMode {
 
     public void runOpMode() {
-        RingsOpenCV vision = new RingsOpenCV(hardwareMap, telemetry);
+        RingsOpenCV vision = new RingsOpenCV(true, hardwareMap, telemetry);
 
         waitForStart();
 

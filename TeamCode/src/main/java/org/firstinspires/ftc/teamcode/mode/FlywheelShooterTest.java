@@ -170,28 +170,34 @@ public class FlywheelShooterTest extends LinearOpMode {
 
             if (ringFeedButton.pressed) {
                 robot.ringFeedServo.setPosition(robot.FEED_OPEN);
+                telemetry.addLine("Feed Open");
             } else {
                 robot.ringFeedServo.setPosition(robot.FEED_CLOSED);
+                telemetry.addLine("Feed Closed");
             }
 
             // Linear slide
             if (slide_y > .05) {
-                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 robot.SlideMotor.setPower(slide_y * slide_y);
                 slideActive = true;
             } else if (slide_y < -.05) {
-                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 robot.SlideMotor.setPower(-(slide_y * slide_y));
                 slideActive = true;
             } else if (slideUpButton.buttonStatus) {
-                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 robot.SlideMotor.setPower(-.75);
                 slideActive = true;
             } else if (slideDownButton.buttonStatus) {
-                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 robot.SlideMotor.setPower(.75);
                 slideActive = true;
             } else {
+                robot.SlideMotor.setPower(0);
+            }
+/*
+            else {
                 // no active control
                 if (slideActive) {
                     // slide was active in previous loop - so we just released controls
@@ -201,6 +207,7 @@ public class FlywheelShooterTest extends LinearOpMode {
                     slideActive = false;
                 }
             }
+*/
 
 /*
             if (slideHomeButton.pressed) {

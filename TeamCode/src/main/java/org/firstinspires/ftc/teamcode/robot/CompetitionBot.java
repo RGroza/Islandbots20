@@ -25,14 +25,15 @@ public class CompetitionBot {
     public Servo grabberServo, armRotateServo, ringFeedServo;
 
     // Servo constants
-    public static final double GRABBER_OPEN = .7;
+    public static final double GRABBER_OPEN = .3;
     public static final double GRABBER_CLOSED = .5;
 
     public static final double FEED_OPEN = .8;
     public static final double FEED_CLOSED = .6;
 
-    public static final double ARM_OUT = 0;
-    public static final double ARM_IN = .3;
+    public static final double ARM_OUT = .35;
+    public static final double ARM_IN = .92;
+    public static final double ARM_MID = .6;
 
     public static final double MAX_SPEED = .7;
 
@@ -184,19 +185,19 @@ public class CompetitionBot {
         LBmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RBmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        SlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        SlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         LFmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         LBmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RFmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RBmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        SlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         LBmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LFmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RBmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RFmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        SlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        SlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     private double SingleClamp(double power) {

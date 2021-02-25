@@ -6,10 +6,10 @@ import org.firstinspires.ftc.teamcode.vision.RingsOpenCV;
 public class RingsAuto extends AutonomousNew {
     @Override
     public void runOpMode() throws InterruptedException {
-        RingsOpenCV vision = new RingsOpenCV(hardwareMap, telemetry);
+        RingsOpenCV vision = new RingsOpenCV(true, hardwareMap, telemetry);
 
         waitForStart();
         telemetry.addData("Analysis", vision.getAnalysis());
-        telemetry.addData("Position", vision.getPosition());
+        telemetry.addData("Position", vision.getNumberRings());
     }
 }

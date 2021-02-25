@@ -39,7 +39,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
     public void redMainAuto(RingsOpenCV vision, Telemetry telemetry) {
         robot.ringFeedServo.setPosition(robot.FEED_CLOSED);
-        String numRings = vision.getPosition();
+        int numRings = vision.getNumberRings();
 
         double angle = robot.getPitch();
 
@@ -54,7 +54,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         detectLine1Sensor(true, false, .25, 3, 180, telemetry);
 
-        if (numRings.equals("NONE")) {
+        if (numRings == 0) {
 
             //Drop wobble goal (turning in method)
         }

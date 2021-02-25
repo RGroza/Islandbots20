@@ -28,7 +28,7 @@ public class CustomSplineTest extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        while(!isStopRequested()) {
+        while (!isStopRequested()) {
             Trajectory traj = drive.trajectoryBuilder(startingPose)
                     .splineTo(new Vector2d(X_F, Y_F), 0)
                     .build();

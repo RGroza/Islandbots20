@@ -42,15 +42,18 @@ public class RingsOpenCV {
     private OpenCvWebcam webcam;
     private SkystoneDeterminationPipeline pipeline;
     private WebcamName webcamName = null;
+    private boolean isRed = true;
 
     private static final int STREAM_WIDTH = 640;
     private static final int STREAM_HEIGHT = 360;
 
-    public RingsOpenCV(HardwareMap hwMap, Telemetry telemetry) {
+    public RingsOpenCV(boolean isRedOrBlue, HardwareMap hwMap, Telemetry telemetry) {
+        isRed = isRedOrBlue;
+
         webcamName = hwMap.get(WebcamName.class, "Webcam 1");
         int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
-        pipeline = new SkystoneDeterminationPipeline();
+        pipeline = new SkystoneDeterminationPipeline(isRed);
         webcam.setPipeline(pipeline);
 
 //        webcam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
@@ -77,15 +80,33 @@ public class RingsOpenCV {
         return pipeline.getAnalysis();
     }
 
-    public String getPosition() {
-        return pipeline.position.toString();
+    public int getNumberRings() {
+        if (pipeline.position == SkystoneDeterminationPipeline.RingPosition.NONE) {
+            return 0;
+        } else if (pipeline.position == SkystoneDeterminationPipeline.RingPosition.ONE) {
+            return 1;
+        } else {
+            return 4;
+        }
     }
 
     public static class SkystoneDeterminationPipeline extends OpenCvPipeline
     {
-        /*
-         * An enum to define the skystone position
-         */
+//        static final int REGION_WIDTH = 110;
+        static final int REGION_WIDTH = 90;
+        static final int REGION_HEIGHT = 80;
+
+//        static Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((STREAM_WIDTH - REGION_WIDTH) / 2 - 210, (STREAM_HEIGHT - REGION_HEIGHT) / 2 + 60);
+        static Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(STREAM_WIDTH - REGION_WIDTH, (STREAM_HEIGHT - REGION_HEIGHT) / 2 + 60);
+
+        public SkystoneDeterminationPipeline(boolean isRed)
+        {
+            if (isRed) {
+//                REGION1_TOPLEFT_ANCHOR_POINT = new Point((STREAM_WIDTH - REGION_WIDTH) / 2 + 210, (STREAM_HEIGHT - REGION_HEIGHT) / 2 + 60);
+                REGION1_TOPLEFT_ANCHOR_POINT = new Point(STREAM_WIDTH - REGION_WIDTH, (STREAM_HEIGHT - REGION_HEIGHT) / 2 + 60);
+            }
+        }
+
         public enum RingPosition
         {
             FOUR,
@@ -93,20 +114,10 @@ public class RingsOpenCV {
             NONE
         }
 
-        /*
-         * Some color constants
-         */
         static final Scalar BLUE = new Scalar(0, 0, 255);
         static final Scalar GREEN = new Scalar(0, 255, 0);
 
-        /*
-         * The core values which define the location and size of the sample regions
-         */
-        static final int REGION_WIDTH = 140;
-        static final int REGION_HEIGHT = 110;
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((STREAM_WIDTH - REGION_WIDTH) / 2, ((STREAM_HEIGHT - REGION_HEIGHT) / 2));
-
-        final int FOUR_RING_THRESHOLD = 137;
+        final int FOUR_RING_THRESHOLD = 136;
         final int ONE_RING_THRESHOLD = 130;
 
         Point region1_pointA = new Point(
