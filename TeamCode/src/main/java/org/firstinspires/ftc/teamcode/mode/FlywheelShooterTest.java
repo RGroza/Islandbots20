@@ -22,6 +22,8 @@ public class FlywheelShooterTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         CompetitionBot robot = new CompetitionBot(hardwareMap, telemetry);
+        robot.RFmotor.setDirection(DcMotor.Direction.REVERSE);
+        robot.RBmotor.setDirection(DcMotor.Direction.REVERSE);
 
         // BUTTON DECLARE
         // Gamepad 1

@@ -75,8 +75,8 @@ public class CompetitionBot {
         resetEncoders();
 
         // motor directions
-        RFmotor.setDirection(DcMotor.Direction.REVERSE);
-        RBmotor.setDirection(DcMotor.Direction.REVERSE);
+//        RFmotor.setDirection(DcMotor.Direction.REVERSE);
+//        RBmotor.setDirection(DcMotor.Direction.REVERSE);
 
         // servos
         grabberServo = hwMap.servo.get("grabberServo");
