@@ -16,12 +16,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 public class CompetitionBot {
     // sensors
     public BNO055IMU gyro;
-//    public AnalogInput sonarDistance;
-//    public DistanceSensor frontDistance, backDistance;
     public NormalizedColorSensor LcolorSensor, RcolorSensor;
 
     // motors
-    public DcMotor RFmotor, RBmotor, LFmotor, LBmotor, SlideMotor, IntakeMotor, FlywheelMotor; //, LEDPower;
+    public DcMotor RFmotor, RBmotor, LFmotor, LBmotor, SlideMotor, IntakeMotor, FlywheelMotor;
     public Servo grabberServo, armRotateServo, ringFeedServo;
 
     // Servo constants
@@ -54,7 +52,6 @@ public class CompetitionBot {
         LBmotor = hwMap.dcMotor.get("LBmotor");
         SlideMotor = hwMap.dcMotor.get("SlideMotor");
         IntakeMotor = hwMap.dcMotor.get("IntakeMotor");
-//        LEDPower = hwMap.dcMotor.get("LEDPower");
         FlywheelMotor = hwMap.dcMotor.get("FlywheelMotor");
 
         // gyro hwMap
@@ -63,13 +60,6 @@ public class CompetitionBot {
         // color sensors
 //        LcolorSensor = hwMap.get(NormalizedColorSensor.class, "LcolorSensor");
         RcolorSensor = hwMap.get(NormalizedColorSensor.class, "RcolorSensor");
-
-        // analog sensors
-//        sonarDistance = hwMap.analogInput.get("sonarDistance");
-
-        // distance sensors
-//        frontDistance = hwMap.get(DistanceSensor.class, "frontDistance");
-//        backDistance = hwMap.get(DistanceSensor.class, "backDistance");
 
         // motor encoders init
         resetEncoders();
@@ -82,8 +72,8 @@ public class CompetitionBot {
         grabberServo = hwMap.servo.get("grabberServo");
         armRotateServo = hwMap.servo.get("armRotateServo");
         ringFeedServo = hwMap.servo.get("ringFeedServo");
-//        grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
-//        armRotateServo.setPosition(CompetitionBot.ARM_IN);
+        grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
+        armRotateServo.setPosition(CompetitionBot.ARM_IN);
         ringFeedServo.setPosition(CompetitionBot.FEED_CLOSED);
 
         // gyro
@@ -185,12 +175,14 @@ public class CompetitionBot {
         LBmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RBmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        FlywheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        SlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         LFmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         LBmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RFmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RBmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        FlywheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         SlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         LBmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -200,8 +192,7 @@ public class CompetitionBot {
         SlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    private double SingleClamp(double power) {
-        // ensures power does not exceed abs(1)
+    private double clamp(double power) {
         if (power > 1) {
             return 1;
         }

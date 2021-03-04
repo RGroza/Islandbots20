@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.mode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -12,8 +12,7 @@ import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 import org.firstinspires.ftc.teamcode.robot.GamepadButton;
 
 
-//@TeleOp(name="TeleOpBot", group="Competition")
-@Disabled
+@TeleOp(name="TeleOpBot", group="Competition")
 public class TeleOpBot extends LinearOpMode {
 
     public boolean waitAndContinue(long initTime, long duration) {
@@ -24,38 +23,32 @@ public class TeleOpBot extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         CompetitionBot robot = new CompetitionBot(hardwareMap, telemetry);
 
+        robot.RFmotor.setDirection(DcMotor.Direction.REVERSE);
+        robot.RBmotor.setDirection(DcMotor.Direction.REVERSE);
+
         // BUTTON DECLARE
         // Gamepad 1
         GamepadButton slowToggleButton = new GamepadButton(300, false);
         GamepadButton fastHoldButton = new GamepadButton(300, false);
         GamepadButton reverseToggleButton = new GamepadButton(300, false);
-        GamepadButton foundationDownButton = new GamepadButton(300, false);
-        GamepadButton foundationInterButton = new GamepadButton(300, false);
-        GamepadButton foundationUpButton = new GamepadButton(300, false);
-        GamepadButton fullForwardButton = new GamepadButton(300, false);
-        GamepadButton fullBackwardButton = new GamepadButton(300, false);
-        GamepadButton fullLeftButton = new GamepadButton(300, false);
-        GamepadButton fullRightButton = new GamepadButton(300, false);
 
-        // Gamepad 2
-        GamepadButton slideUpButton = new GamepadButton(300, false);
-        GamepadButton slideDownButton = new GamepadButton(300, false);
-        GamepadButton slideHomeButton = new GamepadButton(300, false);
-        GamepadButton grabberServoButton = new GamepadButton(300, false);
-        GamepadButton armRotateButton = new GamepadButton(300, false);
         GamepadButton intakeButton = new GamepadButton(300, false);
         GamepadButton reverseIntakeButton = new GamepadButton(300, false);
-        GamepadButton capStoneButton = new GamepadButton(300, false);
-        GamepadButton tapeMeasureOutButton = new GamepadButton(300, false);
-        GamepadButton tapeMeasureInButton = new GamepadButton(300, false);
-        GamepadButton beamsButton = new GamepadButton(300, false);
-
-        boolean slideActive = false;
-
-        long initTime = 0;
-        boolean waitForArm = false;
+        GamepadButton flywheelButton = new GamepadButton(300, false);
+        GamepadButton ringFeedButton = new GamepadButton(300, false);
+        GamepadButton grabberButton = new GamepadButton(300, false);
+        GamepadButton armRotateButton = new GamepadButton(300, false);
+        GamepadButton increaseFlywheelButton = new GamepadButton(300, false);
+        GamepadButton decreaseFlywheelButton = new GamepadButton(300, false);
+        GamepadButton increaseIntakeButton = new GamepadButton(300, false);
+        GamepadButton decreaseIntakeButton = new GamepadButton(300, false);
+        GamepadButton slideHomeButton = new GamepadButton(300, false);
+        GamepadButton slideUpButton = new GamepadButton(300, false);
+        GamepadButton slideDownButton = new GamepadButton(300, false);
 
         double[] powerList = {0, 0, 0, 0};
+        double intakePower = .75;
+        double flywheelPower = .75;
 
         waitForStart();
         while(opModeIsActive()) {
@@ -66,87 +59,157 @@ public class TeleOpBot extends LinearOpMode {
             double rotation = gamepad1.right_stick_x;
 
             boolean slowToggleBool = gamepad1.right_stick_button;
+            boolean fastHoldBool = gamepad1.right_bumper;
             boolean reverseToggleBool = gamepad1.left_stick_button;
 
-            boolean foundationDownBool = gamepad1.a;
-            boolean foundationInterBool = gamepad1.b;
-            boolean foundationUpBool = gamepad1.y;
-
-            boolean fastHoldBool = gamepad1.right_bumper;
-
-            boolean fullForwardBool = gamepad1.dpad_up;
-            boolean fullBackwardBool = gamepad1.dpad_down;
-            boolean fullLeftBool = gamepad1.dpad_left;
-            boolean fullRightBool = gamepad1.dpad_right;
-
             // Gamepad 2
+            boolean intakeBool = gamepad2.x;
+            boolean reverseIntakeBool = gamepad2.b;
+            boolean flywheelBool = gamepad2.y;
+
+            boolean ringFeedBool = gamepad2.right_bumper;
+            boolean grabberBool = gamepad2.left_stick_button;
+            boolean armRotateBool = gamepad2.left_bumper;
+
+            boolean increaseFlywheelBool = gamepad2.dpad_up;
+            boolean decreaseFlywheelBool = gamepad2.dpad_down;
+            boolean increaseIntakeBool = gamepad2.dpad_right;
+            boolean decreaseIntakeBool = gamepad2.dpad_left;
+
             double slide_y = gamepad2.left_stick_y;
             boolean slideHome = gamepad2.a;
 
-            boolean slideUpBool = gamepad2.dpad_up;
-            boolean slideDownBool = gamepad2.dpad_down;
-
-            boolean grabberServoBool = gamepad2.right_bumper;
-            boolean armRotateServoBool = gamepad2.left_bumper;
-            boolean capStoneServoBool = gamepad2.right_stick_button;
-
-            boolean intakeBool = gamepad2.x;
-            boolean reverseIntakeBool = gamepad2.b;
-
-            boolean tapeMeasureOutBool = gamepad2.dpad_right;
-            boolean tapeMeasureInBool = gamepad2.dpad_left;
-
-            boolean beamsBool = gamepad2.y;
+//            boolean slideUpBool = gamepad2.dpad_up;
+//            boolean slideDownBool = gamepad2.dpad_down;
 
             // BUTTON DEBOUNCE
             // Gamepad 1
             slowToggleButton.checkStatus(slowToggleBool);
-            reverseToggleButton.checkStatus(reverseToggleBool);
-            foundationDownButton.checkStatus(foundationDownBool);
-            foundationInterButton.checkStatus(foundationInterBool);
-            foundationUpButton.checkStatus(foundationUpBool);
             fastHoldButton.checkStatus(fastHoldBool);
-            fullForwardButton.checkStatus(fullForwardBool);
-            fullBackwardButton.checkStatus(fullBackwardBool);
-            fullLeftButton.checkStatus(fullLeftBool);
-            fullRightButton.checkStatus(fullRightBool);
+            reverseToggleButton.checkStatus(reverseToggleBool);
 
             // Gamepad 2
-            slideHomeButton.checkStatus(slideHome);
-            slideUpButton.checkStatus(slideUpBool);
-            slideDownButton.checkStatus(slideDownBool);
-            grabberServoButton.checkStatus(grabberServoBool);
-            armRotateButton.checkStatus(armRotateServoBool);
-            capStoneButton.checkStatus(capStoneServoBool);
+            ringFeedButton.checkStatus(ringFeedBool);
+            grabberButton.checkStatus(grabberBool);
+            armRotateButton.checkStatus(armRotateBool);
+            increaseFlywheelButton.checkStatus(increaseFlywheelBool);
+            decreaseFlywheelButton.checkStatus(decreaseFlywheelBool);
+            increaseIntakeButton.checkStatus(increaseIntakeBool);
+            decreaseIntakeButton.checkStatus(decreaseIntakeBool);
             intakeButton.checkStatus(intakeBool);
             reverseIntakeButton.checkStatus(reverseIntakeBool);
-            tapeMeasureOutButton.checkStatus(tapeMeasureOutBool);
-            tapeMeasureInButton.checkStatus(tapeMeasureInBool);
-            beamsButton.checkStatus(beamsBool);
+            flywheelButton.checkStatus(flywheelBool);
+            slideHomeButton.checkStatus(slideHome);
+//            slideUpButton.checkStatus(slideUpBool);
+//            slideDownButton.checkStatus(slideDownBool);
 
+            boolean slideActive = false;
+
+            long initTime = 0;
+            boolean waitForArm = false;
+
+            // Adjust Intake Power
+            if (intakePower > -.025 && intakePower < 1.025) {
+                if (intakePower < 1 && increaseIntakeButton.justPressed) {
+                    intakePower += .05;
+                }
+                if (intakePower > 0 && decreaseIntakeButton.justPressed) {
+                    intakePower -= .05;
+                }
+            }
+
+            // Adjust Flywheel Power
+            if (flywheelPower > -.025 && flywheelPower < 1.025) {
+                if (flywheelPower < 1 && increaseFlywheelButton.justPressed) {
+                    flywheelPower += .05;
+                }
+                if (flywheelPower > 0 && decreaseFlywheelButton.justPressed) {
+                    flywheelPower -= .05;
+                }
+            }
 
             if (reverseToggleButton.pressed) {
                 x = gamepad1.left_stick_x;
                 y = gamepad1.left_stick_y;
             }
 
+            if (reverseIntakeButton.buttonStatus) {
+                robot.IntakeMotor.setPower(-intakePower);
+            } else {
+                if (intakeButton.pressed) {
+                    robot.IntakeMotor.setPower(intakePower);
+                } else {
+                    robot.IntakeMotor.setPower(0);
+                }
+            }
+
+            if (flywheelButton.pressed) {
+                robot.FlywheelMotor.setPower(flywheelPower);
+            } else {
+                robot.FlywheelMotor.setPower(0);
+            }
+
+            if (grabberButton.pressed) {
+                robot.grabberServo.setPosition(robot.GRABBER_OPEN);
+                telemetry.addLine("grabber: OPEN");
+            } else {
+                robot.grabberServo.setPosition(robot.GRABBER_CLOSED);
+                telemetry.addLine("grabber: CLOSED");
+            }
+
+            if (armRotateButton.pressed) {
+                robot.armRotateServo.setPosition(robot.ARM_OUT);
+                telemetry.addLine("arm: OUT");
+            } else {
+                robot.armRotateServo.setPosition(robot.ARM_IN);
+                telemetry.addLine("arm: IN");
+            }
+
+/*
+            if (ringFeedButton.pressed) {
+                robot.ringFeedServo.setPosition(robot.FEED_OPEN);
+                telemetry.addLine("feed: OPEN");
+            } else {
+                robot.ringFeedServo.setPosition(robot.FEED_CLOSED);
+                telemetry.addLine("feed: CLOSED");
+            }
+*/
+
+            if (ringFeedButton.pressed) {
+                robot.ringFeedServo.setPosition(robot.FEED_OPEN);
+                telemetry.addLine("feed: OPEN");
+                initTime = System.currentTimeMillis();
+                ringFeedButton.pressedStatusFalse();
+            }
+            if (waitAndContinue(initTime, 500)) {
+                robot.ringFeedServo.setPosition(robot.FEED_CLOSED);
+                telemetry.addLine("feed: CLOSED");
+                ringFeedButton.pressedStatusFalse();
+            }
+
+
+            // Linear slide
             if (slide_y > .05) {
-                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 robot.SlideMotor.setPower(slide_y * slide_y);
                 slideActive = true;
             } else if (slide_y < -.05) {
-                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 robot.SlideMotor.setPower(-(slide_y * slide_y));
                 slideActive = true;
             } else if (slideUpButton.buttonStatus) {
-                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 robot.SlideMotor.setPower(-.75);
                 slideActive = true;
             } else if (slideDownButton.buttonStatus) {
-                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                robot.SlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 robot.SlideMotor.setPower(.75);
                 slideActive = true;
             } else {
+                robot.SlideMotor.setPower(0);
+            }
+/*
+            else {
                 // no active control
                 if (slideActive) {
                     // slide was active in previous loop - so we just released controls
@@ -156,7 +219,9 @@ public class TeleOpBot extends LinearOpMode {
                     slideActive = false;
                 }
             }
+*/
 
+/*
             if (slideHomeButton.pressed) {
                 if (robot.armRotateServo.getPosition() == CompetitionBot.ARM_OUT) {
                     robot.armRotateServo.setPosition(CompetitionBot.ARM_IN);
@@ -177,84 +242,15 @@ public class TeleOpBot extends LinearOpMode {
                     }
                 }
             }
-
-            if (grabberServoButton.pressed) {
-                robot.grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
-            } else {
-                robot.grabberServo.setPosition(CompetitionBot.GRABBER_OPEN);
-            }
-
-            if (armRotateButton.pressed) {
-                robot.armRotateServo.setPosition(CompetitionBot.ARM_OUT);
-            } else {
-                robot.armRotateServo.setPosition(CompetitionBot.ARM_IN);
-            }
-
-//            if (capStoneButton.pressed) {
-//                robot.capStoneServo.setPosition(CompetitionBot.CAPSTONE_OPEN);
-//            } else {
-//                robot.capStoneServo.setPosition(CompetitionBot.CAPSTONE_CLOSED);
-//            }
-
-            if (reverseIntakeButton.buttonStatus) {
-                robot.IntakeMotor.setPower(-1);
-            } else {
-                if (intakeButton.pressed) {
-                    robot.IntakeMotor.setPower(1);
-                } else {
-                    robot.IntakeMotor.setPower(0);
-                }
-            }
-
-//            if (foundationDownButton.justPressed) {
-//                robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_DOWN);
-//                robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_DOWN);
-//                foundationUpButton.pressed = false;
-//                foundationInterButton.pressed = false;
-//            }
-//            if (foundationInterButton.justPressed) {
-//                robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_INTER);
-//                robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_INTER);
-//                foundationDownButton.pressed = false;
-//                foundationUpButton.pressed = false;
-//            }
-//            if (foundationUpButton.justPressed) {
-//                robot.Lfoundation.setPosition(CompetitionBot.L_FOUND_UP);
-//                robot.Rfoundation.setPosition(CompetitionBot.R_FOUND_UP);
-//                foundationDownButton.pressed = false;
-//                foundationInterButton.pressed = false;
-//            }
-//
-//            if (tapeMeasureOutButton.buttonStatus) {
-//                robot.TapeMeasure.setPower(1);
-//            } else if (tapeMeasureInButton.buttonStatus) {
-//                robot.TapeMeasure.setPower(-1);
-//            } else {
-//                robot.TapeMeasure.setPower(0);
-//            }
-//
-//            if (beamsButton.pressed) {
-//                robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_DOWN);
-//                robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_DOWN);
-//            } else {
-//                robot.LbeamServo.setPosition(CompetitionBot.L_BEAM_UP);
-//                robot.RbeamServo.setPosition(CompetitionBot.R_BEAM_UP);
-//            }
+*/
 
             // MOVEMENT
-            if (fullForwardButton.buttonStatus) {
-                robot.setMotors(1, 1, 1, 1);
-            } else if (fullBackwardButton.buttonStatus) {
-                robot.setMotors(-1, -1, -1, -1);
-            } else if (fullLeftButton.buttonStatus) {
-                robot.setMotors(-1, 1, 1, -1);
-            } else if (fullRightButton.buttonStatus) {
-                robot.setMotors(1, -1, -1, 1);
-            } else {
-                rotation = Math.abs(rotation) < .1 ? 0 : rotation; // "Dead-zone" for joystick
-                powerList = robot.mecanumMove(x, y, rotation, slowToggleButton.pressed, fastHoldButton.buttonStatus, telemetry);
-            }
+            rotation = Math.abs(rotation) < .1 ? 0 : -rotation; // "Dead-zone" for joystick
+            powerList = robot.mecanumMove(x, y, rotation, slowToggleButton.pressed, fastHoldButton.buttonStatus, telemetry);
 
+
+            telemetry.addData("flywheelPower: ", flywheelPower);
+            telemetry.addData("intakePower: ", intakePower);
             telemetry.addData("LF Pos: ", robot.LFmotor.getCurrentPosition());
             telemetry.addData("LF Pow: ", Math.round(powerList[0] * 100.0) / 100.0);
             telemetry.addData("LB Pos: ", robot.LBmotor.getCurrentPosition());
@@ -268,8 +264,6 @@ public class TeleOpBot extends LinearOpMode {
             telemetry.addData("X: ", slowToggleButton.pressed);
             Orientation angOrientation = robot.gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             telemetry.addData("Orientation", angOrientation.firstAngle);
-            telemetry.addData("Slide Pos: ", robot.SlideMotor.getCurrentPosition());
-//            telemetry.addData("Sonar: ", robot.sonarDistance.getVoltage());
             telemetry.update();
 
         }

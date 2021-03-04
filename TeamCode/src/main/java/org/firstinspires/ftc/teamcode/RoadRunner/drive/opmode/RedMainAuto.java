@@ -30,6 +30,8 @@ public class RedMainAuto extends LinearOpMode {
         RingsOpenCV vision = new RingsOpenCV(true, hardwareMap, telemetry);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
+        Thread servoThread = new Thread("servoThread");
+
         Pose2d startingPose = new Pose2d(START_X, START_Y, Math.toRadians(180));
         drive.setPoseEstimate(startingPose);
 
@@ -80,5 +82,19 @@ public class RedMainAuto extends LinearOpMode {
         sleep(500);
         robot.armRotateServo.setPosition(robot.ARM_MID);
         robot.grabberServo.setPosition(robot.GRABBER_OPEN);
+    }
+}
+
+class ServoThread implements Runnable {
+    private CompetitionBot compRobot;
+
+    public ServoThread(CompetitionBot robot) {
+        compRobot = robot;
+    }
+
+    public void run() {
+        double startTime = System.currentTimeMillis();
+        compRobot.armRotateServo.setPosition(compRobot.ARM_MID);
+        compRobot.grabberServo.setPosition(compRobot.GRABBER_OPEN);
     }
 }
