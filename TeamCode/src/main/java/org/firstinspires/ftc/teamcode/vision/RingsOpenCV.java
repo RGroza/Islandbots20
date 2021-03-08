@@ -42,18 +42,16 @@ public class RingsOpenCV {
     private OpenCvWebcam webcam;
     private SkystoneDeterminationPipeline pipeline;
     private WebcamName webcamName = null;
-    private boolean isRed = true;
 
     private static final int STREAM_WIDTH = 640;
     private static final int STREAM_HEIGHT = 360;
 
-    public RingsOpenCV(boolean isRedOrBlue, HardwareMap hwMap, Telemetry telemetry) {
-        isRed = isRedOrBlue;
+    public RingsOpenCV(boolean isPowerShot, HardwareMap hwMap, Telemetry telemetry) {
 
         webcamName = hwMap.get(WebcamName.class, "Webcam 1");
         int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
-        pipeline = new SkystoneDeterminationPipeline(isRed);
+        pipeline = new SkystoneDeterminationPipeline(isPowerShot);
         webcam.setPipeline(pipeline);
 
 //        webcam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
@@ -92,18 +90,16 @@ public class RingsOpenCV {
 
     public static class SkystoneDeterminationPipeline extends OpenCvPipeline
     {
-//        static final int REGION_WIDTH = 110;
-        static final int REGION_WIDTH = 90;
-        static final int REGION_HEIGHT = 80;
+        static int REGION_WIDTH = 100;
+        static int REGION_HEIGHT = 80;
+        static Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((STREAM_WIDTH - REGION_WIDTH) / 2, (STREAM_HEIGHT - REGION_HEIGHT) / 2 + 60);
 
-//        static Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((STREAM_WIDTH - REGION_WIDTH) / 2 - 210, (STREAM_HEIGHT - REGION_HEIGHT) / 2 + 60);
-        static Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(STREAM_WIDTH - REGION_WIDTH, (STREAM_HEIGHT - REGION_HEIGHT) / 2 + 60);
-
-        public SkystoneDeterminationPipeline(boolean isRed)
+        public SkystoneDeterminationPipeline(boolean isPowerShot)
         {
-            if (isRed) {
-//                REGION1_TOPLEFT_ANCHOR_POINT = new Point((STREAM_WIDTH - REGION_WIDTH) / 2 + 210, (STREAM_HEIGHT - REGION_HEIGHT) / 2 + 60);
-                REGION1_TOPLEFT_ANCHOR_POINT = new Point(STREAM_WIDTH - REGION_WIDTH, (STREAM_HEIGHT - REGION_HEIGHT) / 2 + 60);
+            if (isPowerShot) {
+                REGION_WIDTH = 100;
+                REGION_HEIGHT = 80;
+                REGION1_TOPLEFT_ANCHOR_POINT = new Point(STREAM_WIDTH - REGION_WIDTH, (STREAM_HEIGHT - REGION_HEIGHT) / 2 + 50);
             }
         }
 
@@ -117,8 +113,8 @@ public class RingsOpenCV {
         static final Scalar BLUE = new Scalar(0, 0, 255);
         static final Scalar GREEN = new Scalar(0, 255, 0);
 
-        final int FOUR_RING_THRESHOLD = 136;
-        final int ONE_RING_THRESHOLD = 130;
+        final int FOUR_RING_THRESHOLD = 145;
+        final int ONE_RING_THRESHOLD = 133;
 
         Point region1_pointA = new Point(
                 REGION1_TOPLEFT_ANCHOR_POINT.x,

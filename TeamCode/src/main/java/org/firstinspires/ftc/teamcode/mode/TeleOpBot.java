@@ -38,6 +38,7 @@ public class TeleOpBot extends LinearOpMode {
         GamepadButton ringFeedButton = new GamepadButton(300, false);
         GamepadButton grabberButton = new GamepadButton(300, false);
         GamepadButton armRotateButton = new GamepadButton(300, false);
+        GamepadButton armMidButton = new GamepadButton(300, false);
         GamepadButton increaseFlywheelButton = new GamepadButton(300, false);
         GamepadButton decreaseFlywheelButton = new GamepadButton(300, false);
         GamepadButton increaseIntakeButton = new GamepadButton(300, false);
@@ -48,7 +49,14 @@ public class TeleOpBot extends LinearOpMode {
 
         double[] powerList = {0, 0, 0, 0};
         double intakePower = .75;
-        double flywheelPower = .75;
+        double flywheelPower = .9;
+        int initFlywheelPos = 0;
+        int flywheelEncoderSpeed = 0;
+
+        long initRingFeedTime = 0;
+        boolean ringFeedDelaying = false;
+        long initFlywheelTime = 0;
+        boolean flywheelMeasuring = false;
 
         waitForStart();
         while(opModeIsActive()) {
@@ -69,7 +77,8 @@ public class TeleOpBot extends LinearOpMode {
 
             boolean ringFeedBool = gamepad2.right_bumper;
             boolean grabberBool = gamepad2.left_stick_button;
-            boolean armRotateBool = gamepad2.left_bumper;
+            boolean armRotateBool = gamepad2.right_stick_button;
+            boolean armMidBool = gamepad2.left_bumper;
 
             boolean increaseFlywheelBool = gamepad2.dpad_up;
             boolean decreaseFlywheelBool = gamepad2.dpad_down;
@@ -92,6 +101,7 @@ public class TeleOpBot extends LinearOpMode {
             ringFeedButton.checkStatus(ringFeedBool);
             grabberButton.checkStatus(grabberBool);
             armRotateButton.checkStatus(armRotateBool);
+            armMidButton.checkStatus(armMidBool);
             increaseFlywheelButton.checkStatus(increaseFlywheelBool);
             decreaseFlywheelButton.checkStatus(decreaseFlywheelBool);
             increaseIntakeButton.checkStatus(increaseIntakeBool);
@@ -105,8 +115,6 @@ public class TeleOpBot extends LinearOpMode {
 
             boolean slideActive = false;
 
-            long initTime = 0;
-            boolean waitForArm = false;
 
             // Adjust Intake Power
             if (intakePower > -.025 && intakePower < 1.025) {
@@ -160,6 +168,9 @@ public class TeleOpBot extends LinearOpMode {
             if (armRotateButton.pressed) {
                 robot.armRotateServo.setPosition(robot.ARM_OUT);
                 telemetry.addLine("arm: OUT");
+            } else if (armMidButton.pressed) {
+                robot.armRotateServo.setPosition(robot.ARM_MID);
+                telemetry.addLine("arm: MID");
             } else {
                 robot.armRotateServo.setPosition(robot.ARM_IN);
                 telemetry.addLine("arm: IN");
@@ -175,16 +186,14 @@ public class TeleOpBot extends LinearOpMode {
             }
 */
 
-            if (ringFeedButton.pressed) {
+            if (ringFeedButton.buttonStatus) {
                 robot.ringFeedServo.setPosition(robot.FEED_OPEN);
                 telemetry.addLine("feed: OPEN");
-                initTime = System.currentTimeMillis();
-                ringFeedButton.pressedStatusFalse();
+                initRingFeedTime = System.currentTimeMillis();
             }
-            if (waitAndContinue(initTime, 500)) {
+            if (!ringFeedButton.buttonStatus && waitAndContinue(initRingFeedTime, 500)) {
                 robot.ringFeedServo.setPosition(robot.FEED_CLOSED);
                 telemetry.addLine("feed: CLOSED");
-                ringFeedButton.pressedStatusFalse();
             }
 
 
@@ -244,24 +253,37 @@ public class TeleOpBot extends LinearOpMode {
             }
 */
 
+            // Flywheel Encoder Speed
+            if (flywheelMeasuring && waitAndContinue(initFlywheelTime, 500)) {
+                flywheelEncoderSpeed = 2*(robot.FlywheelMotor.getCurrentPosition() - initFlywheelPos);
+                flywheelMeasuring = false;
+            }
+            if (!flywheelMeasuring) {
+                initFlywheelTime = System.currentTimeMillis();
+                initFlywheelPos = robot.FlywheelMotor.getCurrentPosition();
+                flywheelMeasuring = true;
+            }
+
             // MOVEMENT
             rotation = Math.abs(rotation) < .1 ? 0 : -rotation; // "Dead-zone" for joystick
             powerList = robot.mecanumMove(x, y, rotation, slowToggleButton.pressed, fastHoldButton.buttonStatus, telemetry);
 
 
             telemetry.addData("flywheelPower: ", flywheelPower);
+            telemetry.addData("flywheelSpeed: ", flywheelEncoderSpeed);
+            telemetry.addData("flywheelPos", robot.FlywheelMotor.getCurrentPosition());
             telemetry.addData("intakePower: ", intakePower);
-            telemetry.addData("LF Pos: ", robot.LFmotor.getCurrentPosition());
-            telemetry.addData("LF Pow: ", Math.round(powerList[0] * 100.0) / 100.0);
-            telemetry.addData("LB Pos: ", robot.LBmotor.getCurrentPosition());
-            telemetry.addData("LB Pow: ", Math.round(powerList[1] * 100.0) / 100.0);
-            telemetry.addData("RF Pos: ", robot.RFmotor.getCurrentPosition());
-            telemetry.addData("RF Pow: ", Math.round(powerList[2] * 100.0) / 100.0);
-            telemetry.addData("RB Pos: ", robot.RBmotor.getCurrentPosition());
-            telemetry.addData("RB Pow: ", Math.round(powerList[3] * 100.0) / 100.0);
-            telemetry.addData("joyX: ", gamepad1.left_stick_x);
-            telemetry.addData("joyY: ", gamepad1.left_stick_y);
-            telemetry.addData("X: ", slowToggleButton.pressed);
+//            telemetry.addData("LF Pos: ", robot.LFmotor.getCurrentPosition());
+//            telemetry.addData("LF Pow: ", Math.round(powerList[0] * 100.0) / 100.0);
+//            telemetry.addData("LB Pos: ", robot.LBmotor.getCurrentPosition());
+//            telemetry.addData("LB Pow: ", Math.round(powerList[1] * 100.0) / 100.0);
+//            telemetry.addData("RF Pos: ", robot.RFmotor.getCurrentPosition());
+//            telemetry.addData("RF Pow: ", Math.round(powerList[2] * 100.0) / 100.0);
+//            telemetry.addData("RB Pos: ", robot.RBmotor.getCurrentPosition());
+//            telemetry.addData("RB Pow: ", Math.round(powerList[3] * 100.0) / 100.0);
+//            telemetry.addData("joyX: ", gamepad1.left_stick_x);
+//            telemetry.addData("joyY: ", gamepad1.left_stick_y);
+            telemetry.addData("slowToggle: ", slowToggleButton.pressed);
             Orientation angOrientation = robot.gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             telemetry.addData("Orientation", angOrientation.firstAngle);
             telemetry.update();
