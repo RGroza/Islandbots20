@@ -25,6 +25,7 @@ public class TeleOpBot extends LinearOpMode {
 
         robot.RFmotor.setDirection(DcMotor.Direction.REVERSE);
         robot.RBmotor.setDirection(DcMotor.Direction.REVERSE);
+        robot.armRotateServo.setPosition(robot.ARM_MID);
 
         // BUTTON DECLARE
         // Gamepad 1

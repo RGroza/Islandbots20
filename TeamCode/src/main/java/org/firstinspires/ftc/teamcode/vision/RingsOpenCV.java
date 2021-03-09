@@ -92,14 +92,14 @@ public class RingsOpenCV {
     {
         static int REGION_WIDTH = 100;
         static int REGION_HEIGHT = 80;
-        static Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((STREAM_WIDTH - REGION_WIDTH) / 2, (STREAM_HEIGHT - REGION_HEIGHT) / 2 + 60);
+        static Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((STREAM_WIDTH - REGION_WIDTH) / 2 - 50, (STREAM_HEIGHT - REGION_HEIGHT) / 2 - 70);
 
         public SkystoneDeterminationPipeline(boolean isPowerShot)
         {
             if (isPowerShot) {
                 REGION_WIDTH = 100;
                 REGION_HEIGHT = 80;
-                REGION1_TOPLEFT_ANCHOR_POINT = new Point(STREAM_WIDTH - REGION_WIDTH, (STREAM_HEIGHT - REGION_HEIGHT) / 2 + 50);
+                REGION1_TOPLEFT_ANCHOR_POINT = new Point(STREAM_WIDTH - REGION_WIDTH, (STREAM_HEIGHT - REGION_HEIGHT) / 2 - 70);
             }
         }
 

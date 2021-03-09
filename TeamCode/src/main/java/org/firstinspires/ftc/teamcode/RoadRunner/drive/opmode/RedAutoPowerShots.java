@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.vision.RingsOpenCV;
 @Config
 @Autonomous(name="RedAutoPowerShots", group="Autonomous")
 public class RedAutoPowerShots extends LinearOpMode {
-    public static double START_X = -60.375;
+    public static double START_X = -63.25;
     public static double START_Y = -20.75;
     public static double BACK_DIST = 40;
     public static double A_X = 0;
@@ -50,7 +50,7 @@ public class RedAutoPowerShots extends LinearOpMode {
         telemetry.update();
 
         Trajectory traj = drive.trajectoryBuilder(startingPose)
-                .back(4)
+                .back(4.5)
                 .build();
         drive.followTrajectory(traj);
 
@@ -72,6 +72,7 @@ public class RedAutoPowerShots extends LinearOpMode {
 
         shootPowerShot(robot);
         robot.FlywheelMotor.setPower(0);
+
 
         if (numRings == 0) {
             traj = drive.trajectoryBuilder(traj.end(), true)
@@ -101,7 +102,7 @@ public class RedAutoPowerShots extends LinearOpMode {
             sleep(250);
 
             traj = drive.trajectoryBuilder(traj.end())
-                    .splineTo(new Vector2d(PARK_X, PARK_Y), Math.toRadians(180))
+                    .lineToSplineHeading(new Pose2d(PARK_X, PARK_Y, Math.toRadians(180)))
                     .build();
             drive.followTrajectory(traj);
 
@@ -133,7 +134,7 @@ public class RedAutoPowerShots extends LinearOpMode {
     }
 
     public void shootPowerShot(CompetitionBot robot) {
-        robot.FlywheelMotor.setPower(.85);
+        robot.FlywheelMotor.setPower(.855);
         sleep(1500);
         robot.ringFeedServo.setPosition(robot.FEED_OPEN);
         sleep(500);
