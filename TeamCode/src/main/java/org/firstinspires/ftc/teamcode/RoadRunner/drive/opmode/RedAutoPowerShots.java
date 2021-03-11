@@ -18,12 +18,12 @@ public class RedAutoPowerShots extends LinearOpMode {
     public static double START_Y = -20.75;
     public static double BACK_DIST = 40;
     public static double A_X = 0;
-    public static double A_Y = -40;
+    public static double A_Y = -50;
     public static double B_X = 24;
     public static double B_Y = START_Y;
-    public static double C_X = 40;
+    public static double C_X = 48;
     public static double C_Y = -40;
-    public static double PARK_X = 12;
+    public static double PARK_X = 6;
     public static double PARK_Y = -36;
 
     @Override
@@ -84,9 +84,10 @@ public class RedAutoPowerShots extends LinearOpMode {
             sleep(500);
             robot.grabberServo.setPosition(robot.GRABBER_OPEN);
             sleep(250);
+            robot.armRotateServo.setPosition(robot.ARM_IN);
 
             traj = drive.trajectoryBuilder(traj.end())
-                    .forward(6)
+                    .forward(12)
                     .build();
             drive.followTrajectory(traj);
 
@@ -100,14 +101,12 @@ public class RedAutoPowerShots extends LinearOpMode {
             sleep(500);
             robot.grabberServo.setPosition(robot.GRABBER_OPEN);
             sleep(250);
+            robot.armRotateServo.setPosition(robot.ARM_IN);
 
             traj = drive.trajectoryBuilder(traj.end())
                     .lineToSplineHeading(new Pose2d(PARK_X, PARK_Y, Math.toRadians(180)))
                     .build();
             drive.followTrajectory(traj);
-
-            robot.armRotateServo.setPosition(robot.ARM_IN);
-            robot.grabberServo.setPosition(robot.GRABBER_CLOSED);
 
         } else {
             traj = drive.trajectoryBuilder(traj.end(), true)
@@ -120,17 +119,16 @@ public class RedAutoPowerShots extends LinearOpMode {
             sleep(500);
             robot.grabberServo.setPosition(robot.GRABBER_OPEN);
             sleep(250);
+            robot.armRotateServo.setPosition(robot.ARM_IN);
 
             traj = drive.trajectoryBuilder(traj.end())
                     .splineTo(new Vector2d(PARK_X, PARK_Y), Math.toRadians(180))
                     .build();
             drive.followTrajectory(traj);
 
-            robot.armRotateServo.setPosition(robot.ARM_IN);
-            robot.grabberServo.setPosition(robot.GRABBER_CLOSED);
-
         }
 
+        robot.grabberServo.setPosition(robot.GRABBER_CLOSED);
     }
 
     public void shootPowerShot(CompetitionBot robot) {
