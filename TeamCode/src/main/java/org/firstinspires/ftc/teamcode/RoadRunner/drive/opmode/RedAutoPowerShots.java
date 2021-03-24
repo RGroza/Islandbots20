@@ -71,7 +71,8 @@ public class RedAutoPowerShots extends LinearOpMode {
         drive.followTrajectory(traj);
 
         shootPowerShot(robot);
-        robot.FlywheelMotor.setPower(0);
+        robot.LFlywheelMotor.setPower(0);
+        robot.RFlywheelMotor.setPower(0);
 
 
         if (numRings == 0) {
@@ -132,7 +133,8 @@ public class RedAutoPowerShots extends LinearOpMode {
     }
 
     public void shootPowerShot(CompetitionBot robot) {
-        robot.FlywheelMotor.setPower(.855);
+        robot.LFlywheelMotor.setPower(.855);
+        robot.RFlywheelMotor.setPower(.855);
         sleep(1500);
         robot.ringFeedServo.setPosition(robot.FEED_OPEN);
         sleep(500);
@@ -141,7 +143,8 @@ public class RedAutoPowerShots extends LinearOpMode {
     }
 
     public void shootHighGoal(CompetitionBot robot) {
-        robot.FlywheelMotor.setPower(.9);
+        robot.LFlywheelMotor.setPower(.9);
+        robot.RFlywheelMotor.setPower(.9);
         sleep(500);
         robot.ringFeedServo.setPosition(robot.FEED_OPEN);
         sleep(500);

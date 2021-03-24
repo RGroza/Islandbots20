@@ -19,7 +19,7 @@ public class CompetitionBot {
     public NormalizedColorSensor LcolorSensor, RcolorSensor;
 
     // motors
-    public DcMotor RFmotor, RBmotor, LFmotor, LBmotor, SlideMotor, IntakeMotor, FlywheelMotor;
+    public DcMotor RFmotor, RBmotor, LFmotor, LBmotor, SlideMotor, IntakeMotor, LFlywheelMotor, RFlywheelMotor;
     public Servo grabberServo, armRotateServo, ringFeedServo;
 
     // Servo constants
@@ -52,7 +52,8 @@ public class CompetitionBot {
         LBmotor = hwMap.dcMotor.get("LBmotor");
         SlideMotor = hwMap.dcMotor.get("SlideMotor");
         IntakeMotor = hwMap.dcMotor.get("IntakeMotor");
-        FlywheelMotor = hwMap.dcMotor.get("FlywheelMotor");
+        LFlywheelMotor = hwMap.dcMotor.get("LFlywheelMotor");
+        RFlywheelMotor = hwMap.dcMotor.get("RFlywheelMotor");
 
         // gyro hwMap
         gyro = hwMap.get(BNO055IMU.class, "gyro");
@@ -175,14 +176,16 @@ public class CompetitionBot {
         LBmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RBmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        FlywheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LFlywheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RFlywheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        SlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         LFmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         LBmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RFmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RBmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FlywheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        LFlywheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        RFlywheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         SlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         LBmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

@@ -50,7 +50,7 @@ public class TeleOpBot extends LinearOpMode {
 
         double[] powerList = {0, 0, 0, 0};
         double intakePower = .75;
-        double flywheelPower = .9;
+        double flywheelPower = .75;
         int initFlywheelPos = 0;
         int flywheelEncoderSpeed = 0;
 
@@ -153,9 +153,11 @@ public class TeleOpBot extends LinearOpMode {
             }
 
             if (flywheelButton.pressed) {
-                robot.FlywheelMotor.setPower(flywheelPower);
+                robot.LFlywheelMotor.setPower(flywheelPower);
+                robot.RFlywheelMotor.setPower(flywheelPower - .1);
             } else {
-                robot.FlywheelMotor.setPower(0);
+                robot.LFlywheelMotor.setPower(0);
+                robot.RFlywheelMotor.setPower(0);
             }
 
             if (grabberButton.pressed) {
@@ -256,12 +258,12 @@ public class TeleOpBot extends LinearOpMode {
 
             // Flywheel Encoder Speed
             if (flywheelMeasuring && waitAndContinue(initFlywheelTime, 500)) {
-                flywheelEncoderSpeed = 2*(robot.FlywheelMotor.getCurrentPosition() - initFlywheelPos);
+                flywheelEncoderSpeed = 2*(robot.LFlywheelMotor.getCurrentPosition() - initFlywheelPos);
                 flywheelMeasuring = false;
             }
             if (!flywheelMeasuring) {
                 initFlywheelTime = System.currentTimeMillis();
-                initFlywheelPos = robot.FlywheelMotor.getCurrentPosition();
+                initFlywheelPos = robot.LFlywheelMotor.getCurrentPosition();
                 flywheelMeasuring = true;
             }
 
@@ -272,7 +274,8 @@ public class TeleOpBot extends LinearOpMode {
 
             telemetry.addData("flywheelPower: ", flywheelPower);
             telemetry.addData("flywheelSpeed: ", flywheelEncoderSpeed);
-            telemetry.addData("flywheelPos", robot.FlywheelMotor.getCurrentPosition());
+            telemetry.addData("LeftFlywheelPos", robot.LFlywheelMotor.getCurrentPosition());
+            telemetry.addData("RightFlywheelPos", robot.RFlywheelMotor.getCurrentPosition());
             telemetry.addData("intakePower: ", intakePower);
 //            telemetry.addData("LF Pos: ", robot.LFmotor.getCurrentPosition());
 //            telemetry.addData("LF Pow: ", Math.round(powerList[0] * 100.0) / 100.0);

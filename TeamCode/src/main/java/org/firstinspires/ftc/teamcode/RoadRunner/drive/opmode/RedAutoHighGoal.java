@@ -62,12 +62,14 @@ public class RedAutoHighGoal extends LinearOpMode {
                 .build();
         drive.followTrajectory(traj);
 
-        robot.FlywheelMotor.setPower(.9);
+        robot.LFlywheelMotor.setPower(.9);
+        robot.RFlywheelMotor.setPower(.9);
         sleep(500);
         for (int i = 0; i < 3; i++) {
             shootHighGoal(robot);
         }
-        robot.FlywheelMotor.setPower(0);
+        robot.LFlywheelMotor.setPower(0);
+        robot.RFlywheelMotor.setPower(0);
 
         traj = drive.trajectoryBuilder(traj.end(), true)
                 .lineTo(new Vector2d(INIT_X, INIT_Y))
@@ -132,7 +134,8 @@ public class RedAutoHighGoal extends LinearOpMode {
     }
 
     public void shootPowerShot(CompetitionBot robot) {
-        robot.FlywheelMotor.setPower(.85);
+        robot.LFlywheelMotor.setPower(.85);
+        robot.RFlywheelMotor.setPower(.85);
         sleep(1000);
         robot.ringFeedServo.setPosition(robot.FEED_OPEN);
         sleep(500);
@@ -141,7 +144,8 @@ public class RedAutoHighGoal extends LinearOpMode {
     }
 
     public void shootHighGoal(CompetitionBot robot) {
-        robot.FlywheelMotor.setPower(.9);
+        robot.LFlywheelMotor.setPower(.9);
+        robot.RFlywheelMotor.setPower(.9);
         sleep(500);
         robot.ringFeedServo.setPosition(robot.FEED_OPEN);
         sleep(500);
