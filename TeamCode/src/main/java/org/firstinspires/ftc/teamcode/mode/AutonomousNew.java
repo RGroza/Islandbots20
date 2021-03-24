@@ -48,7 +48,7 @@ public abstract class AutonomousNew extends LinearOpMode {
 
         left(0.25, 1, angle, true);
 
-        robot.FlywheelMotor.setPower(.75);
+//        robot.FlywheelMotor.setPower(.75);
         sleep(1500);
         robot.ringFeedServo.setPosition(robot.FEED_OPEN);
 

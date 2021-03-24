@@ -50,7 +50,7 @@ public class TeleOpBot extends LinearOpMode {
 
         double[] powerList = {0, 0, 0, 0};
         double intakePower = .75;
-        double flywheelPower = .75;
+        double flywheelPower = .65;
         int initFlywheelPos = 0;
         int flywheelEncoderSpeed = 0;
 
@@ -128,12 +128,12 @@ public class TeleOpBot extends LinearOpMode {
             }
 
             // Adjust Flywheel Power
-            if (flywheelPower > -.025 && flywheelPower < 1.025) {
+            if (flywheelPower > -.01 && flywheelPower < 1.01) {
                 if (flywheelPower < 1 && increaseFlywheelButton.justPressed) {
-                    flywheelPower += .05;
+                    flywheelPower += .025;
                 }
                 if (flywheelPower > 0 && decreaseFlywheelButton.justPressed) {
-                    flywheelPower -= .05;
+                    flywheelPower -= .025;
                 }
             }
 

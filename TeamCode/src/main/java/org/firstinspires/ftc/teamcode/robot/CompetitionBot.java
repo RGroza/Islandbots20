@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.robot;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -38,6 +39,10 @@ public class CompetitionBot {
     public static final double DRIVETAIN_RPM = 1150;
     public static final double DRIVETAIN_PPR = 146;
 
+    public static final double HIGH_GOAL_SPEED = .65;
+    public static final double POWER_SHOT_SPEED = .65;
+
+
     public CompetitionBot(HardwareMap hwMap, Telemetry telemetry) {
         // gyro initialization
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -54,6 +59,7 @@ public class CompetitionBot {
         IntakeMotor = hwMap.dcMotor.get("IntakeMotor");
         LFlywheelMotor = hwMap.dcMotor.get("LFlywheelMotor");
         RFlywheelMotor = hwMap.dcMotor.get("RFlywheelMotor");
+        RFlywheelMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // gyro hwMap
         gyro = hwMap.get(BNO055IMU.class, "gyro");

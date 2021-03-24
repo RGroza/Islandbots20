@@ -134,8 +134,8 @@ public class RedAutoHighGoal extends LinearOpMode {
     }
 
     public void shootPowerShot(CompetitionBot robot) {
-        robot.LFlywheelMotor.setPower(.85);
-        robot.RFlywheelMotor.setPower(.85);
+        robot.LFlywheelMotor.setPower(robot.POWER_SHOT_SPEED);
+        robot.RFlywheelMotor.setPower(robot.POWER_SHOT_SPEED);
         sleep(1000);
         robot.ringFeedServo.setPosition(robot.FEED_OPEN);
         sleep(500);
@@ -144,8 +144,8 @@ public class RedAutoHighGoal extends LinearOpMode {
     }
 
     public void shootHighGoal(CompetitionBot robot) {
-        robot.LFlywheelMotor.setPower(.9);
-        robot.RFlywheelMotor.setPower(.9);
+        robot.LFlywheelMotor.setPower(robot.HIGH_GOAL_SPEED);
+        robot.RFlywheelMotor.setPower(robot.HIGH_GOAL_SPEED);
         sleep(500);
         robot.ringFeedServo.setPosition(robot.FEED_OPEN);
         sleep(500);
