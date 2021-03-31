@@ -27,8 +27,8 @@ public class CompetitionBot {
     public static final double GRABBER_OPEN = .3;
     public static final double GRABBER_CLOSED = .5;
 
-    public static final double FEED_OPEN = .8;
-    public static final double FEED_CLOSED = .6;
+    public static final double FEED_OPEN = .49;
+    public static final double FEED_CLOSED = .3225;
 
     public static final double ARM_OUT = .35;
     public static final double ARM_IN = .92;

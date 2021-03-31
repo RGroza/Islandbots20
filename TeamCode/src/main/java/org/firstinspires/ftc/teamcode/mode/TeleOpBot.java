@@ -154,7 +154,7 @@ public class TeleOpBot extends LinearOpMode {
 
             if (flywheelButton.pressed) {
                 robot.LFlywheelMotor.setPower(flywheelPower);
-                robot.RFlywheelMotor.setPower(flywheelPower - .1);
+                robot.RFlywheelMotor.setPower(flywheelPower - .2);
             } else {
                 robot.LFlywheelMotor.setPower(0);
                 robot.RFlywheelMotor.setPower(0);
