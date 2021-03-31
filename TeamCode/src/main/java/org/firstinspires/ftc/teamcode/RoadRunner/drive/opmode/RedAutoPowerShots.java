@@ -25,6 +25,8 @@ public class RedAutoPowerShots extends LinearOpMode {
     public static double C_Y = -40;
     public static double PARK_X = 6;
     public static double PARK_Y = -36;
+    public static double WOBBLE_X = -40;
+    public static double WOBBLE_Y = -50;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -122,12 +124,19 @@ public class RedAutoPowerShots extends LinearOpMode {
             sleep(250);
             robot.armRotateServo.setPosition(robot.ARM_IN);
 
+/*
             traj = drive.trajectoryBuilder(traj.end())
                     .splineTo(new Vector2d(PARK_X, PARK_Y), Math.toRadians(180))
                     .build();
             drive.followTrajectory(traj);
+*/
 
         }
+
+        traj = drive.trajectoryBuilder(traj.end())
+                .splineTo(new Vector2d(WOBBLE_X, WOBBLE_Y), Math.toRadians(180))
+                .build();
+        drive.followTrajectory(traj);
 
         robot.grabberServo.setPosition(robot.GRABBER_CLOSED);
     }

@@ -26,6 +26,8 @@ public class RedAutoHighGoal extends LinearOpMode {
     public static double C_Y = INIT_Y;
     public static double PARK_X = 12;
     public static double PARK_Y = -36;
+    public static double WOBBLE_X = -40;
+    public static double WOBBLE_Y = -40;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -89,6 +91,13 @@ public class RedAutoHighGoal extends LinearOpMode {
 
             traj = drive.trajectoryBuilder(traj.end())
                     .forward(6)
+                    .build();
+            drive.followTrajectory(traj);
+
+            drive.turn(Math.toRadians(0));
+
+            traj = drive.trajectoryBuilder(traj.end(), true)
+                    .splineTo(new Vector2d(WOBBLE_X, WOBBLE_Y), Math.toRadians(90))
                     .build();
             drive.followTrajectory(traj);
 
