@@ -57,7 +57,7 @@ public class RedAutoPowerShots extends LinearOpMode {
 //        drive.followTrajectory(traj);
 
         Trajectory traj = drive.trajectoryBuilder(startingPose)
-                .lineTo(new Vector2d(6, START_X))
+                .lineTo(new Vector2d(START_X, 6))
                 .build();
         drive.followTrajectory(traj);
 
