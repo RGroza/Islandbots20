@@ -24,15 +24,15 @@ public class CompetitionBot {
     public Servo grabberServo, armRotateServo, ringFeedServo;
 
     // Servo constants
-    public static final double GRABBER_OPEN = .3;
+    public static final double GRABBER_OPEN = .15;
     public static final double GRABBER_CLOSED = .5;
 
-    public static final double FEED_OPEN = .49;
+    public static final double FEED_OPEN = .46;
     public static final double FEED_CLOSED = .29;
 
-    public static final double ARM_OUT = .35;
-    public static final double ARM_IN = .92;
-    public static final double ARM_MID = .6;
+    public static final double ARM_OUT = .05;
+    public static final double ARM_IN = .6;
+    public static final double ARM_MID = .35;
 
     public static final double MAX_SPEED = .7;
 
