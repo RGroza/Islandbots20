@@ -52,7 +52,7 @@ public class RedAutoPowerShots extends LinearOpMode {
         telemetry.update();
 
         Trajectory traj = drive.trajectoryBuilder(startingPose)
-                .back(69.25)
+                .back(61)
                 .build();
         drive.followTrajectory(traj);
 
@@ -82,7 +82,6 @@ public class RedAutoPowerShots extends LinearOpMode {
 
         if (numRings == 0) {
             traj = drive.trajectoryBuilder(traj.end(), true)
-                    .back(BACK_DIST)
                     .splineTo(new Vector2d(A_X, A_Y), Math.toRadians(270))
                     .build();
             drive.followTrajectory(traj);
@@ -99,7 +98,6 @@ public class RedAutoPowerShots extends LinearOpMode {
 
         } else if (numRings == 1) {
             traj = drive.trajectoryBuilder(traj.end(), true)
-                    .back(BACK_DIST)
                     .splineTo(new Vector2d(B_X, B_Y), Math.toRadians(270))
                     .build();
             drive.followTrajectory(traj);
@@ -116,7 +114,6 @@ public class RedAutoPowerShots extends LinearOpMode {
 
         } else {
             traj = drive.trajectoryBuilder(traj.end(), true)
-                    .back(BACK_DIST)
                     .splineTo(new Vector2d(C_X, C_Y), Math.toRadians(270))
                     .build();
 
