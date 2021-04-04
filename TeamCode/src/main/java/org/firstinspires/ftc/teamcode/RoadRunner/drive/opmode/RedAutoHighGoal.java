@@ -78,6 +78,11 @@ public class RedAutoHighGoal extends LinearOpMode {
                 .build();
         drive.followTrajectory(traj);
 
+        traj = drive.trajectoryBuilder(traj.end(), true)
+                .lineTo(new Vector2d(6, START_Y))
+                .build();
+        drive.followTrajectory(traj);
+
 
         if (numRings == 0) {
             traj = drive.trajectoryBuilder(traj.end(), true)
