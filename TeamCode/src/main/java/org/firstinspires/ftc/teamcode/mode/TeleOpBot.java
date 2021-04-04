@@ -154,7 +154,7 @@ public class TeleOpBot extends LinearOpMode {
 
             if (flywheelButton.pressed) {
                 robot.LFlywheelMotor.setPower(flywheelPower);
-                robot.RFlywheelMotor.setPower(flywheelPower - .2);
+                robot.RFlywheelMotor.setPower(flywheelPower - robot.FLYWHEEL_SPEED_DIFF);
             } else {
                 robot.LFlywheelMotor.setPower(0);
                 robot.RFlywheelMotor.setPower(0);
@@ -194,7 +194,7 @@ public class TeleOpBot extends LinearOpMode {
                 telemetry.addLine("feed: OPEN");
                 initRingFeedTime = System.currentTimeMillis();
             }
-            if (!ringFeedButton.buttonStatus && waitAndContinue(initRingFeedTime, 500)) {
+            if (!ringFeedButton.buttonStatus && waitAndContinue(initRingFeedTime, 300)) {
                 robot.ringFeedServo.setPosition(robot.FEED_CLOSED);
                 telemetry.addLine("feed: CLOSED");
             }
