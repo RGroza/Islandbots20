@@ -51,15 +51,15 @@ public class RedAutoPowerShots extends LinearOpMode {
         telemetry.addData("numRings: ", numRings);
         telemetry.update();
 
-//        Trajectory traj = drive.trajectoryBuilder(startingPose)
-//                .back(24)
-//                .build();
-//        drive.followTrajectory(traj);
-
         Trajectory traj = drive.trajectoryBuilder(startingPose)
-                .lineTo(new Vector2d(6, START_Y))
+                .back(69.25)
                 .build();
         drive.followTrajectory(traj);
+
+//        Trajectory traj = drive.trajectoryBuilder(startingPose)
+//                .lineTo(new Vector2d(6, START_Y))
+//                .build();
+//        drive.followTrajectory(traj);
 
         shootPowerShot(robot);
 
