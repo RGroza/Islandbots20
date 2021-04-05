@@ -5,12 +5,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 
-@Autonomous(name="RingsVisionTest", group="Test")
-public class RingsVisionTest extends LinearOpMode {
+@Autonomous(name="HighGoalVisionTest", group="Test")
+public class HighGoalVisionTest extends LinearOpMode {
 
     public void runOpMode() {
-        CompetitionBot robot = new CompetitionBot(hardwareMap, telemetry);
-        RingsOpenCV vision = new RingsOpenCV(true, hardwareMap, telemetry);
+        RingsOpenCV vision = new RingsOpenCV(false, hardwareMap, telemetry);
 
         waitForStart();
 
