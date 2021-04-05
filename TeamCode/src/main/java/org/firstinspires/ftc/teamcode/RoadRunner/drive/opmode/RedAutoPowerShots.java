@@ -19,7 +19,7 @@ public class RedAutoPowerShots extends LinearOpMode {
     public static double A_X = 4;
     public static double A_Y = -46;
     public static double B_X = 30;
-    public static double B_Y = -44;
+    public static double B_Y = -28;
     public static double C_X = 52;
     public static double C_Y = -46;
     public static double PARK_X = 12;

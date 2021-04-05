@@ -21,7 +21,7 @@ public class RedAutoHighGoal extends LinearOpMode {
     public static double A_X = 4;
     public static double A_Y = -46;
     public static double B_X = 30;
-    public static double B_Y = -44;
+    public static double B_Y = -28;
     public static double C_X = 46;
     public static double C_Y = -46;
     public static double INTER_X = 12;
@@ -88,18 +88,11 @@ public class RedAutoHighGoal extends LinearOpMode {
             sleep(250);
 
             traj = drive.trajectoryBuilder(traj.end())
-                    .lineTo(new Vector2d(PARK_X, PARK_Y))
-                    .build();
-            drive.followTrajectory(traj);
-
-/*
-            traj = drive.trajectoryBuilder(traj.end())
                     .lineTo(new Vector2d(INTER_X, INTER_Y))
                     .build();
             drive.followTrajectory(traj);
 
             drive.turn(Math.toRadians(-90));
-*/
 
         } else if (numRings == 1) {
             traj = drive.trajectoryBuilder(traj.end())
@@ -111,10 +104,10 @@ public class RedAutoHighGoal extends LinearOpMode {
             robot.grabberServo.setPosition(robot.GRABBER_OPEN);
             sleep(250);
 
-            traj = drive.trajectoryBuilder(traj.end())
-                    .lineTo(new Vector2d(PARK_X, PARK_Y))
+/*            traj = drive.trajectoryBuilder(traj.end())
+                    .splineTo(new Vector2d(INTER_X, INTER_Y), Math.toRadians())
                     .build();
-            drive.followTrajectory(traj);
+            drive.followTrajectory(traj);*/
 
         } else {
             traj = drive.trajectoryBuilder(traj.end(), true)
