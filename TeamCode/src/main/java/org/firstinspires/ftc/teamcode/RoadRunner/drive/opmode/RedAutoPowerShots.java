@@ -32,8 +32,8 @@ public class RedAutoPowerShots extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         CompetitionBot robot = new CompetitionBot(hardwareMap, telemetry);
 
-//        Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(robot.STREAM_WIDTH - robot.REGION_WIDTH, (robot.STREAM_HEIGHT - robot.REGION_HEIGHT) / 2 - 70);
-        RingsOpenCV vision = new RingsOpenCV(true, hardwareMap, telemetry);
+        Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(robot.STREAM_WIDTH - robot.REGION_WIDTH, (robot.STREAM_HEIGHT - robot.REGION_HEIGHT) / 2 - 70);
+        RingsOpenCV vision = new RingsOpenCV(REGION1_TOPLEFT_ANCHOR_POINT, hardwareMap, telemetry);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         Pose2d startingPose = new Pose2d(START_X, START_Y, Math.toRadians(180));

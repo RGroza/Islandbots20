@@ -20,11 +20,11 @@ public class RedAutoHighGoal extends LinearOpMode {
     public static double SHOOTING_X = -1.25;
     public static double SHOOTING_Y = -36;
     public static double A_X = 4;
-    public static double A_Y = -54;
+    public static double A_Y = -46;
     public static double B_X = 30;
     public static double B_Y = -44;
     public static double C_X = 52;
-    public static double C_Y = -54;
+    public static double C_Y = -46;
     public static double PARK_X = 12;
     public static double PARK_Y = -36;
     public static double WOBBLE_X = -40;
@@ -34,8 +34,8 @@ public class RedAutoHighGoal extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         CompetitionBot robot = new CompetitionBot(hardwareMap, telemetry);
 
-//        Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((robot.STREAM_WIDTH - robot.REGION_WIDTH) / 2 - 50, (robot.STREAM_HEIGHT - robot.REGION_HEIGHT) / 2 - 70);
-        RingsOpenCV vision = new RingsOpenCV(false, hardwareMap, telemetry);
+        Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((robot.STREAM_WIDTH - robot.REGION_WIDTH) / 2 - 50, (robot.STREAM_HEIGHT - robot.REGION_HEIGHT) / 2 - 70);
+        RingsOpenCV vision = new RingsOpenCV(REGION1_TOPLEFT_ANCHOR_POINT, hardwareMap, telemetry);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         Pose2d startingPose = new Pose2d(START_X, START_Y, Math.toRadians(180));
