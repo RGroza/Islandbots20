@@ -22,7 +22,7 @@ public class RedAutoHighGoal extends LinearOpMode {
     public static double A_Y = -46;
     public static double B_X = 30;
     public static double B_Y = -44;
-    public static double C_X = 52;
+    public static double C_X = 46;
     public static double C_Y = -46;
     public static double PARK_X = 12;
     public static double PARK_Y = -36;
@@ -58,7 +58,7 @@ public class RedAutoHighGoal extends LinearOpMode {
         drive.followTrajectory(traj);
 
         traj = drive.trajectoryBuilder(traj.end())
-                .back(12)
+                .back(18)
                 .build();
         drive.followTrajectory(traj);
 
@@ -138,7 +138,6 @@ public class RedAutoHighGoal extends LinearOpMode {
         robot.SlideMotor.setPower(-.75);
         sleep(500);
         robot.SlideMotor.setPower(0);
-
     }
 
     public void shootHighGoal(CompetitionBot robot) {
