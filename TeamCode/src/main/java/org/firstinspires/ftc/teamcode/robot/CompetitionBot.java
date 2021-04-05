@@ -33,6 +33,7 @@ public class CompetitionBot {
     public static final double ARM_OUT = .05;
     public static final double ARM_IN = .6;
     public static final double ARM_MID = .35;
+    public static final double ARM_AUTO = .25;
 
     public static final double MAX_SPEED = .7;
 

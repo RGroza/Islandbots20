@@ -17,11 +17,11 @@ public class RedAutoPowerShots extends LinearOpMode {
     public static double START_X = -63.25;
     public static double START_Y = -20.75;
     public static double A_X = 4;
-    public static double A_Y = -54;
+    public static double A_Y = -46;
     public static double B_X = 30;
     public static double B_Y = -44;
     public static double C_X = 52;
-    public static double C_Y = -54;
+    public static double C_Y = -46;
     public static double PARK_X = 12;
     public static double PARK_Y = -36;
     public static double WOBBLE_X = -40;
@@ -41,7 +41,7 @@ public class RedAutoPowerShots extends LinearOpMode {
         if (isStopRequested()) return;
 
         robot.SlideMotor.setPower(.75);
-        robot.armRotateServo.setPosition(robot.ARM_MID);
+        robot.armRotateServo.setPosition(robot.ARM_AUTO);
         sleep(750);
         robot.SlideMotor.setPower(0);
 
@@ -128,7 +128,7 @@ public class RedAutoPowerShots extends LinearOpMode {
         }
 
         robot.SlideMotor.setPower(-.75);
-        sleep(250);
+        sleep(500);
         robot.SlideMotor.setPower(0);
 
 /*
