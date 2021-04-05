@@ -127,8 +127,9 @@ public class RedAutoPowerShots extends LinearOpMode {
 
         }
 
-        robot.armRotateServo.setPosition(robot.ARM_IN);
-        robot.grabberServo.setPosition(robot.GRABBER_CLOSED);
+        robot.SlideMotor.setPower(-.75);
+        sleep(250);
+        robot.SlideMotor.setPower(0);
 
 /*
         traj = drive.trajectoryBuilder(traj.end())
