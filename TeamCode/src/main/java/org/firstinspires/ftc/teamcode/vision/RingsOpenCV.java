@@ -47,13 +47,13 @@ public class RingsOpenCV {
 //    private static final int STREAM_WIDTH = 640;
 //    private static final int STREAM_HEIGHT = 360;
 
-    public RingsOpenCV(Point anchorPoint, HardwareMap hwMap, Telemetry telemetry) {
+    public RingsOpenCV(int X_COOR, int Y_COOR, HardwareMap hwMap, Telemetry telemetry) {
         CompetitionBot robot = new CompetitionBot(hwMap, telemetry);
 
         webcamName = hwMap.get(WebcamName.class, "Webcam 1");
         int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
-        pipeline = new SkystoneDeterminationPipeline(anchorPoint, robot);
+        pipeline = new SkystoneDeterminationPipeline(X_COOR, Y_COOR, robot);
         webcam.setPipeline(pipeline);
 
 //        webcam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
@@ -99,7 +99,7 @@ public class RingsOpenCV {
         private Point REGION1_TOPLEFT_ANCHOR_POINT;
         CompetitionBot robot;
 
-        public SkystoneDeterminationPipeline(Point anchorPoint, CompetitionBot CompRobot)
+        public SkystoneDeterminationPipeline(int X_COOR, int Y_COOR, CompetitionBot CompRobot)
         {
 //            if (isPowerShot) {
 //                REGION_WIDTH = 100;
@@ -107,7 +107,7 @@ public class RingsOpenCV {
 //                REGION1_TOPLEFT_ANCHOR_POINT = new Point(STREAM_WIDTH - REGION_WIDTH, (STREAM_HEIGHT - REGION_HEIGHT) / 2 - 70);
 //            }
 
-            REGION1_TOPLEFT_ANCHOR_POINT = anchorPoint;
+            REGION1_TOPLEFT_ANCHOR_POINT = new Point(X_COOR, Y_COOR);;
             robot = CompRobot;
         }
 

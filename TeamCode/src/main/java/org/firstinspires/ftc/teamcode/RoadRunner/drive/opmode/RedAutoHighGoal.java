@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 import org.firstinspires.ftc.teamcode.vision.RingsOpenCV;
-import org.opencv.core.Point;
 
 @Config
 @Autonomous(name="RedAutoHighGoal", group="Autonomous")
@@ -33,9 +32,7 @@ public class RedAutoHighGoal extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         CompetitionBot robot = new CompetitionBot(hardwareMap, telemetry);
-
-        Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((robot.STREAM_WIDTH - robot.REGION_WIDTH) / 2 - 50, (robot.STREAM_HEIGHT - robot.REGION_HEIGHT) / 2 - 70);
-        RingsOpenCV vision = new RingsOpenCV(REGION1_TOPLEFT_ANCHOR_POINT, hardwareMap, telemetry);
+        RingsOpenCV vision = new RingsOpenCV((robot.STREAM_WIDTH - robot.REGION_WIDTH) / 2 - 50, (robot.STREAM_HEIGHT - robot.REGION_HEIGHT) / 2 - 70, hardwareMap, telemetry);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         Pose2d startingPose = new Pose2d(START_X, START_Y, Math.toRadians(180));
