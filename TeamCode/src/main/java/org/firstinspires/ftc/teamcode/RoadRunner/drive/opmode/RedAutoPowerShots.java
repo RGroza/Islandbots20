@@ -30,6 +30,8 @@ public class RedAutoPowerShots extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         CompetitionBot robot = new CompetitionBot(hardwareMap, telemetry);
+//        robot.X_COOR = robot.STREAM_WIDTH - robot.REGION_WIDTH;
+//        robot.Y_COOR = (robot.STREAM_HEIGHT - robot.REGION_HEIGHT) / 2 - 70;
         RingsOpenCV vision = new RingsOpenCV(robot.STREAM_WIDTH - robot.REGION_WIDTH, (robot.STREAM_HEIGHT - robot.REGION_HEIGHT) / 2 - 70, hardwareMap, telemetry);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 

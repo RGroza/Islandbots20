@@ -49,6 +49,8 @@ public class CompetitionBot {
     public static final int STREAM_HEIGHT = 360;
     public static final int REGION_WIDTH = 100;
     public static final int REGION_HEIGHT = 80;
+//    public static int X_COOR;
+//    public static int Y_COOR;
 
     public CompetitionBot(HardwareMap hwMap, Telemetry telemetry) {
         // gyro initialization

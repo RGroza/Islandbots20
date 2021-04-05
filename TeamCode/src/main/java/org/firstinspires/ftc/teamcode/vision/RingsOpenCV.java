@@ -47,13 +47,15 @@ public class RingsOpenCV {
 //    private static final int STREAM_WIDTH = 640;
 //    private static final int STREAM_HEIGHT = 360;
 
+    public enum RingPosition {FOUR, ONE, NONE}
+
     public RingsOpenCV(int X_COOR, int Y_COOR, HardwareMap hwMap, Telemetry telemetry) {
         CompetitionBot robot = new CompetitionBot(hwMap, telemetry);
 
         webcamName = hwMap.get(WebcamName.class, "Webcam 1");
         int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
-        pipeline = new SkystoneDeterminationPipeline(X_COOR, Y_COOR, robot);
+        SkystoneDeterminationPipeline pipeline = new SkystoneDeterminationPipeline(X_COOR, Y_COOR, robot);
         webcam.setPipeline(pipeline);
 
 //        webcam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
@@ -81,16 +83,16 @@ public class RingsOpenCV {
     }
 
     public int getNumberRings() {
-        if (pipeline.position == SkystoneDeterminationPipeline.RingPosition.NONE) {
+        if (pipeline.position == RingPosition.NONE) {
             return 0;
-        } else if (pipeline.position == SkystoneDeterminationPipeline.RingPosition.ONE) {
+        } else if (pipeline.position == RingPosition.ONE) {
             return 1;
         } else {
             return 4;
         }
     }
 
-    public static class SkystoneDeterminationPipeline extends OpenCvPipeline
+    public class SkystoneDeterminationPipeline extends OpenCvPipeline
     {
 //        private int REGION_WIDTH = 100;
 //        private int REGION_HEIGHT = 80;
@@ -111,15 +113,9 @@ public class RingsOpenCV {
             robot = CompRobot;
         }
 
-        public enum RingPosition
-        {
-            FOUR,
-            ONE,
-            NONE
-        }
 
-        static final Scalar BLUE = new Scalar(0, 0, 255);
-        static final Scalar GREEN = new Scalar(0, 255, 0);
+        final Scalar BLUE = new Scalar(0, 0, 255);
+        final Scalar GREEN = new Scalar(0, 255, 0);
 
         final int FOUR_RING_THRESHOLD = 145;
         final int ONE_RING_THRESHOLD = 133;
