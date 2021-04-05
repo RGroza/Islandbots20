@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.vision.RingsOpenCV;
 public class RedAutoHighGoal extends LinearOpMode {
     public static double START_X = -63.25;
     public static double START_Y = -40;
-    public static double SHOOTING_X = -1.25;
+    public static double SHOOTING_X = -8;
     public static double SHOOTING_Y = -36;
     public static double A_X = 4;
     public static double A_Y = -46;
@@ -88,11 +88,18 @@ public class RedAutoHighGoal extends LinearOpMode {
             sleep(250);
 
             traj = drive.trajectoryBuilder(traj.end())
+                    .lineTo(new Vector2d(PARK_X, PARK_Y))
+                    .build();
+            drive.followTrajectory(traj);
+
+/*
+            traj = drive.trajectoryBuilder(traj.end())
                     .lineTo(new Vector2d(INTER_X, INTER_Y))
                     .build();
             drive.followTrajectory(traj);
 
             drive.turn(Math.toRadians(-90));
+*/
 
         } else if (numRings == 1) {
             traj = drive.trajectoryBuilder(traj.end())
@@ -104,10 +111,19 @@ public class RedAutoHighGoal extends LinearOpMode {
             robot.grabberServo.setPosition(robot.GRABBER_OPEN);
             sleep(250);
 
-/*            traj = drive.trajectoryBuilder(traj.end())
-                    .splineTo(new Vector2d(INTER_X, INTER_Y), Math.toRadians())
+            traj = drive.trajectoryBuilder(traj.end())
+                    .lineTo(new Vector2d(PARK_X, PARK_Y))
                     .build();
-            drive.followTrajectory(traj);*/
+            drive.followTrajectory(traj);
+
+/*
+            drive.turn(Math.toRadians(180));
+
+            traj = drive.trajectoryBuilder(traj.end().plus(new Pose2d(0, 0, Math.toRadians(180))), true)
+                    .splineTo(new Vector2d(INTER_X, INTER_Y), Math.toRadians(180))
+                    .build();
+            drive.followTrajectory(traj);
+*/
 
         } else {
             traj = drive.trajectoryBuilder(traj.end(), true)
@@ -119,6 +135,13 @@ public class RedAutoHighGoal extends LinearOpMode {
             sleep(500);
             robot.grabberServo.setPosition(robot.GRABBER_OPEN);
             sleep(250);
+
+            traj = drive.trajectoryBuilder(traj.end())
+                    .strafeLeft(12)
+                    .build();
+            drive.followTrajectory(traj);
+
+//            drive.turn(Math.toRadians(180));
 
             traj = drive.trajectoryBuilder(traj.end())
                     .splineTo(new Vector2d(PARK_X, PARK_Y), Math.toRadians(180))

@@ -51,7 +51,7 @@ public class RedAutoPowerShots extends LinearOpMode {
         telemetry.update();
 
         Trajectory traj = drive.trajectoryBuilder(startingPose)
-                .back(62)
+                .back(52)
                 .build();
         drive.followTrajectory(traj);
 
