@@ -180,8 +180,9 @@ public class RedAutoHighGoal extends LinearOpMode {
     }
 
     public void shootHighGoal(CompetitionBot robot) {
-        robot.LFlywheelMotor.setPower(robot.HIGH_GOAL_SPEED);
-        robot.RFlywheelMotor.setPower(robot.HIGH_GOAL_SPEED - robot.FLYWHEEL_SPEED_DIFF);
+        double flywheelSpeed = robot.HIGH_GOAL_SPEED - .5;
+        robot.LFlywheelMotor.setPower(flywheelSpeed);
+        robot.RFlywheelMotor.setPower(flywheelSpeed - robot.FLYWHEEL_SPEED_DIFF);
         sleep(1000);
         robot.ringFeedServo.setPosition(robot.FEED_OPEN);
         sleep(robot.FEEDING_DELAY);
