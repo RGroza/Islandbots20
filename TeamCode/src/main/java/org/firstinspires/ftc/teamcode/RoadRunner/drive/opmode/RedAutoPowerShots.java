@@ -16,14 +16,13 @@ import org.firstinspires.ftc.teamcode.vision.RingsOpenCV;
 public class RedAutoPowerShots extends LinearOpMode {
     public static double START_X = -63.25;
     public static double START_Y = -20.75;
-    public static double BACK_DIST = 40;
-    public static double A_X = 0;
-    public static double A_Y = -50;
-    public static double B_X = 24;
-    public static double B_Y = START_Y;
-    public static double C_X = 48;
-    public static double C_Y = -40;
-    public static double PARK_X = 6;
+    public static double A_X = 4;
+    public static double A_Y = -54;
+    public static double B_X = 30;
+    public static double B_Y = -44;
+    public static double C_X = 52;
+    public static double C_Y = -54;
+    public static double PARK_X = 12;
     public static double PARK_Y = -36;
     public static double WOBBLE_X = -40;
     public static double WOBBLE_Y = -50;
@@ -52,12 +51,12 @@ public class RedAutoPowerShots extends LinearOpMode {
         telemetry.update();
 
         Trajectory traj = drive.trajectoryBuilder(startingPose)
-                .back(61)
+                .back(62)
                 .build();
         drive.followTrajectory(traj);
 
 //        Trajectory traj = drive.trajectoryBuilder(startingPose)
-//                .lineTo(new Vector2d(6, START_Y))
+//                .splineTo(new Vector2d(6, START_Y))
 //                .build();
 //        drive.followTrajectory(traj);
 
@@ -89,10 +88,9 @@ public class RedAutoPowerShots extends LinearOpMode {
             sleep(500);
             robot.grabberServo.setPosition(robot.GRABBER_OPEN);
             sleep(250);
-            robot.armRotateServo.setPosition(robot.ARM_IN);
 
             traj = drive.trajectoryBuilder(traj.end())
-                    .forward(12)
+                    .lineTo(new Vector2d(PARK_X, PARK_Y))
                     .build();
             drive.followTrajectory(traj);
 
@@ -105,10 +103,9 @@ public class RedAutoPowerShots extends LinearOpMode {
             sleep(500);
             robot.grabberServo.setPosition(robot.GRABBER_OPEN);
             sleep(250);
-            robot.armRotateServo.setPosition(robot.ARM_IN);
 
             traj = drive.trajectoryBuilder(traj.end())
-                    .lineToSplineHeading(new Pose2d(PARK_X, PARK_Y, Math.toRadians(180)))
+                    .lineTo(new Vector2d(PARK_X, PARK_Y))
                     .build();
             drive.followTrajectory(traj);
 
@@ -122,39 +119,30 @@ public class RedAutoPowerShots extends LinearOpMode {
             sleep(500);
             robot.grabberServo.setPosition(robot.GRABBER_OPEN);
             sleep(250);
-            robot.armRotateServo.setPosition(robot.ARM_IN);
 
-/*
             traj = drive.trajectoryBuilder(traj.end())
                     .splineTo(new Vector2d(PARK_X, PARK_Y), Math.toRadians(180))
                     .build();
             drive.followTrajectory(traj);
-*/
 
         }
 
+        robot.armRotateServo.setPosition(robot.ARM_IN);
+        robot.grabberServo.setPosition(robot.GRABBER_CLOSED);
+
+/*
         traj = drive.trajectoryBuilder(traj.end())
-                .splineTo(new Vector2d(WOBBLE_X, WOBBLE_Y), Math.toRadians(180))
+                .splineTo(new Vector2d(WOBBLE_X, WOBBLE_Y), Math.toRadians(0))
                 .build();
         drive.followTrajectory(traj);
+*/
 
-        robot.grabberServo.setPosition(robot.GRABBER_CLOSED);
     }
 
     public void shootPowerShot(CompetitionBot robot) {
         robot.LFlywheelMotor.setPower(robot.POWER_SHOT_SPEED);
         robot.RFlywheelMotor.setPower(robot.POWER_SHOT_SPEED - robot.FLYWHEEL_SPEED_DIFF);
-        sleep(1500);
-        robot.ringFeedServo.setPosition(robot.FEED_OPEN);
-        sleep(500);
-        robot.ringFeedServo.setPosition(robot.FEED_CLOSED);
-        sleep(500);
-    }
-
-    public void shootHighGoal(CompetitionBot robot) {
-        robot.LFlywheelMotor.setPower(robot.HIGH_GOAL_SPEED);
-        robot.RFlywheelMotor.setPower(robot.HIGH_GOAL_SPEED - robot.FLYWHEEL_SPEED_DIFF);
-        sleep(500);
+        sleep(1000);
         robot.ringFeedServo.setPosition(robot.FEED_OPEN);
         sleep(500);
         robot.ringFeedServo.setPosition(robot.FEED_CLOSED);

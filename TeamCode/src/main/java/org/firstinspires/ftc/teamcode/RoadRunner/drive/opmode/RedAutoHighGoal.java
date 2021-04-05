@@ -16,14 +16,14 @@ import org.firstinspires.ftc.teamcode.vision.RingsOpenCV;
 public class RedAutoHighGoal extends LinearOpMode {
     public static double START_X = -63.25;
     public static double START_Y = -40;
-    public static double INIT_X = -36;
-    public static double INIT_Y = -60;
-    public static double A_X = -8;
-    public static double A_Y = INIT_Y;
+    public static double SHOOTING_X = -1.25;
+    public static double SHOOTING_Y = -36;
+    public static double A_X = 4;
+    public static double A_Y = -54;
     public static double B_X = 30;
-    public static double B_Y = -48;
-    public static double C_X = 40;
-    public static double C_Y = INIT_Y;
+    public static double B_Y = -44;
+    public static double C_X = 52;
+    public static double C_Y = -54;
     public static double PARK_X = 12;
     public static double PARK_Y = -36;
     public static double WOBBLE_X = -40;
@@ -53,40 +53,26 @@ public class RedAutoHighGoal extends LinearOpMode {
         telemetry.update();
 
         Trajectory traj = drive.trajectoryBuilder(startingPose)
-                .back(3)
+                .lineTo(new Vector2d(-36, -60))
                 .build();
         drive.followTrajectory(traj);
-
-        sleep(250);
 
         traj = drive.trajectoryBuilder(traj.end())
-                .strafeRight(4)
+                .lineTo(new Vector2d(SHOOTING_X, SHOOTING_Y))
                 .build();
         drive.followTrajectory(traj);
 
-        robot.LFlywheelMotor.setPower(.9);
-        robot.RFlywheelMotor.setPower(.9);
-        sleep(500);
+
         for (int i = 0; i < 3; i++) {
             shootHighGoal(robot);
         }
         robot.LFlywheelMotor.setPower(0);
         robot.RFlywheelMotor.setPower(0);
 
-        traj = drive.trajectoryBuilder(traj.end(), true)
-                .lineTo(new Vector2d(INIT_X, INIT_Y))
-                .build();
-        drive.followTrajectory(traj);
-
-        traj = drive.trajectoryBuilder(traj.end(), true)
-                .lineTo(new Vector2d(6, START_Y))
-                .build();
-        drive.followTrajectory(traj);
-
 
         if (numRings == 0) {
-            traj = drive.trajectoryBuilder(traj.end(), true)
-                    .splineTo(new Vector2d(A_X, A_Y), 0)
+            traj = drive.trajectoryBuilder(traj.end())
+                    .lineToLinearHeading(new Pose2d(A_X, A_Y, Math.toRadians(90)))
                     .build();
             drive.followTrajectory(traj);
 
@@ -95,20 +81,25 @@ public class RedAutoHighGoal extends LinearOpMode {
             sleep(250);
 
             traj = drive.trajectoryBuilder(traj.end())
-                    .forward(6)
+                    .lineTo(new Vector2d(PARK_X, PARK_Y))
                     .build();
             drive.followTrajectory(traj);
 
-            drive.turn(Math.toRadians(0));
-
-            traj = drive.trajectoryBuilder(traj.end(), true)
-                    .splineTo(new Vector2d(WOBBLE_X, WOBBLE_Y), Math.toRadians(90))
-                    .build();
-            drive.followTrajectory(traj);
+//            traj = drive.trajectoryBuilder(traj.end())
+//                    .forward(6)
+//                    .build();
+//            drive.followTrajectory(traj);
+//
+//            drive.turn(Math.toRadians(0));
+//
+//            traj = drive.trajectoryBuilder(traj.end(), true)
+//                    .splineTo(new Vector2d(WOBBLE_X, WOBBLE_Y), Math.toRadians(90))
+//                    .build();
+//            drive.followTrajectory(traj);
 
         } else if (numRings == 1) {
-            traj = drive.trajectoryBuilder(traj.end(), true)
-                    .splineTo(new Vector2d(B_X, B_Y), Math.toRadians(45))
+            traj = drive.trajectoryBuilder(traj.end())
+                    .lineTo(new Vector2d(B_X, B_Y))
                     .build();
             drive.followTrajectory(traj);
 
@@ -117,16 +108,13 @@ public class RedAutoHighGoal extends LinearOpMode {
             sleep(250);
 
             traj = drive.trajectoryBuilder(traj.end())
-                    .lineToSplineHeading(new Pose2d(PARK_X, PARK_Y, Math.toRadians(180)))
+                    .lineTo(new Vector2d(PARK_X, PARK_Y))
                     .build();
             drive.followTrajectory(traj);
-
-            robot.armRotateServo.setPosition(robot.ARM_IN);
-            robot.grabberServo.setPosition(robot.GRABBER_CLOSED);
 
         } else {
             traj = drive.trajectoryBuilder(traj.end(), true)
-                    .splineTo(new Vector2d(C_X, C_Y), 0)
+                    .splineTo(new Vector2d(C_X, C_Y), Math.toRadians(270))
                     .build();
 
             drive.followTrajectory(traj);
@@ -140,26 +128,16 @@ public class RedAutoHighGoal extends LinearOpMode {
                     .build();
             drive.followTrajectory(traj);
 
-            robot.armRotateServo.setPosition(robot.ARM_IN);
-            robot.grabberServo.setPosition(robot.GRABBER_CLOSED);
-
         }
 
-    }
+        robot.armRotateServo.setPosition(robot.ARM_IN);
+        robot.grabberServo.setPosition(robot.GRABBER_CLOSED);
 
-    public void shootPowerShot(CompetitionBot robot) {
-        robot.LFlywheelMotor.setPower(robot.POWER_SHOT_SPEED);
-        robot.RFlywheelMotor.setPower(robot.POWER_SHOT_SPEED);
-        sleep(1000);
-        robot.ringFeedServo.setPosition(robot.FEED_OPEN);
-        sleep(500);
-        robot.ringFeedServo.setPosition(robot.FEED_CLOSED);
-        sleep(500);
     }
 
     public void shootHighGoal(CompetitionBot robot) {
         robot.LFlywheelMotor.setPower(robot.HIGH_GOAL_SPEED);
-        robot.RFlywheelMotor.setPower(robot.HIGH_GOAL_SPEED);
+        robot.RFlywheelMotor.setPower(robot.HIGH_GOAL_SPEED - robot.FLYWHEEL_SPEED_DIFF);
         sleep(500);
         robot.ringFeedServo.setPosition(robot.FEED_OPEN);
         sleep(500);
