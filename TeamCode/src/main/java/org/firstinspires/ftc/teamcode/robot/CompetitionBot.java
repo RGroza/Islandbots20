@@ -25,7 +25,7 @@ public class CompetitionBot {
 
     // Servo constants
     public static final double GRABBER_OPEN = .15;
-    public static final double GRABBER_CLOSED = .5;
+    public static final double GRABBER_CLOSED = .6;
 
     public static final double FEED_OPEN = .46;
     public static final double FEED_CLOSED = .29;
@@ -44,6 +44,11 @@ public class CompetitionBot {
     public static final double POWER_SHOT_SPEED = .65;
     public static final double FLYWHEEL_SPEED_DIFF = .2;
 
+    // CV
+//    public static final int STREAM_WIDTH = 640;
+//    public static final int STREAM_HEIGHT = 360;
+//    public static final int REGION_WIDTH = 100;
+//    public static final int REGION_HEIGHT = 80;
 
     public CompetitionBot(HardwareMap hwMap, Telemetry telemetry) {
         // gyro initialization

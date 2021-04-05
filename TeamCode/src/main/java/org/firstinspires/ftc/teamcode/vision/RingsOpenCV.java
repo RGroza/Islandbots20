@@ -90,9 +90,9 @@ public class RingsOpenCV {
 
     public static class SkystoneDeterminationPipeline extends OpenCvPipeline
     {
-        static int REGION_WIDTH = 100;
-        static int REGION_HEIGHT = 80;
-        static Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((STREAM_WIDTH - REGION_WIDTH) / 2 - 50, (STREAM_HEIGHT - REGION_HEIGHT) / 2 - 70);
+        private int REGION_WIDTH = 100;
+        private int REGION_HEIGHT = 80;
+        private Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((STREAM_WIDTH - REGION_WIDTH) / 2 - 50, (STREAM_HEIGHT - REGION_HEIGHT) / 2 - 70);
 
         public SkystoneDeterminationPipeline(boolean isPowerShot)
         {
