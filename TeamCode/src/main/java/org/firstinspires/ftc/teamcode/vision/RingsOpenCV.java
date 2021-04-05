@@ -1,31 +1,9 @@
-/*
- * Copyright (c) 2020 OpenFTC Team
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
 package org.firstinspires.ftc.teamcode.vision;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.robot.CompetitionBot;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -44,18 +22,15 @@ public class RingsOpenCV {
     private SkystoneDeterminationPipeline pipeline;
     private WebcamName webcamName = null;
 
-//    private static final int STREAM_WIDTH = 640;
-//    private static final int STREAM_HEIGHT = 360;
+    private static final int STREAM_WIDTH = 640;
+    private static final int STREAM_HEIGHT = 360;
 
-    public enum RingPosition {FOUR, ONE, NONE}
-
-    public RingsOpenCV(int X_COOR, int Y_COOR, HardwareMap hwMap, Telemetry telemetry) {
-        CompetitionBot robot = new CompetitionBot(hwMap, telemetry);
+    public RingsOpenCV(boolean isPowerShot, HardwareMap hwMap, Telemetry telemetry) {
 
         webcamName = hwMap.get(WebcamName.class, "Webcam 1");
         int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
-        SkystoneDeterminationPipeline pipeline = new SkystoneDeterminationPipeline(X_COOR, Y_COOR, robot);
+        pipeline = new SkystoneDeterminationPipeline(isPowerShot);
         webcam.setPipeline(pipeline);
 
 //        webcam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
@@ -64,7 +39,7 @@ public class RingsOpenCV {
             @Override
             public void onOpened()
             {
-                webcam.startStreaming(robot.STREAM_WIDTH, robot.STREAM_HEIGHT, OpenCvCameraRotation.UPRIGHT);
+                webcam.startStreaming(STREAM_WIDTH, STREAM_HEIGHT, OpenCvCameraRotation.UPRIGHT);
             }
         });
 
@@ -83,39 +58,39 @@ public class RingsOpenCV {
     }
 
     public int getNumberRings() {
-        if (pipeline.position == RingPosition.NONE) {
+        if (pipeline.position == SkystoneDeterminationPipeline.RingPosition.NONE) {
             return 0;
-        } else if (pipeline.position == RingPosition.ONE) {
+        } else if (pipeline.position == SkystoneDeterminationPipeline.RingPosition.ONE) {
             return 1;
         } else {
             return 4;
         }
     }
 
-    public class SkystoneDeterminationPipeline extends OpenCvPipeline
+    public static class SkystoneDeterminationPipeline extends OpenCvPipeline
     {
-//        private int REGION_WIDTH = 100;
-//        private int REGION_HEIGHT = 80;
-//        private Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((STREAM_WIDTH - REGION_WIDTH) / 2 - 50, (STREAM_HEIGHT - REGION_HEIGHT) / 2 - 70);
+        static int REGION_WIDTH = 100;
+        static int REGION_HEIGHT = 80;
+        static Point REGION1_TOPLEFT_ANCHOR_POINT = new Point((STREAM_WIDTH - REGION_WIDTH) / 2 - 50, (STREAM_HEIGHT - REGION_HEIGHT) / 2 - 70);
 
-        private Point REGION1_TOPLEFT_ANCHOR_POINT;
-        CompetitionBot robot;
-
-        public SkystoneDeterminationPipeline(int X_COOR, int Y_COOR, CompetitionBot CompRobot)
+        public SkystoneDeterminationPipeline(boolean isPowerShot)
         {
-//            if (isPowerShot) {
-//                REGION_WIDTH = 100;
-//                REGION_HEIGHT = 80;
-//                REGION1_TOPLEFT_ANCHOR_POINT = new Point(STREAM_WIDTH - REGION_WIDTH, (STREAM_HEIGHT - REGION_HEIGHT) / 2 - 70);
-//            }
-
-            REGION1_TOPLEFT_ANCHOR_POINT = new Point(X_COOR, Y_COOR);;
-            robot = CompRobot;
+            if (isPowerShot) {
+                REGION_WIDTH = 100;
+                REGION_HEIGHT = 80;
+                REGION1_TOPLEFT_ANCHOR_POINT = new Point(STREAM_WIDTH - REGION_WIDTH, (STREAM_HEIGHT - REGION_HEIGHT) / 2 - 70);
+            }
         }
 
+        public enum RingPosition
+        {
+            FOUR,
+            ONE,
+            NONE
+        }
 
-        final Scalar BLUE = new Scalar(0, 0, 255);
-        final Scalar GREEN = new Scalar(0, 255, 0);
+        static final Scalar BLUE = new Scalar(0, 0, 255);
+        static final Scalar GREEN = new Scalar(0, 255, 0);
 
         final int FOUR_RING_THRESHOLD = 145;
         final int ONE_RING_THRESHOLD = 133;
@@ -124,8 +99,8 @@ public class RingsOpenCV {
                 REGION1_TOPLEFT_ANCHOR_POINT.x,
                 REGION1_TOPLEFT_ANCHOR_POINT.y);
         Point region1_pointB = new Point(
-                REGION1_TOPLEFT_ANCHOR_POINT.x + robot.REGION_WIDTH,
-                REGION1_TOPLEFT_ANCHOR_POINT.y + robot.REGION_HEIGHT);
+                REGION1_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
+                REGION1_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
 
         /*
          * Working variables

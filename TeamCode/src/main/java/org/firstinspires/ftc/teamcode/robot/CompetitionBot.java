@@ -44,13 +44,6 @@ public class CompetitionBot {
     public static final double POWER_SHOT_SPEED = .65;
     public static final double FLYWHEEL_SPEED_DIFF = .2;
 
-    // CV
-    public static final int STREAM_WIDTH = 640;
-    public static final int STREAM_HEIGHT = 360;
-    public static final int REGION_WIDTH = 100;
-    public static final int REGION_HEIGHT = 80;
-//    public static int X_COOR;
-//    public static int Y_COOR;
 
     public CompetitionBot(HardwareMap hwMap, Telemetry telemetry) {
         // gyro initialization

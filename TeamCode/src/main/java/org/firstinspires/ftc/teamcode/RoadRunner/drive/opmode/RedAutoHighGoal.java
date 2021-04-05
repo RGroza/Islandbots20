@@ -32,7 +32,7 @@ public class RedAutoHighGoal extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         CompetitionBot robot = new CompetitionBot(hardwareMap, telemetry);
-        RingsOpenCV vision = new RingsOpenCV((robot.STREAM_WIDTH - robot.REGION_WIDTH) / 2 - 50, (robot.STREAM_HEIGHT - robot.REGION_HEIGHT) / 2 - 70, hardwareMap, telemetry);
+        RingsOpenCV vision = new RingsOpenCV(false, hardwareMap, telemetry);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         Pose2d startingPose = new Pose2d(START_X, START_Y, Math.toRadians(180));

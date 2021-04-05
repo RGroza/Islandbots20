@@ -10,7 +10,7 @@ public class RingsVisionTest extends LinearOpMode {
 
     public void runOpMode() {
         CompetitionBot robot = new CompetitionBot(hardwareMap, telemetry);
-        RingsOpenCV vision = new RingsOpenCV(robot.STREAM_WIDTH - robot.REGION_WIDTH, (robot.STREAM_HEIGHT - robot.REGION_HEIGHT) / 2 - 70, hardwareMap, telemetry);
+        RingsOpenCV vision = new RingsOpenCV(true, hardwareMap, telemetry);
 
         waitForStart();
 
