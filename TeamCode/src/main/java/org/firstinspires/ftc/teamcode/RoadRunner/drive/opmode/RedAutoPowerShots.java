@@ -20,7 +20,7 @@ public class RedAutoPowerShots extends LinearOpMode {
     public static double A_Y = -46;
     public static double B_X = 30;
     public static double B_Y = -28;
-    public static double C_X = 52;
+    public static double C_X = 46;
     public static double C_Y = -46;
     public static double PARK_X = 12;
     public static double PARK_Y = -36;
@@ -42,7 +42,7 @@ public class RedAutoPowerShots extends LinearOpMode {
 
         robot.SlideMotor.setPower(.75);
         robot.armRotateServo.setPosition(robot.ARM_AUTO);
-        sleep(750);
+        sleep(500);
         robot.SlideMotor.setPower(0);
 
         sleep(1500);

@@ -46,7 +46,7 @@ public class RedAutoHighGoal extends LinearOpMode {
 
         robot.SlideMotor.setPower(.75);
         robot.armRotateServo.setPosition(robot.ARM_AUTO);
-        sleep(750);
+        sleep(500);
         robot.SlideMotor.setPower(0);
 
         sleep(1500);
