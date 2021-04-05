@@ -50,7 +50,7 @@ public class TeleOpBot extends LinearOpMode {
 
         double[] powerList = {0, 0, 0, 0};
         double intakePower = .75;
-        double flywheelPower = .65;
+        double flywheelPower = robot.HIGH_GOAL_SPEED;
         int initFlywheelPos = 0;
         int flywheelEncoderSpeed = 0;
 
@@ -60,7 +60,7 @@ public class TeleOpBot extends LinearOpMode {
         boolean flywheelMeasuring = false;
 
         waitForStart();
-        while(opModeIsActive()) {
+        while (opModeIsActive()) {
             // CONTROLS
             // Gamepad 1
             double x = -gamepad1.left_stick_x;

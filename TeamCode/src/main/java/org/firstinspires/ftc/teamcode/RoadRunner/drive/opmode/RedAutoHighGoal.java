@@ -24,6 +24,8 @@ public class RedAutoHighGoal extends LinearOpMode {
     public static double B_Y = -44;
     public static double C_X = 46;
     public static double C_Y = -46;
+    public static double INTER_X = 12;
+    public static double INTER_Y = -12;
     public static double PARK_X = 12;
     public static double PARK_Y = -36;
     public static double WOBBLE_X = -40;
@@ -58,7 +60,7 @@ public class RedAutoHighGoal extends LinearOpMode {
         drive.followTrajectory(traj);
 
         traj = drive.trajectoryBuilder(traj.end())
-                .back(18)
+                .back(24)
                 .build();
         drive.followTrajectory(traj);
 
@@ -90,17 +92,14 @@ public class RedAutoHighGoal extends LinearOpMode {
                     .build();
             drive.followTrajectory(traj);
 
-//            traj = drive.trajectoryBuilder(traj.end())
-//                    .forward(6)
-//                    .build();
-//            drive.followTrajectory(traj);
-//
-//            drive.turn(Math.toRadians(0));
-//
-//            traj = drive.trajectoryBuilder(traj.end(), true)
-//                    .splineTo(new Vector2d(WOBBLE_X, WOBBLE_Y), Math.toRadians(90))
-//                    .build();
-//            drive.followTrajectory(traj);
+/*
+            traj = drive.trajectoryBuilder(traj.end())
+                    .lineTo(new Vector2d(INTER_X, INTER_Y))
+                    .build();
+            drive.followTrajectory(traj);
+
+            drive.turn(Math.toRadians(-90));
+*/
 
         } else if (numRings == 1) {
             traj = drive.trajectoryBuilder(traj.end())
@@ -138,6 +137,30 @@ public class RedAutoHighGoal extends LinearOpMode {
         robot.SlideMotor.setPower(-.75);
         sleep(500);
         robot.SlideMotor.setPower(0);
+
+        // SECOND WOBBLE GOAL
+
+/*
+        if (numRings == 0) {
+            traj = drive.trajectoryBuilder(traj.end().plus(new Pose2d(0, 0, Math.toRadians(-90))))
+                    .lineTo(new Vector2d(WOBBLE_X, WOBBLE_Y))
+                    .build();
+            drive.followTrajectory(traj);
+
+        } else if (numRings == 1) {
+            traj = drive.trajectoryBuilder(traj.end())
+                    .lineTo(new Vector2d(WOBBLE_X, WOBBLE_Y))
+                    .build();
+            drive.followTrajectory(traj);
+
+        } else {
+            traj = drive.trajectoryBuilder(traj.end())
+                    .lineTo(new Vector2d(WOBBLE_X, WOBBLE_Y))
+                    .build();
+            drive.followTrajectory(traj);
+
+        }
+*/
     }
 
     public void shootHighGoal(CompetitionBot robot) {
