@@ -44,7 +44,7 @@ public class RedAutoHighGoal extends LinearOpMode {
 
         robot.SlideMotor.setPower(.75);
         robot.armRotateServo.setPosition(robot.ARM_AUTO);
-        sleep(250);
+        sleep(750);
         robot.SlideMotor.setPower(0);
 
         sleep(1500);
@@ -58,7 +58,7 @@ public class RedAutoHighGoal extends LinearOpMode {
         drive.followTrajectory(traj);
 
         traj = drive.trajectoryBuilder(traj.end())
-                .back(6)
+                .back(12)
                 .build();
         drive.followTrajectory(traj);
 
@@ -144,9 +144,9 @@ public class RedAutoHighGoal extends LinearOpMode {
     public void shootHighGoal(CompetitionBot robot) {
         robot.LFlywheelMotor.setPower(robot.HIGH_GOAL_SPEED);
         robot.RFlywheelMotor.setPower(robot.HIGH_GOAL_SPEED - robot.FLYWHEEL_SPEED_DIFF);
-        sleep(500);
+        sleep(1000);
         robot.ringFeedServo.setPosition(robot.FEED_OPEN);
-        sleep(500);
+        sleep(robot.FEEDING_DELAY);
         robot.ringFeedServo.setPosition(robot.FEED_CLOSED);
     }
 }

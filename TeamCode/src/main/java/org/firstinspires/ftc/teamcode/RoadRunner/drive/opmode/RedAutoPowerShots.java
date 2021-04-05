@@ -147,7 +147,7 @@ public class RedAutoPowerShots extends LinearOpMode {
         robot.RFlywheelMotor.setPower(robot.POWER_SHOT_SPEED - robot.FLYWHEEL_SPEED_DIFF);
         sleep(1000);
         robot.ringFeedServo.setPosition(robot.FEED_OPEN);
-        sleep(500);
+        sleep(robot.FEEDING_DELAY);
         robot.ringFeedServo.setPosition(robot.FEED_CLOSED);
     }
 }

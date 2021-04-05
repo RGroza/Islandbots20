@@ -194,7 +194,7 @@ public class TeleOpBot extends LinearOpMode {
                 telemetry.addLine("feed: OPEN");
                 initRingFeedTime = System.currentTimeMillis();
             }
-            if (!ringFeedButton.buttonStatus && waitAndContinue(initRingFeedTime, 300)) {
+            if (!ringFeedButton.buttonStatus && waitAndContinue(initRingFeedTime, robot.FEEDING_DELAY)) {
                 robot.ringFeedServo.setPosition(robot.FEED_CLOSED);
                 telemetry.addLine("feed: CLOSED");
             }

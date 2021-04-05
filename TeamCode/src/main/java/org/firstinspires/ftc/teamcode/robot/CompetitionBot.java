@@ -44,6 +44,7 @@ public class CompetitionBot {
     public static final double POWER_SHOT_SPEED = .65;
     public static final double FLYWHEEL_SPEED_DIFF = .2;
 
+    public static final int FEEDING_DELAY = 300;
 
     public CompetitionBot(HardwareMap hwMap, Telemetry telemetry) {
         // gyro initialization
