@@ -137,7 +137,7 @@ public class RedAutoHighGoal extends LinearOpMode {
             sleep(250);
 
             traj = drive.trajectoryBuilder(traj.end())
-                    .strafeLeft(12)
+                    .strafeLeft(6)
                     .build();
             drive.followTrajectory(traj);
 

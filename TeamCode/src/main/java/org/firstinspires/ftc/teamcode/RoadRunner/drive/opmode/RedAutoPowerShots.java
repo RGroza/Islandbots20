@@ -123,6 +123,11 @@ public class RedAutoPowerShots extends LinearOpMode {
             sleep(250);
 
             traj = drive.trajectoryBuilder(traj.end())
+                    .strafeLeft(6)
+                    .build();
+            drive.followTrajectory(traj);
+
+            traj = drive.trajectoryBuilder(traj.end())
                     .splineTo(new Vector2d(PARK_X, PARK_Y), Math.toRadians(180))
                     .build();
             drive.followTrajectory(traj);
