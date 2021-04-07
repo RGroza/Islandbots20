@@ -41,7 +41,7 @@ public class CompetitionBot {
     public static final double DRIVETAIN_PPR = 146;
 
     public static final double HIGH_GOAL_SPEED = .775;
-    public static final double POWER_SHOT_SPEED = .675;
+    public static final double POWER_SHOT_SPEED = .75;
     public static final double FLYWHEEL_SPEED_DIFF = .2;
 
     public static final int FEEDING_DELAY = 300;
