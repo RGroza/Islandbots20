@@ -20,13 +20,13 @@ public class RedAutoHighGoal extends LinearOpMode {
     public static double SHOOTING_Y = -36;
     public static double A_X = 4;
     public static double A_Y = -46;
-    public static double B_X = 30;
-    public static double B_Y = -28;
+    public static double B_X = 22;
+    public static double B_Y = -24;
     public static double C_X = 46;
     public static double C_Y = -46;
     public static double INTER_X = 12;
     public static double INTER_Y = -12;
-    public static double PARK_X = 12;
+    public static double PARK_X = 6;
     public static double PARK_Y = -36;
     public static double WOBBLE_X = -40;
     public static double WOBBLE_Y = -40;
@@ -180,7 +180,7 @@ public class RedAutoHighGoal extends LinearOpMode {
     }
 
     public void shootHighGoal(CompetitionBot robot) {
-        double flywheelSpeed = robot.HIGH_GOAL_SPEED - .05;
+        double flywheelSpeed = robot.HIGH_GOAL_SPEED - .01;
         robot.LFlywheelMotor.setPower(flywheelSpeed);
         robot.RFlywheelMotor.setPower(flywheelSpeed - robot.FLYWHEEL_SPEED_DIFF);
         sleep(1000);

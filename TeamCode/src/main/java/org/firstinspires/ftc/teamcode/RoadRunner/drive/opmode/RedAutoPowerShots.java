@@ -18,11 +18,11 @@ public class RedAutoPowerShots extends LinearOpMode {
     public static double START_Y = -20.75;
     public static double A_X = 4;
     public static double A_Y = -46;
-    public static double B_X = 30;
-    public static double B_Y = -28;
+    public static double B_X = 22;
+    public static double B_Y = -24;
     public static double C_X = 46;
     public static double C_Y = -46;
-    public static double PARK_X = 12;
+    public static double PARK_X = 6;
     public static double PARK_Y = -36;
     public static double WOBBLE_X = -40;
     public static double WOBBLE_Y = -50;
@@ -148,7 +148,7 @@ public class RedAutoPowerShots extends LinearOpMode {
     }
 
     public void shootPowerShot(CompetitionBot robot) {
-        double flywheelSpeed = robot.POWER_SHOT_SPEED - .05;
+        double flywheelSpeed = robot.POWER_SHOT_SPEED - .01;
         robot.LFlywheelMotor.setPower(flywheelSpeed);
         robot.RFlywheelMotor.setPower(flywheelSpeed - robot.FLYWHEEL_SPEED_DIFF);
         sleep(1000);
