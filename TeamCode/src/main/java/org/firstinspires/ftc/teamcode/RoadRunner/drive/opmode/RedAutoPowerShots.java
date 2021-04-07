@@ -148,7 +148,7 @@ public class RedAutoPowerShots extends LinearOpMode {
     }
 
     public void shootPowerShot(CompetitionBot robot) {
-        double flywheelSpeed = robot.POWER_SHOT_SPEED - .5;
+        double flywheelSpeed = robot.POWER_SHOT_SPEED - .05;
         robot.LFlywheelMotor.setPower(flywheelSpeed);
         robot.RFlywheelMotor.setPower(flywheelSpeed - robot.FLYWHEEL_SPEED_DIFF);
         sleep(1000);
