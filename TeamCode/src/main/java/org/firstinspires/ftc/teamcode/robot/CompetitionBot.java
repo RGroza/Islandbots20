@@ -157,6 +157,33 @@ public class CompetitionBot {
         return powerVals;
     }
 
+    public double[] tankMove(double joystickMove, double joystickTurn, boolean slowToggle, boolean fastHold, Telemetry telemetry) {
+        double SPEED_REDUCTION;
+
+        if (slowToggle){
+            SPEED_REDUCTION = .5*MAX_SPEED;
+        } else if (fastHold) {
+            SPEED_REDUCTION = 1;
+        } else {
+            SPEED_REDUCTION = MAX_SPEED;
+        }
+
+        double L = joystickMove * joystickMove + (0.5*joystickTurn);
+        double R = joystickMove * joystickMove - (0.5*joystickTurn);
+
+        L *= SPEED_REDUCTION;
+        R *= SPEED_REDUCTION;
+
+        double[] powerVals = {L, R};
+
+        L *= clamp(powerVals);
+        R *= clamp(powerVals);
+
+        setMotors(L, L, R, R);
+
+        return powerVals;
+    }
+
     public void setMotors(double LF, double LB, double RF, double RB) {
         LFmotor.setPower(LF);
         LBmotor.setPower(LB);
