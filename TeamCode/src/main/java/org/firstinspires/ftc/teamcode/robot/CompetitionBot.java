@@ -20,8 +20,8 @@ public class CompetitionBot {
     public NormalizedColorSensor LcolorSensor, RcolorSensor;
 
     // motors
-    public DcMotor RFmotor, RBmotor, LFmotor, LBmotor, SlideMotor, IntakeMotor, LFlywheelMotor, RFlywheelMotor;
-    public Servo grabberServo, armRotateServo, ringFeedServo;
+    public DcMotor RFmotor, RBmotor, LFmotor, LBmotor; //, SlideMotor, IntakeMotor, LFlywheelMotor, RFlywheelMotor;
+//    public Servo grabberServo, armRotateServo, ringFeedServo;
 
     // Servo constants
     public static final double GRABBER_OPEN = .15;
@@ -58,11 +58,11 @@ public class CompetitionBot {
         RBmotor = hwMap.dcMotor.get("RBmotor");
         LFmotor = hwMap.dcMotor.get("LFmotor");
         LBmotor = hwMap.dcMotor.get("LBmotor");
-        SlideMotor = hwMap.dcMotor.get("SlideMotor");
-        IntakeMotor = hwMap.dcMotor.get("IntakeMotor");
-        LFlywheelMotor = hwMap.dcMotor.get("LFlywheelMotor");
-        RFlywheelMotor = hwMap.dcMotor.get("RFlywheelMotor");
-        RFlywheelMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+//        SlideMotor = hwMap.dcMotor.get("SlideMotor");
+//        IntakeMotor = hwMap.dcMotor.get("IntakeMotor");
+//        LFlywheelMotor = hwMap.dcMotor.get("LFlywheelMotor");
+//        RFlywheelMotor = hwMap.dcMotor.get("RFlywheelMotor");
+//        RFlywheelMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // gyro hwMap
         gyro = hwMap.get(BNO055IMU.class, "gyro");
@@ -79,12 +79,12 @@ public class CompetitionBot {
 //        RBmotor.setDirection(DcMotor.Direction.REVERSE);
 
         // servos
-        grabberServo = hwMap.servo.get("grabberServo");
-        armRotateServo = hwMap.servo.get("armRotateServo");
-        ringFeedServo = hwMap.servo.get("ringFeedServo");
-        grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
-        armRotateServo.setPosition(CompetitionBot.ARM_IN);
-        ringFeedServo.setPosition(CompetitionBot.FEED_CLOSED);
+//        grabberServo = hwMap.servo.get("grabberServo");
+//        armRotateServo = hwMap.servo.get("armRotateServo");
+//        ringFeedServo = hwMap.servo.get("ringFeedServo");
+//        grabberServo.setPosition(CompetitionBot.GRABBER_CLOSED);
+//        armRotateServo.setPosition(CompetitionBot.ARM_IN);
+//        ringFeedServo.setPosition(CompetitionBot.FEED_CLOSED);
 
         // gyro
         gyro.initialize(parameters);
@@ -212,23 +212,23 @@ public class CompetitionBot {
         LBmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RBmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        LFlywheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RFlywheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        LFlywheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        RFlywheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        SlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         LFmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         LBmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RFmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RBmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        LFlywheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        RFlywheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        SlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        LFlywheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        RFlywheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        SlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         LBmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LFmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RBmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RFmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        SlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        SlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     private double clamp(double power) {
